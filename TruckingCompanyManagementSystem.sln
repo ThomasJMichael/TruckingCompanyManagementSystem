@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33530.505
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCMS.API", "TCMS.API\TCMS.API.csproj", "{76CF9C2F-A136-40A5-8E9D-80A01256B757}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCMS.Data", "TCMS.Data\TCMS.Data.csproj", "{2E245427-4738-4BB1-B626-587045C24B4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCMS.Common", "TCMS.Common\TCMS.Common.csproj", "{A9556C56-F2D1-44CA-99C3-B863A2166B49}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{76CF9C2F-A136-40A5-8E9D-80A01256B757}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76CF9C2F-A136-40A5-8E9D-80A01256B757}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76CF9C2F-A136-40A5-8E9D-80A01256B757}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76CF9C2F-A136-40A5-8E9D-80A01256B757}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E245427-4738-4BB1-B626-587045C24B4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E245427-4738-4BB1-B626-587045C24B4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E245427-4738-4BB1-B626-587045C24B4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E245427-4738-4BB1-B626-587045C24B4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9556C56-F2D1-44CA-99C3-B863A2166B49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9556C56-F2D1-44CA-99C3-B863A2166B49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9556C56-F2D1-44CA-99C3-B863A2166B49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9556C56-F2D1-44CA-99C3-B863A2166B49}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9C338C59-E9A7-4C8E-91AD-CEF7511683CF}
+	EndGlobalSection
+EndGlobal
