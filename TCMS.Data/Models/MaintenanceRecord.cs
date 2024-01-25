@@ -1,0 +1,14 @@
+﻿namespace TCMS.Data.Models
+{
+    public class MaintenanceRecord
+    {
+        public int MaintenanceRecordId { get; set; }
+        public string Description { get; set; }
+        public DateTime MaintenanceDate { get; set; }
+        public decimal Cost { get; set; }
+
+        //Foreign Keys
+        public string? VehicleId { get; set; }
+        public virtual Vehicle Vehicle { get; set; }
+    }
+}
