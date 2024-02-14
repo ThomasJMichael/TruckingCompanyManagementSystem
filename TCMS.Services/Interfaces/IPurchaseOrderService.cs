@@ -1,18 +1,19 @@
-﻿using TCMS.Data.Models;
+﻿using TCMS.Common.DTOs.Financial;
+using TCMS.Data.Models;
 
 namespace TCMS.Services.Interfaces;
 
-public interface IPurchaseOrderService
+public interface IPurchaseOrderDtoService
 {
-    Task<IEnumerable<PurchaseOrder>> GetAllPurchaseOrdersAsync();
-    Task<PurchaseOrder> GetPurchaseOrderByIdAsync(int id);
-    Task<PurchaseOrder> CreatePurchaseOrderAsync(PurchaseOrder purchaseOrder);
-    Task<bool> UpdatePurchaseOrderAsync(PurchaseOrder purchaseOrder);
-    Task<bool> DeletePurchaseOrderAsync(int id);
+    Task<IEnumerable<PurchaseOrderDto>> GetAllPurchaseOrdersAsync();
+    Task<PurchaseOrderDto> GetPurchaseOrderByIdAsync(int id);
+    Task<PurchaseOrderDto> CreatePurchaseOrderAsync(PurchaseOrderDto purchaseOrder);
+    Task<bool> UpdatePurchaseOrderDtoAsync(PurchaseOrderDto purchaseOrder);
+    Task<bool> DeletePurchaseOrderDtoAsync(int id);
 
-    Task<IEnumerable<PurchaseOrder>> GeneratePurchaseOrderReportAsync(DateTime startDate, DateTime endDate);
-    Task<bool> LinkManifestToPurchaseOrder(int manifestId, int purchaseOrderId);
-    Task<bool> UpdateItemStatus(int purchaseOrderId, ManifestItem itemId, ItemStatus status);
+    Task<IEnumerable<PurchaseOrderDto>> GeneratePurchaseOrderReportAsync(DateTime startDate, DateTime endDate);
+    Task<bool> LinkManifestToPurchaseOrderDto(int manifestId, int purchaseOrderId);
+    Task<bool> UpdateItemStatus(int purchaseOrderId, int itemId, ItemStatus status);
     Task<decimal> CalculateTotalCost(int purchaseOrderId);
 
 }

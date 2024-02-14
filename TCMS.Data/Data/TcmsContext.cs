@@ -153,5 +153,12 @@ public class TcmsContext : DbContext
             .HasForeignKey(s => s.VehicleId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        // MaintenanceRecord
+        modelBuilder.Entity<MaintenanceRecord>()
+            .HasOne(m => m.Vehicle)
+            .WithMany(v => v.MaintenanceRecords)
+            .HasForeignKey(m => m.VehicleId)
+            .OnDelete(DeleteBehavior.Restrict);
+
     }
 }

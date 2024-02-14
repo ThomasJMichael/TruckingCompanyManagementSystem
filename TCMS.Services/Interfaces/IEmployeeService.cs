@@ -1,20 +1,22 @@
 ﻿
+using TCMS.Common.DTOs.Employee;
+using TCMS.Common.DTOs.Misc;
 using TCMS.Data.Models;
 
 namespace TCMS.Services.Interfaces;
 
-public interface IEmployeeService
+public interface IEmployeeDtoService
 {
-    Task<IEnumerable<Employee>> GetAll();
-    Task<Employee> GetByIdAsync (int employeeId);
-    Task<Employee> CreateAsync(Employee employee);
-    Task<bool> UpdateAsync(Employee employee);
+    Task<IEnumerable<EmployeeDto>> GetAll();
+    Task<EmployeeDto> GetByIdAsync (int employeeId);
+    Task<EmployeeDto> CreateAsync(EmployeeDto employee);
+    Task<bool> UpdateAsync(EmployeeDto employee);
     Task<bool> DeleteAsync(int employeeId);
 
-    Task<IEnumerable<TimeSheet>> GetTimeSheetsByEmployeeIdAsync (int employeeId);
-    Task<TimeSheet> AddTimeSheetAsync (int employeeId, TimeSheet timeSheet);
-    Task<bool> UpdateTimeSheetAsync (TimeSheet timeSheet);
-    Task<bool> DeleteTimeSheetAsync (int timeSheetId);
+    Task<IEnumerable<TimeSheetDto>> GetTimeSheetsByEmployeeDtoIdAsync (int employeeId);
+    Task<TimeSheetDto> AddTimeSheetAsync (int employeeId, TimeSheetDto timeSheet);
+    Task<bool> UpdateTimeSheetDtoAsync (TimeSheetDto timeSheet);
+    Task<bool> DeleteTimeSheetDtoAsync (int timeSheetId);
 
     
 }

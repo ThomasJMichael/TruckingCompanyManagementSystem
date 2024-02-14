@@ -1,16 +1,17 @@
-﻿using TCMS.Data.Models;
+﻿using TCMS.Common.DTOs.Financial;
+using TCMS.Data.Models;
 
 namespace TCMS.Services.Interfaces;
 
-public interface IPayrollService
+public interface IPayrollDtoService
 {
-    Task<IEnumerable<Payroll>> GetAllPayrollsAsync();
-    Task<Payroll> GetPayrollByIdAsync(int id);
-    Task<Payroll> CreatePayrollAsync(Payroll payroll);
-    Task<bool> UpdatePayrollAsync(Payroll payroll);
-    Task<bool> DeletePayrollAsync(int id);
+    Task<IEnumerable<PayrollDto>> GetAllPayrollsAsync();
+    Task<PayrollDto> GetPayrollByIdAsync(int id);
+    Task<PayrollDto> CreatePayrollAsync(PayrollDto payroll);
+    Task<bool> UpdatePayrollDtoAsync(PayrollDto payroll);
+    Task<bool> DeletePayrollDtoAsync(int id);
     Task<bool> CalculateGrossPayAsync(int id);
     Task<bool> CalculateNetPayAsync(int id);
     Task<bool> CalculateDeductionsAsync(int id);
-    Task<IEnumerable<Payroll>> GeneratePayrollReportAsync (DateTime startDate, DateTime endDate);
+    Task<IEnumerable<PayrollDto>> GeneratePayrollReportAsync (DateTime startDate, DateTime endDate);
 }

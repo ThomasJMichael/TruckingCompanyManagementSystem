@@ -1,4 +1,5 @@
-﻿using TCMS.Data.Models;
+﻿using TCMS.Common.DTOs.Equipment;
+using TCMS.Data.Models;
 
 namespace TCMS.Services.Interfaces;
 
@@ -12,10 +13,10 @@ public interface IVehicleService
     Task<bool> DeleteVehicleAsync(int id);
 
     // Routine Inspections and Maintenance
-    Task<IEnumerable<MaintenanceRecord>> GetMaintenanceRecordsByVehicleIdAsync(string vehicleId);
-    Task<IEnumerable<MaintenanceRecord>> GetInspectionRecordsByVehicleIdAsync(string vehicleId);
-    Task<bool> AddMaintenanceRecordToVehicleAsync(string vehicleId, MaintenanceRecord maintenanceRecord);
-    Task<bool> AddInspectionRecordToVehicleAsync(string vehicleId, MaintenanceRecord inspectionRecord);
+    Task<IEnumerable<MaintenanceRecordDto>> GetMaintenanceRecordsByVehicleIdAsync(string vehicleId);
+    Task<IEnumerable<MaintenanceRecordDto>> GetInspectionRecordsByVehicleIdAsync(string vehicleId);
+    Task<bool> AddMaintenanceRecordToVehicleAsync(string vehicleId, MaintenanceRecordDto maintenanceRecordDto);
+    Task<bool> AddInspectionRecordToVehicleAsync(string vehicleId, MaintenanceRecordDto inspectionRecordDto);
 
     // Repair Records
     Task<IEnumerable<RepairRecord>> GetRepairRecordsByVehicleIdAsync(string vehicleId);

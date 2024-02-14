@@ -1,13 +1,14 @@
 ﻿
+using TCMS.Common.DTOs.DrugAndAlcohol;
 using TCMS.Data.Models;
 
 namespace TCMS.Services.Interfaces;
 
 public interface IDrugTestService
 {
-    Task<IEnumerable<DrugAndAlcoholTest>> GetAllAsync();
-    Task<DrugAndAlcoholTest> GetByIdAsync(int id);
-    Task<DrugAndAlcoholTest> CreateAsync(DrugAndAlcoholTest drugAndAlcoholTest);
-    Task<bool> UpdateAsync(DrugAndAlcoholTest drugAndAlcoholTest);
+    Task<IEnumerable<DrugAndAlcoholTestDto>> GetAllAsync();
+    Task<DrugAndAlcoholTestDto> GetByIdAsync(int id);
+    Task<DrugAndAlcoholTestDto> CreateAsync(DrugAndAlcoholTest drugAndAlcoholTest);
+    Task<bool> UpdateAsync(DrugAndAlcoholTestDto drugAndAlcoholTest);
     Task<bool> DeleteAsync(int id);
 }
