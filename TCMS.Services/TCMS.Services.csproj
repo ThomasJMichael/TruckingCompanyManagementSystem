@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -7,10 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\General\" />
+    <Folder Include="Extensions\" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TCMS.Common\TCMS.Common.csproj" />
     <ProjectReference Include="..\TCMS.Data\TCMS.Data.csproj" />
   </ItemGroup>
 

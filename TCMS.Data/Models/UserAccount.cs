@@ -37,9 +37,9 @@ namespace TCMS.Data.Models
                 case Role.Full:
                     return true;
                 case Role.Shipping:
-                    return dataType == DataType.Shipping || dataType == DataType.Equipment || dataType == DataType.Maintenance;
+                    return dataType is DataType.Shipping or DataType.Equipment or DataType.Maintenance;
                 case Role.Maintenance:
-                    return dataType == DataType.Maintenance || dataType == DataType.Equipment;
+                    return dataType is DataType.Maintenance or DataType.Equipment;
                 case Role.Driver:
                     // Need to handle driver only having access to their specific shipments.
                     return dataType == DataType.Shipping;

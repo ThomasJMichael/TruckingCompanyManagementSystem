@@ -20,6 +20,14 @@
 
   <ItemGroup>
     <Folder Include="Controller\" />
+    <Folder Include="DTOs\General\" />
+    <Folder Include="DTOs\Employee\" />
+    <Folder Include="DTOs\Equipment\" />
+    <Folder Include="DTOs\Financial\" />
+    <Folder Include="DTOs\DrugAndAlcohol\" />
+    <Folder Include="DTOs\NewFolder\" />
+    <Folder Include="DTOs\Report\" />
+    <Folder Include="DTOs\Shipment\" />
   </ItemGroup>
 
 </Project>
