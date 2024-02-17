@@ -181,7 +181,8 @@ namespace TCMS.Services.Implementations
                 if (roles.Count == 0)
                 {
                     var defaultRole = await _userManager.AddToRoleAsync(user, Role.Default);
-                    if (!defaultRole.Succeeded) return OperationResult.Failure(defaultRole.Errors.Select(e => e.Description))
+                    if (!defaultRole.Succeeded)
+                        return OperationResult.Failure(defaultRole.Errors.Select(e => e.Description));
                 }
                 return OperationResult.Success();
             }
@@ -202,11 +203,11 @@ namespace TCMS.Services.Implementations
 
         }
 
-        public async Task<OperationResult<UserAccountDto>> GetUserAccountByIdAsync(int id)
+        public async Task<OperationResult<UserAccountDto>> GetUserAccountByIdAsync(string userId)
         {
             try
             {
-                var user = await _userManager.FindByIdAsync(id.ToString());
+                var user = await _userManager.FindByIdAsync(userId);
                 if (user == null) return OperationResult<UserAccountDto>.Failure(["User not found."]);
 
                 var roles = await _userManager.GetRolesAsync(user);
@@ -245,9 +246,9 @@ namespace TCMS.Services.Implementations
             }
         }
 
-        public async Task<OperationResult<IEnumerable<string>>> GetRolesAsync(int userId)
+        public async Task<OperationResult<IEnumerable<string>>> GetRolesAsync(string userId)
         {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
+            var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
                 return OperationResult<IEnumerable<string>>.Failure(["User not found."]);

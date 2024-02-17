@@ -35,7 +35,7 @@ namespace TCMS.Data.Models
         public string TestDetails { get; set; } // Any additional details about the test
 
         // Potential reference to an incident if the test is post-accident
-        public int? IncidentReportID { get; set; }
+        public int? IncidentReportId { get; set; }
         public virtual IncidentReport IncidentReport { get; set; } //Virtual for lazy loading
 
         // Foll-up details, if applicable

@@ -1,14 +1,20 @@
-﻿
-using TCMS.Common.DTOs.DrugAndAlcohol;
-using TCMS.Data.Models;
+﻿using TCMS.Data.Models;
+using TCMS.Common.DTOs.DrugTestDto;
+using TCMS.Common.Operations;
 
-namespace TCMS.Services.Interfaces;
-
-public interface IDrugTestService
+namespace TCMS.Services.Interfaces
 {
-    Task<IEnumerable<DrugAndAlcoholTestDto>> GetAllAsync();
-    Task<DrugAndAlcoholTestDto> GetByIdAsync(int id);
-    Task<DrugAndAlcoholTestDto> CreateAsync(DrugAndAlcoholTest drugAndAlcoholTest);
-    Task<bool> UpdateAsync(DrugAndAlcoholTestDto drugAndAlcoholTest);
-    Task<bool> DeleteAsync(int id);
+    public interface IDrugTestService
+    {
+        Task<OperationResult> CreateTestAsync(DrugTestCreateDto drugTestDto);
+        Task<OperationResult<IEnumerable<DrugTestDto>>> GetAllTestsAsync();
+        Task<OperationResult<DrugTestDto>> GetTestByIdAsync(int drugTestId);
+        Task<OperationResult> UpdateTestAsync(DrugTestUpdateDto drugTestDto);
+        Task<OperationResult> DeleteTestAsync(int drugTestId);
+
+        // Specialized operations
+        Task<OperationResult<IEnumerable<DrugTestDto>>> GetTestsByDriverIdAsync(int driverId);
+        Task<OperationResult> ScheduleFollowUpTestAsync(int drugTestId, DateTime followUpDate);
+        Task<OperationResult> CompleteFollowUpTestAsync(int drugTestId, TestResult result);
+    }
 }
