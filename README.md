@@ -24,7 +24,7 @@ git clone https://github.com/ThomasJMichael/TruckingCompanyManagementSystem.git
 Navigate to the cloned directory:
 
 ```sh
-cd TCMS
+cd TruckingCompanyManagementSystem
 ```
 
 ### Step 2: Open the Project in Visual Studio 2022
