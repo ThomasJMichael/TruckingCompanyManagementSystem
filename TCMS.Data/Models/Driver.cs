@@ -9,7 +9,7 @@ namespace TCMS.Data.Models
     public class Driver : Employee
     {
         public string CDLNumber { get; set; }
-        public string CDLExperationDate { get; set; }
+        public DateTime CDLExperationDate { get; set; }
 
         // Navigation Property for Assignments
         public ICollection<Assignment>? Assignments { get; set; }

@@ -1,51 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace TCMS.Data.Models
 {
-    public enum DataType
+    public static class Role
     {
-        Equipment,
-        Shipping,
-        Maintenance,
+        public const string Admin = "Admin";
+        public const string ShippingManager = "ShippingManager";
+        public const string MaintenanceWorker = "MaintenanceWorker";
+        public const string Driver = "Driver";
+        public const string Default = "Default";
     }
-
-    public enum Role
+    public static class RoleHelpers
     {
-        Full,
-        Shipping,
-        Maintenance,
-        Driver,
-    }
-    public class UserAccount
-    {
-        public int UserAccountId { get; set; }
-        public string Username { get; set; }
-        public string PasswordHash { get; set; }
-        public Role UserRole { get; set; }
-
-        public int? EmployeeId { get; set; }
-        public virtual Employee Employee { get; set; }
-
-        public bool HasAccessTo(DataType dataType)
+        public static IEnumerable<string?> GetAllRoles()
         {
-            switch (UserRole)
-            {
-                case Role.Full:
-                    return true;
-                case Role.Shipping:
-                    return dataType is DataType.Shipping or DataType.Equipment or DataType.Maintenance;
-                case Role.Maintenance:
-                    return dataType is DataType.Maintenance or DataType.Equipment;
-                case Role.Driver:
-                    // Need to handle driver only having access to their specific shipments.
-                    return dataType == DataType.Shipping;
-                default:
-                    return false;
-            }
+            return typeof(Role)
+                .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
+                .Where(fi => fi is { IsLiteral: true, IsInitOnly: false })
+                .Select(selector: fi => fi.GetValue(null)?.ToString());
         }
+    }
+    public class UserAccount : IdentityUser
+    {
+        public string? EmployeeId { get; set; }
+        public virtual Employee Employee { get; set; }
     }
 }

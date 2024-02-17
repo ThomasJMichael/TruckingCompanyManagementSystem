@@ -1,29 +1,26 @@
-﻿using TCMS.Common.DTOs.User;
-using TCMS.Data.Models;
+﻿using TCMS.Common.DTOs.Employee;
+using TCMS.Common.DTOs.User;
+using TCMS.Common.Operations;
 
 namespace TCMS.Services.Interfaces;
 
 public interface IUserService
 {
     // Account Management
-    Task<bool> ChangePassword(ChangePasswordDto changePasswordDto);
-    Task<UserAccount> CreateUserAccountAsync(NewAccountDto newAccountDto);
-    Task<bool> UpdateUserAccountAsync(UpdateAccountDto updateAccountDto);
-    Task<bool> DeleteUserAccountAsync(int id);
+    Task<OperationResult> CreateUserAccountAsync(NewAccountDto newAccountDto);
+    Task<OperationResult> UpdateUsernameAsync(ChangeUsernameDto changeUsernameDto);
+    Task<OperationResult> DeleteUserAccountAsync(string userId);
 
     // User Management
-    Task<bool> UpdatePayRate (int userId, decimal newPayRate);
+    Task<OperationResult> UpdatePayRate(UpdatePayRateDto updatePayRateDto);
 
     // Role and Permission Management
-    Task<bool> AddRoleToUserAsync(int userId, string roleName);
-    Task<bool> RemoveRoleFromUserAsync(int userId, string roleName);
-    Task<IEnumerable<Role>> GetRolesAsync(int userId);
-
-    // Employee and Driver Account Linking
-    Task<bool> LinkEmployeeToUserAccountAsync (int employeeId, int userId);
+    Task<OperationResult> AddRoleToUserAsync(UserRoleDto userRoleDto);
+    Task<OperationResult> RemoveRoleFromUserAsync(UserRoleDto userRoleDto);
+    Task<OperationResult<IEnumerable<string>>> GetRolesAsync(string userId);
 
     // Account information retrieval
-    Task<UserAccountDto> GetUserAccountByIdAsync(int id);
-    Task<IEnumerable<UserAccountDto>> GetAllUserAccountsAsync();
+    Task<OperationResult<UserAccountDto>> GetUserAccountByIdAsync(string id);
+    Task<OperationResult<IEnumerable<UserAccountDto>>> GetAllUserAccountsAsync();
 
 }

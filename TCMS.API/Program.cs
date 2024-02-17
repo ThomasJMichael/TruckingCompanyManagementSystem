@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TCMS.Data.Data;
+using TCMS.Data.Initialization;
+using TCMS.Data.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers(); // Add this line for API controllers
 builder.Services.AddDbContext<TcmsContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddDefaultIdentity<UserAccount>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<TcmsContext>();
+
 
 // Add any other services here, such as AddScoped, AddSingleton, etc.
 
@@ -21,6 +29,13 @@ else
 {
     app.UseExceptionHandler("/Error");
     app.UseHsts();
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var userManager = services.GetRequiredService<UserManager<UserAccount>>();
+    await SeedData.Initialize(services, userManager);
 }
 
 app.UseHttpsRedirection();

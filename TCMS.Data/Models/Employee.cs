@@ -8,7 +8,7 @@ namespace TCMS.Data.Models
 {
      public class Employee
     {
-        public int EmployeeId { get; set; }
+        public string EmployeeId { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
@@ -19,13 +19,14 @@ namespace TCMS.Data.Models
         public string HomePhoneNumber { get; set; }
         public string CellPhoneNumber { get; set; }
         public decimal PayRate { get; set; }
-        public int YearsWithCompany { get; set; }
 
-        // UserAccount
-        public int UserAccountId { get; set; }
-        public virtual UserAccount UserAccount { get; set; }
+        public DateTime StartDate { get; set; }
+        public int YearsWithCompany => (DateTime.Now - StartDate).Days / 365;
 
         public virtual ICollection<TimeSheet> TimeSheets { get; set; }
+
+        public int ? UserAccountId { get; set; }
+        public virtual UserAccount UserAccount { get; set; }
 
     }
 }

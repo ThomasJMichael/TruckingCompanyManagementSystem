@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using TCMS.Data.Models;
 
 namespace TCMS.Data.Data;
 
-public class TcmsContext : DbContext
+public class TcmsContext : IdentityDbContext<UserAccount>
 {
     // DbSets
     public DbSet<Assignment> Assignments { get; set; }
@@ -31,6 +32,8 @@ public class TcmsContext : DbContext
     // OnModelCreating
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+
         // Assignment
         modelBuilder.Entity<Assignment>()
             .HasOne(a => a.Driver)
