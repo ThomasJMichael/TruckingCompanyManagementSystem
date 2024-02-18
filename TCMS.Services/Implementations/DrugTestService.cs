@@ -1,5 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using TCMS.Common.DTOs.DrugTestDto;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using TCMS.Common.DTOs.DrugTest;
 using TCMS.Common.Operations;
 using TCMS.Data.Data;
 using TCMS.Data.Models;
@@ -7,31 +8,21 @@ using TCMS.Services.Interfaces;
 
 namespace TCMS.Services.Implementations
 {
-    public class DrugTestService : IDrugTestService
+    public class DrugTestService(TcmsContext context, IMapper mapper) : IDrugTestService
     {
-        private readonly TcmsContext _context;
         public async Task<OperationResult> CreateTestAsync(DrugTestCreateDto drugTestDto)
         {
             try
             {
-                var drugTest = new DrugAndAlcoholTest
-                {
-                    DriverId = drugTestDto.DriverId,
-                    TestType = drugTestDto.TestType,
-                    TestResult = drugTestDto.TestResult,
-                    TestDetails = drugTestDto.TestDetails,
-                    TestDate = drugTestDto.TestDate,
-                    IncidentReportId = drugTestDto.IncidentReportId,
-                    FollowUpTestDate = drugTestDto.FollowUpTestDate
-                };
-                _context.DrugAndAlcoholTests.Add(drugTest);
-                await _context.SaveChangesAsync();
+                var drugTest = mapper.Map<DrugAndAlcoholTest>(drugTestDto);
+                context.DrugAndAlcoholTests.Add(drugTest);
+                await context.SaveChangesAsync();
 
                 return OperationResult.Success();
             }
             catch (Exception e)
             {
-                return OperationResult.Failure([e.Message]);
+                return OperationResult.Failure(new List<string> { e.Message });
             }
         }
 
@@ -39,49 +30,29 @@ namespace TCMS.Services.Implementations
         {
             try
             {
-                var tests = await _context.DrugAndAlcoholTests
+                var tests = await context.DrugAndAlcoholTests
                     .Include(t => t.Driver)
-                    .Select(t => new DrugTestDto
-                    {
-                        DrugAndAlcoholTestId = t.DrugAndAlcoholTestId,
-                        DriverId = t.DriverId,
-                        TestType = t.TestType,
-                        TestResult = t.TestResult,
-                        TestDetails = t.TestDetails,
-                        TestDate = t.TestDate,
-                        IncidentReportId = t.IncidentReportId,
-                        FollowUpTestDate = t.FollowUpTestDate,
-                        IsFollowUpComplete = t.IsFollowUpComplete
-                    })
                     .ToListAsync();
 
-                return OperationResult<IEnumerable<DrugTestDto>>.Success(tests);
+                var testDtos = mapper.Map<IEnumerable<DrugTestDto>>(tests);
+
+                return OperationResult<IEnumerable<DrugTestDto>>.Success(testDtos);
             }
             catch (Exception e)
             {
-                return OperationResult<IEnumerable<DrugTestDto>>.Failure([e.Message]);
+                return OperationResult<IEnumerable<DrugTestDto>>.Failure(new List<string> { e.Message });
             }
         }
 
-        public async Task<OperationResult<DrugTestDto>> GetTestByIdAsync(int drugTestId)
+
+    public async Task<OperationResult<DrugTestDto>> GetTestByIdAsync(int drugTestId)
         {
             try
             {
-                var test = await _context.DrugAndAlcoholTests.FindAsync(drugTestId);
+                var test = await context.DrugAndAlcoholTests.FindAsync(drugTestId);
                 if (test == null) return OperationResult<DrugTestDto>.Failure(["Test not found."]);
 
-                var testDto = new DrugTestDto
-                {
-                    DrugAndAlcoholTestId = test.DrugAndAlcoholTestId,
-                    DriverId = test.DriverId,
-                    TestType = test.TestType,
-                    TestResult = test.TestResult,
-                    TestDetails = test.TestDetails,
-                    TestDate = test.TestDate,
-                    IncidentReportId = test.IncidentReportId,
-                    FollowUpTestDate = test.FollowUpTestDate,
-                    IsFollowUpComplete = test.IsFollowUpComplete
-                };
+                var testDto = mapper.Map<DrugTestDto>(test);
                 return OperationResult<DrugTestDto>.Success(testDto);
             }
             catch (Exception e)
@@ -92,20 +63,14 @@ namespace TCMS.Services.Implementations
 
         public async Task<OperationResult> UpdateTestAsync(DrugTestUpdateDto drugTestDto)
         {
-            var test = await _context.DrugAndAlcoholTests.FindAsync(drugTestDto.DrugAndAlcoholTestId);
+            var test = await context.DrugAndAlcoholTests.FindAsync(drugTestDto.DrugAndAlcoholTestId);
             if (test == null) return OperationResult.Failure(["Test not found."]);
 
-            test.TestDate = drugTestDto.TestDate;
-            test.TestType = drugTestDto.TestType;
-            test.TestResult = drugTestDto.TestResult;
-            test.TestDetails = drugTestDto.TestDetails;
-            test.IncidentReportId = drugTestDto.IncidentReportId;
-            test.FollowUpTestDate = drugTestDto.FollowUpTestDate;
-            test.IsFollowUpComplete = drugTestDto.IsFollowUpComplete;
+            mapper.Map(drugTestDto, test);
 
             try
             {
-                await _context.SaveChangesAsync();
+                await context.SaveChangesAsync();
                 return OperationResult.Success();
             }
             catch (Exception e)
@@ -116,13 +81,13 @@ namespace TCMS.Services.Implementations
 
         public async Task<OperationResult> DeleteTestAsync(int drugTestId)
         {
-            var test = await _context.DrugAndAlcoholTests.FindAsync(drugTestId);
+            var test = await context.DrugAndAlcoholTests.FindAsync(drugTestId);
             if (test == null) return OperationResult.Failure(["Test not found."]);
 
             try
             {
-                _context.DrugAndAlcoholTests.Remove(test);
-                await _context.SaveChangesAsync();
+                context.DrugAndAlcoholTests.Remove(test);
+                await context.SaveChangesAsync();
                 return OperationResult.Success();
             }
             catch (Exception e)
@@ -135,22 +100,11 @@ namespace TCMS.Services.Implementations
         {
             try
             {
-                var tests = await _context.DrugAndAlcoholTests
+                var tests = await context.DrugAndAlcoholTests
                     .Where(test => test.DriverId == driverId)
                     .ToListAsync();
 
-                var testDtos = tests.Select(t => new DrugTestDto
-                {
-                    DrugAndAlcoholTestId = t.DrugAndAlcoholTestId,
-                    DriverId = t.DriverId,
-                    TestType = t.TestType,
-                    TestResult = t.TestResult,
-                    TestDetails = t.TestDetails,
-                    TestDate = t.TestDate,
-                    IncidentReportId = t.IncidentReportId,
-                    FollowUpTestDate = t.FollowUpTestDate,
-                    IsFollowUpComplete = t.IsFollowUpComplete
-                });
+                var testDtos = mapper.Map<IEnumerable<DrugTestDto>>(tests);
 
                 return OperationResult<IEnumerable<DrugTestDto>>.Success(testDtos);
             }
@@ -164,7 +118,7 @@ namespace TCMS.Services.Implementations
         {
             try
             {
-                var test = await _context.DrugAndAlcoholTests.FindAsync(drugTestId);
+                var test = await context.DrugAndAlcoholTests.FindAsync(drugTestId);
                 if (test == null) return OperationResult.Failure(["Test not found."]);
 
                 if (followUpDate < DateTime.Now) return OperationResult.Failure(["Follow-up date must be in the future."]);
@@ -172,7 +126,7 @@ namespace TCMS.Services.Implementations
                 test.FollowUpTestDate = followUpDate;
                 test.IsFollowUpComplete = false;
 
-                await _context.SaveChangesAsync();
+                await context.SaveChangesAsync();
                 return OperationResult.Success();
             }
             catch (Exception e)
@@ -185,7 +139,7 @@ namespace TCMS.Services.Implementations
         {
             try
             {
-                var test = await _context.DrugAndAlcoholTests.FindAsync(drugTestId);
+                var test = await context.DrugAndAlcoholTests.FindAsync(drugTestId);
                 if (test == null) return OperationResult.Failure(["Test not found."]);
 
                 if (test.FollowUpTestDate == null) return OperationResult.Failure(["No follow-up test scheduled."]);
@@ -193,7 +147,7 @@ namespace TCMS.Services.Implementations
                 test.TestResult = result;
                 test.IsFollowUpComplete = true;
 
-                await _context.SaveChangesAsync();
+                await context.SaveChangesAsync();
                 return OperationResult.Success();
             }
             catch (Exception e)

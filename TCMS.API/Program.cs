@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using TCMS.Common.Mappings;
 using TCMS.Data.Data;
 using TCMS.Data.Initialization;
 using TCMS.Data.Models;
@@ -14,6 +15,9 @@ builder.Services.AddDbContext<TcmsContext>(options =>
 builder.Services.AddDefaultIdentity<UserAccount>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<TcmsContext>();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAutoMapper(typeof(MappingConfigurations));
 
 
 // Add any other services here, such as AddScoped, AddSingleton, etc.

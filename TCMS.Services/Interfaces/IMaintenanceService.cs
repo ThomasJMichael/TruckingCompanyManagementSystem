@@ -1,38 +1,40 @@
 ﻿using TCMS.Common.DTOs.Equipment;
+using TCMS.Common.Operations;
 using TCMS.Data.Models;
 
 namespace TCMS.Services.Interfaces;
 
 public interface IMaintenanceService
 {
-    //Maintenance Records
-    Task<IEnumerable<MaintenanceRecordDto>> GetAllMaintenanceRecordsAsync();
-    Task<MaintenanceRecordDto> GetByIdAsync(int maintenanceRecordId);
-    Task<IEnumerable<MaintenanceRecordDto>> GetByVehicleIdAsync(string vehicleId);
-    Task<MaintenanceRecordDto> CreateAsync(MaintenanceRecordDto maintenanceRecordDto);
-    Task<bool> UpdateAsync(MaintenanceRecordDto maintenanceRecordDto);
-    Task<bool> DeleteAsync(int maintenanceRecordId);
+    // Maintenance Records
+    Task<OperationResult<IEnumerable<MaintenanceRecordDto>>> GetAllMaintenanceRecordsAsync();
+    Task<OperationResult<MaintenanceRecordDto>> GetMaintenanceRecordByIdAsync(int maintenanceRecordId);
+    Task<OperationResult<IEnumerable<MaintenanceRecordDto>>> GetMaintenanceRecordsByVehicleIdAsync(string vehicleId);
+    Task<OperationResult<MaintenanceRecordDto>> CreateMaintenanceRecordAsync(MaintenanceRecordDto maintenanceRecordDto);
+    Task<OperationResult> UpdateMaintenanceRecordAsync(MaintenanceRecordDto maintenanceRecordDto);
+    Task<OperationResult> DeleteMaintenanceRecordAsync(int maintenanceRecordId);
 
     // Repair Records
-    Task<IEnumerable<RepairRecordDto>> GetAllRepairRecordsAsync { get; }
-    Task<RepairRecordDto> GetRepairRecordByIdAsync(int repairRecordId);
-    Task<RepairRecordDto> CreateRepairRecordAsync(RepairRecordDto repairRecord);
-    Task<bool> UpdateRepairRecordAsync(RepairRecordDto repairRecord);
-    Task<bool> DeleteRepairRecordAsync(int repairRecordId);
-    Task<IEnumerable<RepairRecordDto>> GetRepairRecordsByVehicleIdAsync(string vehicleId);
+    Task<OperationResult<IEnumerable<RepairRecordDto>>> GetAllRepairRecordsAsync();
+    Task<OperationResult<RepairRecordDto>> GetRepairRecordByIdAsync(int repairRecordId);
+    Task<OperationResult<RepairRecordDto>> CreateRepairRecordAsync(RepairRecordDto repairRecordDto);
+    Task<OperationResult> UpdateRepairRecordAsync(RepairRecordDto repairRecordDto);
+    Task<OperationResult> DeleteRepairRecordAsync(int repairRecordId);
+    Task<OperationResult<IEnumerable<RepairRecordDto>>> GetRepairRecordsByVehicleIdAsync(string vehicleId);
 
     // Parts
-    Task<IEnumerable<PartDetailDto>> GetAllPartsAsync();
-    Task<PartDetailDto> GetPartByIdAsync(int partId);
-    Task<PartDetailDto> AddPartAsync(PartDetailDto part);
-    Task<bool> UpdatePartAsync(PartDetailDto part);
-    Task<bool> DeletePartAsync(int partId);
+    Task<OperationResult<IEnumerable<PartDetailDto>>> GetAllPartsAsync();
+    Task<OperationResult<PartDetailDto>> GetPartByIdAsync(int partId);
+    Task<OperationResult<PartDetailDto>> AddPartAsync(PartDetailDto partDto);
+    Task<OperationResult> UpdatePartAsync(PartDetailDto partDto);
+    Task<OperationResult> DeletePartAsync(int partId);
 
-    // Assign Part to MaintenanceRecordDto
-    Task<bool> AssignPartToMaintenanceRecordAsync(int maintenanceRecordId, int partId);
+    // Assign Part to MaintenanceRecord
+    Task<OperationResult> AssignPartToMaintenanceRecordAsync(int maintenanceRecordId, int partId);
 
     // Add Special Ordered Part
-    Task<bool> AddSpecialOrderedPartAsync(PartDetailDto part, string orderSource, decimal cost);
-
+    Task<OperationResult> AddSpecialOrderedPartAsync(PartDetailDto partDto, string orderSource, decimal cost);
 
 }
+
+

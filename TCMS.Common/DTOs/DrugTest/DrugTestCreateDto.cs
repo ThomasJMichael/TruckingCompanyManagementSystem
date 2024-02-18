@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 using TCMS.Common.DataAnnotations;
 using TCMS.Data.Models;
 
-namespace TCMS.Common.DTOs.DrugTestDto
+namespace TCMS.Common.DTOs.DrugTest
 {
     public class DrugTestCreateDto
     {

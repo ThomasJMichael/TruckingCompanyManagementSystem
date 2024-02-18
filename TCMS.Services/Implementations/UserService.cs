@@ -14,32 +14,34 @@ using TCMS.Services.Interfaces;
 
 namespace TCMS.Services.Implementations
 {
-    public class UserService : IUserService
+    public class UserService(
+        UserManager<UserAccount> userManager,
+        RoleManager<IdentityRole> roleManager,
+        SignInManager<UserAccount> signInManager,
+        TcmsContext context)
+        : IUserService
     {
-        private readonly UserManager<UserAccount> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly SignInManager<UserAccount> _signInManager;
-        private readonly TcmsContext _context;
+        private readonly SignInManager<UserAccount> _signInManager = signInManager;
 
         public async Task<OperationResult> AddRoleToUserAsync(int userId, string roleName)
         {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
+            var user = await userManager.FindByIdAsync(userId.ToString());
             if (user == null) return OperationResult.UserNotFound();
 
-            var role = await _roleManager.FindByNameAsync(roleName);
+            var role = await roleManager.FindByNameAsync(roleName);
             if (role == null) return OperationResult.RoleNotFound();
 
-            var result = await _userManager.AddToRoleAsync(user, roleName);
+            var result = await userManager.AddToRoleAsync(user, roleName);
             return result.Succeeded ? OperationResult.Success() : OperationResult.Failure(result.Errors.Select(e => e.Description));
         }
 
         public async Task<OperationResult> CreateUserAccountAsync(NewAccountDto newAccountDto)
         {
             //Check if user already exists
-            var existingUser = await _userManager.FindByNameAsync(newAccountDto.Username);
+            var existingUser = await userManager.FindByNameAsync(newAccountDto.Username);
             if (existingUser != null) return OperationResult.UserAlreadyExists();
 
-            await using var transaction = await _context.Database.BeginTransactionAsync();
+            await using var transaction = await context.Database.BeginTransactionAsync();
             try
             {
                 Employee employee;
@@ -61,7 +63,7 @@ namespace TCMS.Services.Implementations
                         CDLNumber = newAccountDto.DriverInfo.CDLNumber,
                         CDLExperationDate = newAccountDto.DriverInfo.CDLExperationDate
                     };
-                    _context.Drivers.Add(driver);
+                    context.Drivers.Add(driver);
                     employee = driver;
                 }
                 else
@@ -80,16 +82,16 @@ namespace TCMS.Services.Implementations
                         PayRate = newAccountDto.PayRate,
                         StartDate = newAccountDto.StartDate
                     };
-                    _context.Employees.Add(employee);
+                    context.Employees.Add(employee);
                 }
-                await _context.SaveChangesAsync();
+                await context.SaveChangesAsync();
 
                 var user = new UserAccount
                 {
                     UserName = newAccountDto.Username,
                     EmployeeId = employee.EmployeeId
                 };
-                var createResult = await _userManager.CreateAsync(user, newAccountDto.Password);
+                var createResult = await userManager.CreateAsync(user, newAccountDto.Password);
                 if (!createResult.Succeeded)
                 {
                     await transaction.RollbackAsync();
@@ -97,7 +99,7 @@ namespace TCMS.Services.Implementations
                 }
 
                 //Add user to role
-                var roleResult = await _userManager.AddToRoleAsync(user, newAccountDto.Role);
+                var roleResult = await userManager.AddToRoleAsync(user, newAccountDto.Role);
                 if (!roleResult.Succeeded)
                 {
                     await transaction.RollbackAsync();
@@ -116,10 +118,10 @@ namespace TCMS.Services.Implementations
 
         public async Task<OperationResult> UpdateUsernameAsync(ChangeUsernameDto changeUsernameDto)
         {
-            var user = await _userManager.FindByIdAsync(changeUsernameDto.CurrentUsername);
+            var user = await userManager.FindByIdAsync(changeUsernameDto.CurrentUsername);
             if (user == null) return OperationResult.UserNotFound();
             
-            var setUsernameResult = await _userManager.SetUserNameAsync(user, changeUsernameDto.NewUsername);
+            var setUsernameResult = await userManager.SetUserNameAsync(user, changeUsernameDto.NewUsername);
             return setUsernameResult.Succeeded ? OperationResult.Success() : OperationResult.Failure(setUsernameResult.Errors.Select(e => e.Description));
         }
 
@@ -130,16 +132,16 @@ namespace TCMS.Services.Implementations
 
         public async Task<OperationResult> UpdatePayRate(UpdatePayRateDto updatePayRateDto)
         {
-            await using var transaction = await _context.Database.BeginTransactionAsync();
+            await using var transaction = await context.Database.BeginTransactionAsync();
 
             try
             {
-                var employee = await _context.Employees.FindAsync(updatePayRateDto.EmployeeId);
+                var employee = await context.Employees.FindAsync(updatePayRateDto.EmployeeId);
                 if (employee == null) return OperationResult.Failure(["Employee not found."]);
 
                 employee.PayRate = updatePayRateDto.NewPayRate;
-                _context.Employees.Update(employee);
-                await _context.SaveChangesAsync();
+                context.Employees.Update(employee);
+                await context.SaveChangesAsync();
                 return OperationResult.Success();
             }
             catch (Exception e)
@@ -153,10 +155,10 @@ namespace TCMS.Services.Implementations
         {
             try
             {
-                var user = await _userManager.FindByIdAsync(userRoleDto.UserId);
+                var user = await userManager.FindByIdAsync(userRoleDto.UserId);
                 if (user == null) return OperationResult.UserNotFound();
 
-                var result = await _userManager.AddToRoleAsync(user, userRoleDto.RoleName);
+                var result = await userManager.AddToRoleAsync(user, userRoleDto.RoleName);
                 return result.Succeeded
                     ? OperationResult.Success()
                     : OperationResult.Failure(result.Errors.Select(e => e.Description));
@@ -171,16 +173,16 @@ namespace TCMS.Services.Implementations
         {
             try
             {
-                var user = await _userManager.FindByIdAsync(userRoleDto.UserId);
+                var user = await userManager.FindByIdAsync(userRoleDto.UserId);
                 if (user == null) return OperationResult.UserNotFound();
                 
-                var result = await _userManager.RemoveFromRoleAsync(user, userRoleDto.RoleName);
+                var result = await userManager.RemoveFromRoleAsync(user, userRoleDto.RoleName);
                 if (!result.Succeeded) return OperationResult.Failure(result.Errors.Select(e => e.Description));
                 
-                var roles = await _userManager.GetRolesAsync(user);
+                var roles = await userManager.GetRolesAsync(user);
                 if (roles.Count == 0)
                 {
-                    var defaultRole = await _userManager.AddToRoleAsync(user, Role.Default);
+                    var defaultRole = await userManager.AddToRoleAsync(user, Role.Default);
                     if (!defaultRole.Succeeded)
                         return OperationResult.Failure(defaultRole.Errors.Select(e => e.Description));
                 }
@@ -195,10 +197,10 @@ namespace TCMS.Services.Implementations
         //TODO I think this operation will fail currently because of OnDelete behavior
         public async Task<OperationResult> DeleteUserAccountAsync(int id)
         {
-            var user = await _userManager.FindByIdAsync(id.ToString());
+            var user = await userManager.FindByIdAsync(id.ToString());
             if (user == null) return OperationResult.UserNotFound();
             
-            var result = await _userManager.DeleteAsync(user);
+            var result = await userManager.DeleteAsync(user);
             return result.Succeeded ? OperationResult.Success() : OperationResult.Failure(result.Errors.Select(e => e.Description));
 
         }
@@ -207,10 +209,10 @@ namespace TCMS.Services.Implementations
         {
             try
             {
-                var user = await _userManager.FindByIdAsync(userId);
+                var user = await userManager.FindByIdAsync(userId);
                 if (user == null) return OperationResult<UserAccountDto>.Failure(["User not found."]);
 
-                var roles = await _userManager.GetRolesAsync(user);
+                var roles = await userManager.GetRolesAsync(user);
                 var roleName = roles.FirstOrDefault();
 
                 var userAccountDto = new UserAccountDto
@@ -231,12 +233,12 @@ namespace TCMS.Services.Implementations
         {
             try
             {
-                var userAccounts = await _context.UserAccounts.ToListAsync();
+                var userAccounts = await context.UserAccounts.ToListAsync();
                 var userAccountDtos = userAccounts.Select(u => new UserAccountDto
                 {
                     EmployeeId = u.EmployeeId,
                     Username = u.UserName,
-                    UserRole = _roleManager.Roles.FirstOrDefault(r => r.Id == _userManager.GetRolesAsync(u).Result.FirstOrDefault())?.Name,
+                    UserRole = roleManager.Roles.FirstOrDefault(r => r.Id == userManager.GetRolesAsync(u).Result.FirstOrDefault())?.Name,
                 }).ToList();
                 return OperationResult<IEnumerable<UserAccountDto>>.Success(userAccountDtos);
             }
@@ -248,13 +250,13 @@ namespace TCMS.Services.Implementations
 
         public async Task<OperationResult<IEnumerable<string>>> GetRolesAsync(string userId)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await userManager.FindByIdAsync(userId);
             if (user == null)
             {
                 return OperationResult<IEnumerable<string>>.Failure(["User not found."]);
             }
 
-            var roles = await _userManager.GetRolesAsync(user);
+            var roles = await userManager.GetRolesAsync(user);
             return OperationResult<IEnumerable<string>>.Success(roles);
         }
 

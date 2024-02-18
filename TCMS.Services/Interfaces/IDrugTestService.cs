@@ -1,5 +1,5 @@
-﻿using TCMS.Data.Models;
-using TCMS.Common.DTOs.DrugTestDto;
+﻿using TCMS.Common.DTOs.DrugTest;
+using TCMS.Data.Models;
 using TCMS.Common.Operations;
 
 namespace TCMS.Services.Interfaces

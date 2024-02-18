@@ -17,6 +17,6 @@ public interface IIncidentService
     Task<OperationResult<IncidentReportDto>> GetIncidentReportByIdAsync(int incidentReportId);
 
     // This method will be responsible for checking if a Drug and Alcohol Test is needed after an incident
-    Task<OperationResult> EvaluateAndInitiateDrugTestForIncidentAsync(int incidentReportId);
+    Task<OperationResult> EvaluateAndInitiateDrugTestForIncidentAsync(int incidentReportId, DateTime? testDate = null );
 }
 
