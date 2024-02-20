@@ -10,5 +10,7 @@
         //Foreign Keys
         public string? VehicleId { get; set; }
         public virtual Vehicle Vehicle { get; set; }
+
+        public virtual ICollection<PartDetails>? PartDetails { get; set; }
     }
 }

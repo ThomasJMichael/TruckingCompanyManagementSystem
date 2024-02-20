@@ -139,7 +139,7 @@ public class TcmsContext : IdentityDbContext<UserAccount>
         modelBuilder.Entity<IncidentReport>()
             .HasOne(i => i.DrugAndAlcoholTest)
             .WithOne(t => t.IncidentReport)
-            .HasForeignKey<DrugAndAlcoholTest>(t => t.IncidentReportID)
+            .HasForeignKey<DrugAndAlcoholTest>(t => t.IncidentReportId)
             .OnDelete(DeleteBehavior.Restrict);
 
         // Shipment
@@ -161,6 +161,12 @@ public class TcmsContext : IdentityDbContext<UserAccount>
             .HasOne(m => m.Vehicle)
             .WithMany(v => v.MaintenanceRecords)
             .HasForeignKey(m => m.VehicleId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<MaintenanceRecord>()
+            .HasMany(m => m.PartDetails)
+            .WithOne(p => p.MaintenanceRecord)
+            .HasForeignKey(p => p.MaintenanceRecordId)
             .OnDelete(DeleteBehavior.Restrict);
 
     }
