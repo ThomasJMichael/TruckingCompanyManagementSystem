@@ -30,6 +30,7 @@ namespace TCMS.Common.Mappings
             // Financial mappings
             CreateMap<Payroll, PayrollDto>().ReverseMap();
             CreateMap<PurchaseOrder, PurchaseOrderDto>().ReverseMap();
+            CreateMap<TimeSheet, TimesheetDto>().ReverseMap();
 
             // General mappings
 

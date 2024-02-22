@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Folder Include="DTOs\General\" />
+    <Folder Include="DTOs\Misc\" />
   </ItemGroup>
 
   <ItemGroup>
