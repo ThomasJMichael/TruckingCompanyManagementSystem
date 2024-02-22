@@ -6,13 +6,28 @@ namespace TCMS.Services.Interfaces;
 
 public interface IPayrollService
 {
+    // Retrieves all payroll records
     Task<OperationResult<IEnumerable<PayrollDto>>> GetAllPayrollsAsync();
+
+    // Retrieves a specific payroll record by ID
     Task<OperationResult<PayrollDto>> GetPayrollByIdAsync(int id);
-    Task<OperationResult<PayrollDto>> CreatePayrollAsync(PayrollDto payroll);
-    Task<OperationResult> UpdatePayrollDtoAsync(PayrollDto payroll);
-    Task<OperationResult> DeletePayrollDtoAsync(int id);
-    Task<OperationResult> CalculateGrossPayAsync(int id);
-    Task<OperationResult> CalculateNetPayAsync(int id);
-    Task<OperationResult> CalculateDeductionsAsync(int id);
+
+    // Generates payroll for all employees based on timesheets within a given date range
+    Task<OperationResult<IEnumerable<PayrollDto>>> GeneratePayrollForPeriodAsync(DateTime payPeriodStart, DateTime payPeriodEnd);
+
+    // Updates an existing payroll record (optional, depends on business logic)
+    Task<OperationResult> UpdatePayrollAsync(PayrollDto payroll);
+
+    // Deletes a specific payroll record by ID (optional, depends on business logic)
+    Task<OperationResult> DeletePayrollAsync(int id);
+
+    // Additional helper methods to calculate parts of the payroll
+    // Note: These could be internal to the service and not necessarily exposed via the interface
+    // Task<OperationResult<decimal>> CalculateGrossPayAsync(int employeeId, DateTime startDate, DateTime endDate);
+    // Task<OperationResult<decimal>> CalculateNetPayAsync(int payrollId);
+    // Task<OperationResult<decimal>> CalculateDeductionsAsync(int payrollId);
+
+    // Generates a report for payroll within a specific period
     Task<OperationResult<IEnumerable<PayrollDto>>> GeneratePayrollReportAsync(DateTime startDate, DateTime endDate);
 }
+
