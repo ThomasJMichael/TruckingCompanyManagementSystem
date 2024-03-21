@@ -27,7 +27,7 @@ namespace TCMS.Data.Models
     public class DrugAndAlcoholTest
     {
         public int DrugAndAlcoholTestId { get; set; }
-        public int DriverId { get; set; }
+        public string DriverId { get; set; }
         public virtual Driver? Driver { get; set; } //Virtual for lazy loading
         public DateTime TestDate { get; set; }
         public TestType TestType { get; set; }

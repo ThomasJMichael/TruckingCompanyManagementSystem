@@ -101,7 +101,7 @@ namespace TCMS.Services.Implementations
             try
             {
                 var tests = await context.DrugAndAlcoholTests
-                    .Where(test => test.DriverId == driverId)
+                    .Where(test => test.DriverId.Equals(driverId))
                     .ToListAsync();
 
                 var testDtos = mapper.Map<IEnumerable<DrugTestDto>>(tests);

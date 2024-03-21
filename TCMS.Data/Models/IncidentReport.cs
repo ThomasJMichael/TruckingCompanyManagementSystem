@@ -26,7 +26,7 @@ namespace TCMS.Data.Models
         public Vehicle Vehicle { get; set; }
 
         // Foreign key for the involved driver
-        public int DriverId { get; set; }
+        public string DriverId { get; set; }
         public Driver Driver { get; set; }
 
         // Specific to accidents

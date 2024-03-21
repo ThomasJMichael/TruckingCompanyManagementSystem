@@ -56,7 +56,7 @@ namespace TCMS.Services.Implementations
                 mapper.Map(incidentReportDto, incidentReport);
 
                 // Update or create drug and alcohol test if required
-                if (incidentReport.RequiresDrugAndAlcoholTest())
+                if (incidentReport.RequiresDrugAndAlcoholTest)
                 {
                     DrugAndAlcoholTest drugAndAlcoholTest;
                     if (incidentReport.DrugAndAlcoholTestId.HasValue)

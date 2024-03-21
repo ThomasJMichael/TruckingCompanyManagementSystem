@@ -15,7 +15,135 @@ namespace TCMS.Data.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.1");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.2");
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens", (string)null);
+                });
 
             modelBuilder.Entity("TCMS.Data.Models.Assignment", b =>
                 {
@@ -27,8 +155,9 @@ namespace TCMS.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("DriverId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("DriverId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("EndTime")
                         .HasColumnType("TEXT");
@@ -58,13 +187,14 @@ namespace TCMS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("DriverId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("DriverId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("FollowUpTestDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("IncidentReportID")
+                    b.Property<int?>("IncidentReportId")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsFollowUpComplete")
@@ -87,7 +217,7 @@ namespace TCMS.Data.Migrations
 
                     b.HasIndex("DriverId");
 
-                    b.HasIndex("IncidentReportID")
+                    b.HasIndex("IncidentReportId")
                         .IsUnique();
 
                     b.ToTable("DrugAndAlcoholTests");
@@ -95,9 +225,8 @@ namespace TCMS.Data.Migrations
 
             modelBuilder.Entity("TCMS.Data.Models.Employee", b =>
                 {
-                    b.Property<int>("EmployeeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("EmployeeId")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -135,15 +264,15 @@ namespace TCMS.Data.Migrations
                     b.Property<decimal>("PayRate")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("State")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("UserAccountId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("YearsWithCompany")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("UserAccountId")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Zip")
                         .IsRequired()
@@ -174,8 +303,9 @@ namespace TCMS.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("DriverId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("DriverId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("DrugAndAlcoholTestId")
                         .HasColumnType("INTEGER");
@@ -373,8 +503,9 @@ namespace TCMS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("EmployeeId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<decimal>("FederalIncomeTax")
                         .HasColumnType("TEXT");
@@ -523,8 +654,8 @@ namespace TCMS.Data.Migrations
                     b.Property<int>("Direction")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("DriverEmployeeId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("DriverEmployeeId")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("EstimatedArrivalTime")
                         .HasColumnType("TEXT");
@@ -569,13 +700,17 @@ namespace TCMS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime>("ClockIn")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ClockOut")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<decimal>("HoursWorked")
+                    b.Property<string>("EmployeeId")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("TimeSheetId");
@@ -587,27 +722,69 @@ namespace TCMS.Data.Migrations
 
             modelBuilder.Entity("TCMS.Data.Models.UserAccount", b =>
                 {
-                    b.Property<int>("UserAccountId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("AccessFailedCount")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("EmployeeId")
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("EmailConfirmed")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("EmployeeId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("PasswordHash")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("UserRole")
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Username")
-                        .IsRequired()
+                    b.Property<string>("SecurityStamp")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("UserAccountId");
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("INTEGER");
 
-                    b.ToTable("UserAccounts");
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex");
+
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("TCMS.Data.Models.Vehicle", b =>
@@ -639,8 +816,7 @@ namespace TCMS.Data.Migrations
                 {
                     b.HasBaseType("TCMS.Data.Models.Employee");
 
-                    b.Property<string>("CDLExperationDate")
-                        .IsRequired()
+                    b.Property<DateTime>("CDLExperationDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("CDLNumber")
@@ -648,6 +824,57 @@ namespace TCMS.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasDiscriminator().HasValue("Driver");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.HasOne("TCMS.Data.Models.UserAccount", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("TCMS.Data.Models.UserAccount", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TCMS.Data.Models.UserAccount", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("TCMS.Data.Models.UserAccount", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TCMS.Data.Models.Assignment", b =>
@@ -679,7 +906,7 @@ namespace TCMS.Data.Migrations
 
                     b.HasOne("TCMS.Data.Models.IncidentReport", "IncidentReport")
                         .WithOne("DrugAndAlcoholTest")
-                        .HasForeignKey("TCMS.Data.Models.DrugAndAlcoholTest", "IncidentReportID")
+                        .HasForeignKey("TCMS.Data.Models.DrugAndAlcoholTest", "IncidentReportId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Driver");
@@ -692,8 +919,7 @@ namespace TCMS.Data.Migrations
                     b.HasOne("TCMS.Data.Models.UserAccount", "UserAccount")
                         .WithOne("Employee")
                         .HasForeignKey("TCMS.Data.Models.Employee", "UserAccountId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("UserAccount");
                 });
@@ -719,7 +945,8 @@ namespace TCMS.Data.Migrations
                 {
                     b.HasOne("TCMS.Data.Models.Vehicle", "Vehicle")
                         .WithMany("MaintenanceRecords")
-                        .HasForeignKey("VehicleId");
+                        .HasForeignKey("VehicleId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Vehicle");
                 });
@@ -757,8 +984,9 @@ namespace TCMS.Data.Migrations
             modelBuilder.Entity("TCMS.Data.Models.PartDetails", b =>
                 {
                     b.HasOne("TCMS.Data.Models.MaintenanceRecord", "MaintenanceRecord")
-                        .WithMany()
-                        .HasForeignKey("MaintenanceRecordId");
+                        .WithMany("PartDetails")
+                        .HasForeignKey("MaintenanceRecordId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TCMS.Data.Models.RepairRecord", "RepairRecord")
                         .WithMany()
@@ -849,6 +1077,11 @@ namespace TCMS.Data.Migrations
                 {
                     b.Navigation("DrugAndAlcoholTest")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("TCMS.Data.Models.MaintenanceRecord", b =>
+                {
+                    b.Navigation("PartDetails");
                 });
 
             modelBuilder.Entity("TCMS.Data.Models.Manifest", b =>

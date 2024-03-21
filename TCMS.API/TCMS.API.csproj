@@ -7,21 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TCMS.Common\TCMS.Common.csproj" />
     <ProjectReference Include="..\TCMS.Data\TCMS.Data.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controller\" />
+    <ProjectReference Include="..\TCMS.Services\TCMS.Services.csproj" />
   </ItemGroup>
 
 </Project>

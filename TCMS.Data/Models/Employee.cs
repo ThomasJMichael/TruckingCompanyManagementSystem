@@ -25,7 +25,7 @@ namespace TCMS.Data.Models
 
         public virtual ICollection<TimeSheet> TimeSheets { get; set; }
 
-        public int ? UserAccountId { get; set; }
+        public string? UserAccountId { get; set; }
         public virtual UserAccount UserAccount { get; set; }
 
     }

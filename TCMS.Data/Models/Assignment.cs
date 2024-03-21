@@ -14,7 +14,7 @@ namespace TCMS.Data.Models
         public string Status { get; set; }
         public string Details { get; set; }
 
-        public int DriverId { get; set; }
+        public string DriverId { get; set; }
         public virtual Driver Driver { get; set; }
 
         public int ShipmentId { get; set; }

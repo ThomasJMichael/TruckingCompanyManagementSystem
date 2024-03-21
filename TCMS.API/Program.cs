@@ -1,14 +1,27 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using TCMS.Common.Mappings;
 using TCMS.Data.Data;
 using TCMS.Data.Initialization;
 using TCMS.Data.Models;
+using TCMS.Services.Implementations;
+using TCMS.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllers(); // Add this line for API controllers
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IDrugTestService, DrugTestService>();
+builder.Services.AddScoped<IIncidentService, IncidentService>();
+builder.Services.AddScoped<IMaintenanceService, MaintenanceService>();
+builder.Services.AddScoped<IManifestService, ManifestService>();
+builder.Services.AddScoped<IPayrollService, PayrollService>();
+builder.Services.AddScoped<ITimeTrackingService, TimeTrackingService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<TcmsContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -19,8 +32,11 @@ builder.Services.AddDefaultIdentity<UserAccount>(options => options.SignIn.Requi
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddAutoMapper(typeof(MappingConfigurations));
 
-
-// Add any other services here, such as AddScoped, AddSingleton, etc.
+// Register the Swagger generator
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "TCMS API", Version = "v1" });
+});
 
 var app = builder.Build();
 
@@ -34,6 +50,17 @@ else
     app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
+// Enable middleware to serve generated Swagger as a JSON endpoint.
+app.UseSwagger();
+
+// Enable middleware to serve swagger-ui
+// specifying the Swagger JSON endpoint.
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "TCMS API V1");
+    c.DocumentTitle = "TCMS API Documentation";
+    c.RoutePrefix = string.Empty; // To serve the Swagger UI at the app's root
+});
 
 using (var scope = app.Services.CreateScope())
 {
