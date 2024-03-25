@@ -1,0 +1,1 @@
+Contains static resources like images, icons, stylesheets, and themes that the GUI uses.

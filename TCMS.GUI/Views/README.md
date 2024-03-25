@@ -1,0 +1,1 @@
+Represents the UI of your application. Each View is typically tied to a ViewModel. This is where you design your application's interface using XAML (for WPF applications).

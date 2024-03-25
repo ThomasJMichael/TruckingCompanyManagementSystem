@@ -1,0 +1,1 @@
+Provides reusable logic that can be consumed by multiple ViewModels. Examples include data fetching, data saving, navigation, and dialog services. Services help to keep the ViewModel layer clean and focused on UI logic rather than business logic or data access operations.

@@ -1,0 +1,1 @@
+Defines the data structures that the application works with. These are plain C# classes representing the business model.

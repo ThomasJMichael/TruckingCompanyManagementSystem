@@ -1,0 +1,1 @@
+Contains the logic for the views but decoupled from the UI elements themselves. ViewModels transform model information into view information, handle user commands, and trigger UI actions. They act as the link between the Models and the Views.
