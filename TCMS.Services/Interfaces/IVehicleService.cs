@@ -1,39 +1,39 @@
 ﻿using TCMS.Common.DTOs.Equipment;
+using TCMS.Common.Operations;
 using TCMS.Data.Models;
+using TCMS.Common.DTOs.Equipment;
 
 namespace TCMS.Services.Interfaces;
 
 public interface IVehicleService
 {
     // Vehicle CRUD
-    Task<IEnumerable<Vehicle>> GetAllAsync();
-    Task<Vehicle> GetVehicleByIdAsync(int id);
-    Task<Vehicle> CreateVehicleAsync(Vehicle vehicle);
-    Task<bool> UpdateVehicleAsync(Vehicle vehicle);
-    Task<bool> DeleteVehicleAsync(int id);
+    Task<OperationResult<IEnumerable<VehicleDto>>> GetAllAsync();
+    Task<OperationResult<VehicleDto>> GetVehicleByIdAsync(string vehicleId);
+    Task<OperationResult<VehicleDto>> CreateVehicleAsync(VehicleCreateDto vehicleDto);
+    Task<OperationResult> UpdateVehicleAsync(VehicleUpdateDto vehicleDto);
+    Task<OperationResult> DeleteVehicleAsync(string vehicleId);
 
     // Routine Inspections and Maintenance
-    Task<IEnumerable<MaintenanceRecordDto>> GetMaintenanceRecordsByVehicleIdAsync(string vehicleId);
-    Task<IEnumerable<MaintenanceRecordDto>> GetInspectionRecordsByVehicleIdAsync(string vehicleId);
-    Task<bool> AddMaintenanceRecordToVehicleAsync(string vehicleId, MaintenanceRecordDto maintenanceRecordDto);
-    Task<bool> AddInspectionRecordToVehicleAsync(string vehicleId, MaintenanceRecordDto inspectionRecordDto);
+    Task<OperationResult<IEnumerable<MaintenanceRecordDto>>> GetMaintenanceRecordsByVehicleIdAsync(string vehicleId);
+    Task<OperationResult<IEnumerable<MaintenanceRecordDto>>> GetInspectionRecordsByVehicleIdAsync(string vehicleId);
+    Task<OperationResult> AddMaintenanceRecordToVehicleAsync(MaintenanceRecordCreateDto maintenanceRecordDto);
+    Task<OperationResult> AddInspectionRecordToVehicleAsync(InspectionRecordCreateDto inspectionRecordDto);
 
     // Repair Records
-    Task<IEnumerable<RepairRecord>> GetRepairRecordsByVehicleIdAsync(string vehicleId);
-    Task<RepairRecord> AddRepairRecordToVehicleAsync(string vehicleId, RepairRecord repairRecord);
-    Task<bool> UpdateRepairRecordAsync(RepairRecord repairRecord);
-    Task<bool> DeleteRepairRecordAsync(int repairRecordId);
+    Task<OperationResult<IEnumerable<RepairRecordDto>>> GetRepairRecordsByVehicleIdAsync(string vehicleId);
+    Task<OperationResult<RepairRecordDto>> AddRepairRecordToVehicleAsync(RepairRecordCreateDto repairRecordDto);
+    Task<OperationResult> UpdateRepairRecordAsync(RepairRecordUpdateDto repairRecordDto);
+    Task<OperationResult> DeleteRepairRecordAsync(int repairRecordId);
 
     // Parts Management
-    Task<IEnumerable<PartDetails>> GetPartsByVehicleIdAsync(string vehicleId);
-    Task<PartDetails> AddPartToVehicleAsync(string vehicleId, PartDetails part);
-    Task<bool> RemovePartFromVehicleAsync(string vehicleId, int partId);
+    Task<OperationResult<IEnumerable<PartDetailDto>>> GetPartsByVehicleIdAsync(string vehicleId);
+    Task<OperationResult<PartDetailDto>> AddPartToVehicleAsync(PartDetailCreateDto partDto); // Removed vehicleId since it should be in PartDetailCreateDto
+    Task<OperationResult> RemovePartFromVehicleAsync(string vehicleId, int partId);
 
     // Special Orders
-    Task<IEnumerable<PartDetails>> GetAllSpecialOrderedPartsAsync();
-    Task<IEnumerable<PartDetails>> GetSpecialOrderedPartsByVehicleIdAsync(string vehicleId);
-    Task<bool> MarkPartAsSpecialOrderedAsync(int partId, string orderSource, decimal cost);
-
-
-
+    Task<OperationResult<IEnumerable<PartDetailDto>>> GetAllSpecialOrderedPartsAsync();
+    Task<OperationResult<IEnumerable<PartDetailDto>>> GetSpecialOrderedPartsByVehicleIdAsync(string vehicleId);
+    Task<OperationResult> SpecialOrderedPartUpdate(SpecialOrderPartUpdateDto specialOrderDto);
 }
+

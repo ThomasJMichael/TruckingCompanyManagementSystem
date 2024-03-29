@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace TCMS.Common.DTOs.Equipment
 {
-    public class VehicleDto
+    public class VehicleCreateDto
     {
-        public string VehicleId { get; set; }
-
         [Required(ErrorMessage = "Brand is required.")]
         [StringLength(255, ErrorMessage = "Brand name must be less than 255 characters.")]
         public string Brand { get; set; }
@@ -26,6 +24,7 @@ namespace TCMS.Common.DTOs.Equipment
         [Required(ErrorMessage = "Type is required.")]
         [StringLength(100, ErrorMessage = "Type must be less than 100 characters.")]
         public string Type { get; set; }
+
     }
 
 }

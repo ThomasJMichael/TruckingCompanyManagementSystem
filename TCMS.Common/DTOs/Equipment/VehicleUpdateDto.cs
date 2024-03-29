@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace TCMS.Common.DTOs.Equipment
 {
-    public class VehicleDto
+    public class VehicleUpdateDto
     {
+        [Required]
         public string VehicleId { get; set; }
 
         [Required(ErrorMessage = "Brand is required.")]

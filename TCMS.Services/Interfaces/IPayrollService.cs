@@ -22,7 +22,6 @@ public interface IPayrollService
     Task<OperationResult> DeletePayrollAsync(int id);
 
     // Additional helper methods to calculate parts of the payroll
-    // Note: These could be internal to the service and not necessarily exposed via the interface
     // Task<OperationResult<decimal>> CalculateGrossPayAsync(int employeeId, DateTime startDate, DateTime endDate);
     // Task<OperationResult<decimal>> CalculateNetPayAsync(int payrollId);
     // Task<OperationResult<decimal>> CalculateDeductionsAsync(int payrollId);
