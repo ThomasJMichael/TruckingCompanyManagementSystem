@@ -27,6 +27,9 @@ namespace TCMS.Data.Models
         public virtual ICollection<Assignment> Assignments { get; set; }
         public string VehicleId { get; set; }
         public virtual Vehicle Vehicle { get; set; }
+        public decimal ShippingCost { get; set; }
+        public bool IsShippingCostPaid { get; set; }
+        public DateTime? ShippingCostPaymentDate { get; set; }
 
         public int ManifestId { get; set; }
         public virtual Manifest Manifest { get; set; }
@@ -36,5 +39,29 @@ namespace TCMS.Data.Models
         public DateTime? DepDateTime { get; set; }
         public DateTime? EstimatedArrivalTime { get; set; }
         public DateTime? ActualArrivalTime { get; set; }
+
+        public decimal TotalCost
+        {
+            get
+            {
+                var totalCost = Manifest
+                    .ManifestItems
+                    .Sum(i => i.TotalPrice);
+
+                return totalCost + ShippingCost;
+            }
+        }
+
+        public bool isFullyPaid
+        {
+            get
+            {
+                var areAllItemsPaid = Manifest
+                    .ManifestItems
+                    .All(i => i.IsPaid);
+
+                return areAllItemsPaid && IsShippingCostPaid;
+            }
+        }
     }
 }

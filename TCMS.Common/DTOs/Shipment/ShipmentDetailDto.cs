@@ -27,6 +27,9 @@ namespace TCMS.Common.DTOs.Shipment
         [MaxLength(10)]
         public string Zip { get; set; }
 
+        public decimal TotalCost { get; set; }
+        public bool IsFullyPaid { get; set; }
+
         public string VehicleId { get; set; }
 
         public int ManifestId { get; set; }

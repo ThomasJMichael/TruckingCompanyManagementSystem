@@ -13,6 +13,8 @@ public interface IMaintenanceService
     Task<OperationResult<MaintenanceRecordDto>> CreateMaintenanceRecordAsync(MaintenanceRecordDto maintenanceRecordDto);
     Task<OperationResult> UpdateMaintenanceRecordAsync(MaintenanceRecordDto maintenanceRecordDto);
     Task<OperationResult> DeleteMaintenanceRecordAsync(int maintenanceRecordId);
+    Task<OperationResult<IEnumerable<MaintenanceRecordDto>>> GetMaintenanceRecordsForPeriod(DateTime startDate, DateTime endDate);
+
 
     // Repair Records
     Task<OperationResult<IEnumerable<RepairRecordDto>>> GetAllRepairRecordsAsync();

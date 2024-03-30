@@ -109,6 +109,23 @@ namespace TCMS.Services.Implementations
             }
         }
 
+        public async Task<OperationResult<IEnumerable<MaintenanceRecordDto>>> GetMaintenanceRecordsForPeriod(DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                var maintenanceRecords = await _context.MaintenanceRecords
+                    .Where(mr => mr.MaintenanceDate >= startDate && mr.MaintenanceDate <= endDate)
+                    .ToListAsync();
+
+                var maintenanceRecordsDto = _mapper.Map<IEnumerable<MaintenanceRecordDto>>(maintenanceRecords);
+                return OperationResult<IEnumerable<MaintenanceRecordDto>>.Success(maintenanceRecordsDto);
+            }
+            catch (Exception ex)
+            {
+                return OperationResult<IEnumerable<MaintenanceRecordDto>>.Failure([ ex.Message ]);
+            }
+        }
+
         public async Task<OperationResult<IEnumerable<RepairRecordDto>>> GetAllRepairRecordsAsync()
         {
             try

@@ -8,6 +8,11 @@ namespace TCMS.Common.DTOs.Financial
 
         [Required]
         public string EmployeeId { get; set; }
+        public string FirstName { get; set; }
+        public string? MiddleName { get; set; } = "";
+        public string LastName { get; set; }
+        public decimal HoursWorked { get; set; }
+        public decimal PayRate { get; set; }
 
         [Required]
         [DataType(DataType.Date)]

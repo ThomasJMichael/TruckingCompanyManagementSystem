@@ -74,6 +74,11 @@ namespace TCMS.Services.Implementations
                     var payroll = new PayrollDto
                     {
                         EmployeeId = employee.EmployeeId,
+                        FirstName = employee.FirstName,
+                        MiddleName = employee.MiddleName ?? "",
+                        LastName = employee.LastName,
+                        HoursWorked = group.Sum(ts => ts.HoursWorked),
+                        PayRate = employee.PayRate,
                         PayPeriodStart = payPeriodStart,
                         PayPeriodEnd = payPeriodEnd,
                         GrossPay = CalculateGrossPay(employee, group),
@@ -156,6 +161,11 @@ namespace TCMS.Services.Implementations
                     payrollReport.Add(new PayrollDto
                     {
                         EmployeeId = employee.EmployeeId,
+                        FirstName = employee.FirstName,
+                        MiddleName = employee.MiddleName ?? "",
+                        LastName = employee.LastName,
+                        HoursWorked = totalHoursWorked,
+                        PayRate = employee.PayRate,
                         PayPeriodStart = startDate,
                         PayPeriodEnd = endDate,
                         GrossPay = grossPay,

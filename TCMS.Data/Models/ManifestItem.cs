@@ -28,6 +28,7 @@ namespace TCMS.Data.Models
         public DateTime? DateReturned { get; set; }
         public DateTime? DateCancelled { get; set; }
         public DateTime? DateRefunded { get; set; }
+        public bool IsPaid { get; set; }
         public DateTime? DatePaid { get; set; }
         public DateTime? DateInvoiced { get; set; }
         public DateTime? DatePaidFor { get; set; }

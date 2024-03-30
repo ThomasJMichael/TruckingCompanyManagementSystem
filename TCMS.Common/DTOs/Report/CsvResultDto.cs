@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace TCMS.Common.DTOs.Report
 {
-    public class CsvResultDto(byte[] content, string filename)
+    public class CsvResultDto(string content, string filename)
     {
-        public byte[] Content { get; set; } = content;
+        public string Content { get; set; } = content;
         public string Filename { get; set; } = filename;
         public string ContentType { get; set; } = "text/csv";
     }
