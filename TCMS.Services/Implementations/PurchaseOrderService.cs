@@ -66,7 +66,7 @@ namespace TCMS.Services.Implementations
             }
         }
 
-        public async Task<OperationResult> UpdatePurchaseOrderDtoAsync(PurchaseOrderDto purchaseOrder)
+        public async Task<OperationResult> UpdatePurchaseOrderAsync(PurchaseOrderDto purchaseOrder)
         {
             try
             {
@@ -85,7 +85,7 @@ namespace TCMS.Services.Implementations
             }
         }
 
-        public async Task<OperationResult> DeletePurchaseOrderDtoAsync(int id)
+        public async Task<OperationResult> DeletePurchaseOrderAsync(int id)
         {
             var purchaseOrder = await context.PurchaseOrders.FindAsync(id);
             if (purchaseOrder == null)
@@ -108,7 +108,7 @@ namespace TCMS.Services.Implementations
             throw new NotImplementedException();
         }
 
-        public async Task<OperationResult> LinkManifestToPurchaseOrderDto(int manifestId, int purchaseOrderId)
+        public async Task<OperationResult> LinkManifestToPurchaseOrder(int manifestId, int purchaseOrderId)
         {
             try
             {
