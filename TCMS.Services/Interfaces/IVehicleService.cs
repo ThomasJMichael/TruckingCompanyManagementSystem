@@ -28,7 +28,7 @@ public interface IVehicleService
 
     // Parts Management
     Task<OperationResult<IEnumerable<PartDetailDto>>> GetPartsByVehicleIdAsync(string vehicleId);
-    Task<OperationResult<PartDetailDto>> AddPartToVehicleAsync(PartDetailCreateDto partDto); // Removed vehicleId since it should be in PartDetailCreateDto
+    Task<OperationResult<PartDetailDto>> AddPartToVehicleAsync(PartDetailCreateDto partDto); 
     Task<OperationResult> RemovePartFromVehicleAsync(string vehicleId, int partId);
 
     // Special Orders
