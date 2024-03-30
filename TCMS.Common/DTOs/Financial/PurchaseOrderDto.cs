@@ -7,9 +7,7 @@ namespace TCMS.Common.DTOs.Financial
     {
         public int PurchaseOrderId { get; set; }
 
-        [Required]
-        [DataType(DataType.Date)]
-        public DateTime DateCreated { get; set; }
+        [Required] [DataType(DataType.Date)] public DateTime DateCreated { get; set; }
 
         [Required]
         [StringLength(20, ErrorMessage = "Order number must be less than 20 characters long.")]
@@ -18,3 +16,4 @@ namespace TCMS.Common.DTOs.Financial
         // Assuming ManifestDto exists and is properly defined elsewhere
         public ICollection<ManifestDto> Manifests { get; set; } = new List<ManifestDto>();
     }
+}

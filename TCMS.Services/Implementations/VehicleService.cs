@@ -117,7 +117,8 @@ namespace TCMS.Services.Implementations
                     .ToListAsync();
 
                 if (!maintenanceRecords.Any())
-                    return OperationResult<IEnumerable<MaintenanceRecordDto>>.Failure(new List<string> { "No maintenance records found." })
+                    return OperationResult<IEnumerable<MaintenanceRecordDto>>.Failure(new List<string>
+                        { "No maintenance records found." });
 
                 var maintenanceRecordDtos = mapper.Map<IEnumerable<MaintenanceRecordDto>>(maintenanceRecords);
 
@@ -292,7 +293,7 @@ namespace TCMS.Services.Implementations
                     return OperationResult<IEnumerable<PartDetailDto>>.Failure(
                         new List<string> { "Vehicle not found." });
 
-                var parts = await context.Parts
+                var parts = await context.PartDetails
                     .Where(p => p.VehicleId == vehicleId)
                     .ToListAsync();
 
