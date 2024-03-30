@@ -66,7 +66,7 @@ namespace TCMS.Services.Implementations
             }
         }
 
-        public async Task<OperationResult> UpdateManifestDtoAsync(ManifestDto manifestDto)
+        public async Task<OperationResult> UpdateManifestAsync(ManifestDto manifestDto)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace TCMS.Services.Implementations
             }
         }
 
-        public async Task<OperationResult> DeleteManifestDtoAsync(int id)
+        public async Task<OperationResult> DeleteManifestAsync(int id)
         {
             try
             {

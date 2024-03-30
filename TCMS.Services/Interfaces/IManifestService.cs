@@ -9,8 +9,8 @@ public interface IManifestService
     Task<OperationResult<IEnumerable<ManifestDto>>> GetAllManifestsAsync();
     Task<OperationResult<ManifestDto>> GetManifestByIdAsync(int id);
     Task<OperationResult<ManifestDto>> CreateManifestAsync(ManifestDto manifest);
-    Task<OperationResult> UpdateManifestDtoAsync(ManifestDto manifestDto);
-    Task<OperationResult> DeleteManifestDtoAsync(int id);
+    Task<OperationResult> UpdateManifestAsync(ManifestDto manifestDto);
+    Task<OperationResult> DeleteManifestAsync(int id);
 
     Task<OperationResult<IEnumerable<ManifestItemDto>>> GetManifestItemsByManifestIdAsync(int manifestId);
     Task<OperationResult> AddItemToManifestAsync(int manifestId, ManifestItemDto manifestItem);
