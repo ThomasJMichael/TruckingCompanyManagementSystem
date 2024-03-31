@@ -14,35 +14,60 @@ namespace TCMS.Data.Initialization
         public static async Task Initialize(IServiceProvider serviceProvider, UserManager<UserAccount> userManager)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            Console.WriteLine("Seeding roles...");
+
             foreach (var roleName in RoleHelpers.GetAllRoles())
             {
                 if (roleName == null) continue;
-                /*
-                 * Seed Roles to the database if they do not exist already
-                 */
+
+                // Seed Roles to the database if they do not exist already
                 var roleExist = await roleManager.RoleExistsAsync(roleName);
                 if (!roleExist)
                 {
-                    await roleManager.CreateAsync(new IdentityRole(roleName));
+                    var roleResult = await roleManager.CreateAsync(new IdentityRole(roleName));
+                    if (roleResult.Succeeded)
+                    {
+                        Console.WriteLine($"Successfully created role: {roleName}");
+                    }
+                    else
+                    {
+                        Console.WriteLine(
+                            $"Error creating role: {roleName}. Errors: {string.Join(", ", roleResult.Errors.Select(e => e.Description))}");
+                    }
                 }
             }
 
-            /*
-             * seed default admin user to the database if it does not exist already
-             */
+            // Seed default admin user to the database if it does not exist already
             const string adminUserName = "admin";
             var defaultAdmin = await userManager.FindByNameAsync(adminUserName);
-            if (defaultAdmin == null) ;
+            if (defaultAdmin == null)
             {
+                Console.WriteLine("Seeding default admin user...");
                 var adminUser = new UserAccount
                 {
                     UserName = adminUserName,
                     Email = "admin@admin.com"
                 };
-                var result = await userManager.CreateAsync(adminUser, "admin");
-                if (result.Succeeded)
+                var createUserResult = await userManager.CreateAsync(adminUser, "Admin1!");
+                if (createUserResult.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(adminUser, Role.Admin);
+                    var addToRoleResult =
+                        await userManager.AddToRoleAsync(adminUser,
+                            Role.Admin); // Make sure RoleHelpers.Admin is correctly defined and matches the role name
+                    if (addToRoleResult.Succeeded)
+                    {
+                        Console.WriteLine("Successfully created and assigned role to admin user.");
+                    }
+                    else
+                    {
+                        Console.WriteLine(
+                            $"Error adding admin user to role. Errors: {string.Join(", ", addToRoleResult.Errors.Select(e => e.Description))}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine(
+                        $"Error creating admin user. Errors: {string.Join(", ", createUserResult.Errors.Select(e => e.Description))}");
                 }
             }
         }

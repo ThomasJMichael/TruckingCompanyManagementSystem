@@ -18,6 +18,10 @@ namespace TCMS.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var result = await _authService.LoginAsync(loginDto);
 
             if (!result.IsSuccessful)
@@ -38,6 +42,10 @@ namespace TCMS.API.Controllers
         [HttpPost("change-password")]
         public async Task<IActionResult> ChangePassword(ChangePasswordDto changePasswordDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var result = await _authService.ChangePasswordAsync(changePasswordDto);
 
             if (!result.IsSuccessful)

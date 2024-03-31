@@ -1,0 +1,53 @@
+﻿<Window x:Class="TCMS.GUI.Views.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TCMS.GUI.Views"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:viewModels="clr-namespace:TCMS.GUI.ViewModels"
+        xmlns:assets="clr-namespace:TCMS.GUI.Assets"
+        mc:Ignorable="d"
+        Title="Login" Height="400" Width="350">
+    <Window.Resources>
+        <Style x:Key="InputFieldStyle" TargetType="TextBox">
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+        <Style x:Key="LoginButtonStyle" TargetType="Button">
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Background" Value="DarkSlateBlue"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+        </Style>
+        <assets:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock Text="Login" FontSize="24" FontWeight="Bold" Foreground="DarkSlateBlue" HorizontalAlignment="Center" Margin="0,20,0,20"/>
+
+        <!-- Input Fields -->
+        <StackPanel Grid.Row="1">
+            <xctk:WatermarkTextBox Style="{StaticResource InputFieldStyle}" Watermark="Username" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <!-- Note: PasswordBox does not directly support data binding for security reasons -->
+            <PasswordBox Margin="10" Height="40" x:Name="passwordBox" PasswordChar="*" FontFamily="Segoe UI" FontSize="14"/>
+            <TextBlock Text="{Binding LoginErrorMessage}" Foreground="Red" Margin="10,5"
+                       Visibility="{Binding LoginErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+        </StackPanel>
+
+        <Button Grid.Row="2" Style="{StaticResource LoginButtonStyle}" Command="{Binding LoginCommand}" Content="Login"/>
+    </Grid>
+</Window>
