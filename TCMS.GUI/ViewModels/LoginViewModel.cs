@@ -83,8 +83,6 @@ namespace TCMS.GUI.ViewModels
             {
                 // Attempt to log in via the API client. The result can be used to proceed based on success or failure.
                 var result = await _apiClient.PostAsync<OperationResult>("api/auth/login", loginDto);
-                Debug.WriteLine($"Login result: {result.IsSuccessful}");
-                Debug.WriteLine($"Login error messages: {string.Join(", ", result.Messages)}");
                 if (result.IsSuccessful) // Assuming IsSuccess is a property that indicates success
                 {
                     // Close the current Login window and open the main window
@@ -103,7 +101,7 @@ namespace TCMS.GUI.ViewModels
                         }
 
                         // Open the main window
-                        var mainWindow = new MainWindow(); // Assuming MainWindow is the name of your main window class
+                        var mainWindow = new MainWindow(); 
                         mainWindow.Show();
                     });
                 }

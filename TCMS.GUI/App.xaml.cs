@@ -69,6 +69,8 @@ namespace TCMS.GUI
             // Ensure to call the base class's OnStartup method.
             base.OnStartup(e);
 
+            this.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+
             // Resolve the LoginWindow from the service provider.
             var loginWindow = _serviceProvider.GetRequiredService<LoginWindow>();
             // Although the DataContext is already set in ConfigureServices, 
