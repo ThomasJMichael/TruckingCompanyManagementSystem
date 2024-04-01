@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TCMS.Common.DTOs.User; 
+using TCMS.Common.DTOs.User;
+using TCMS.Common.Operations;
 using TCMS.Services.Interfaces;
 
 namespace TCMS.API.Controllers
@@ -16,7 +17,9 @@ namespace TCMS.API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDto loginDto)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<OperationResult>> Login(LoginDto loginDto)
         {
             if (!ModelState.IsValid)
             {
@@ -26,21 +29,25 @@ namespace TCMS.API.Controllers
 
             if (!result.IsSuccessful)
             {
-                return BadRequest(result.Messages);
+                return BadRequest(result);
             }
 
-            return Ok();
+            return Ok(result);
         }
 
         [HttpPost("logout")]
-        public async Task<IActionResult> Logout()
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<OperationResult>> Logout()
         {
-            await _authService.LogoutAsync();
-            return Ok();
+            var result = await _authService.LogoutAsync();
+            return result.IsSuccessful ? Ok(result) : BadRequest(result);
         }
 
         [HttpPost("change-password")]
-        public async Task<IActionResult> ChangePassword(ChangePasswordDto changePasswordDto)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<OperationResult>> ChangePassword(ChangePasswordDto changePasswordDto)
         {
             if (!ModelState.IsValid)
             {
@@ -50,10 +57,10 @@ namespace TCMS.API.Controllers
 
             if (!result.IsSuccessful)
             {
-                return BadRequest(result.Messages);
+                return BadRequest(result);
             }
 
-            return Ok();
+            return Ok(result);
         }
     }
 }

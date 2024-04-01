@@ -83,6 +83,8 @@ namespace TCMS.GUI.ViewModels
             {
                 // Attempt to log in via the API client. The result can be used to proceed based on success or failure.
                 var result = await _apiClient.PostAsync<OperationResult>("api/auth/login", loginDto);
+                Debug.WriteLine($"Login result: {result.IsSuccessful}");
+                Debug.WriteLine($"Login error messages: {string.Join(", ", result.Messages)}");
                 if (result.IsSuccessful) // Assuming IsSuccess is a property that indicates success
                 {
                     // Close the current Login window and open the main window
@@ -115,7 +117,7 @@ namespace TCMS.GUI.ViewModels
             {
                 // Specific error handling based on the exception message.
                 // Adjust these based on your backend API's error messages.
-                if (ex.Message.Contains("User not found") || ex.Message.Contains("Invalid password"))
+                if (ex.Message.Contains("Invalid username or password."))
                 {
                     LoginErrorMessage = "The username or password is incorrect. Please try again.";
                 }

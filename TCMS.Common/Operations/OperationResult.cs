@@ -2,20 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace TCMS.Common.Operations
 {
     public class OperationResult
     {
-        public bool IsSuccessful { get; private set; }
-        public List<string> Messages { get; private set; }
+        [JsonPropertyName("isSuccessful")]
+        public bool IsSuccessful { get; set; }
+        [JsonPropertyName("messages")]
+        public List<string> Messages { get; set; } = new List<string>();
+        public OperationResult() { }
 
         protected OperationResult(bool isSuccessful, List<string>? messages = null)
         {
             IsSuccessful = isSuccessful;
             Messages = messages ?? [];
         }
+
+        public override string ToString()
+        {
+            return $"IsSuccessful: {IsSuccessful}, Messages: {string.Join(", ", Messages)}";
+        }
+
 
         public static OperationResult Success()
         {
@@ -60,9 +70,14 @@ namespace TCMS.Common.Operations
 
     public class OperationResult<T>
     {
-        public bool IsSuccessful { get; private set; }
-        public T Data { get; private set; }
-        public List<string> Errors { get; private set; }
+        [JsonPropertyName("isSuccessful")]
+        public bool IsSuccessful { get; set; }
+        [JsonPropertyName("data")]
+        public T Data { get; set; } = default!;
+        [JsonPropertyName("messages")]
+        public List<string> Errors { get; set; } = new List<string>();
+
+        public OperationResult() { }
 
         protected OperationResult(bool success, T data, List<string>? errors = null)
         {
