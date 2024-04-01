@@ -147,6 +147,66 @@ namespace TCMS.API.Controllers
             return result.IsSuccessful ? Ok(result) : BadRequest(result);
         }
 
+        // Add product
+        [HttpPost("product/add")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<OperationResult>> AddProduct(ProductDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _manifestService.AddProductAsync(dto);
+            return result.IsSuccessful ? Ok(result) : BadRequest(result);
+        }
+
+        // Update product
+        [HttpPut("product/update")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<OperationResult>> UpdateProduct(ProductDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _manifestService.UpdateProductAsync(dto);
+            return result.IsSuccessful ? Ok(result) : BadRequest(result);
+        }
+
+        // Delete product
+        [HttpDelete("product/delete/{productId}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<OperationResult>> DeleteProduct(int productId)
+        {
+            var result = await _manifestService.DeleteProductAsync(productId);
+            return result.IsSuccessful ? Ok(result) : BadRequest(result);
+        }
+
+        // Get all products
+        [HttpGet("product/all")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult<IEnumerable<ProductDto>>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<OperationResult<IEnumerable<ProductDto>>>> GetAllProducts()
+        {
+            var result = await _manifestService.GetAllProductsAsync();
+            return result.IsSuccessful ? Ok(result) : BadRequest(result);
+        }
+
+        // Get product by id
+        [HttpGet("product/{productId}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult<ProductDto>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<OperationResult<ProductDto>>> GetProductById(int productId)
+        {
+            var result = await _manifestService.GetProductByIdAsync(productId);
+            return result.IsSuccessful ? Ok(result) : BadRequest(result);
+        }
+
         // Add items to manifest bulk
         [HttpPost("{id}/items/add/bulk")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult))]

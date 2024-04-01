@@ -11,6 +11,8 @@ namespace TCMS.Common.DTOs.Shipment
     {
         public int ManifestItemId { get; set; }
 
+        public int ProductId { get; set; }
+
         [Required]
         public int Quantity { get; set; }
 

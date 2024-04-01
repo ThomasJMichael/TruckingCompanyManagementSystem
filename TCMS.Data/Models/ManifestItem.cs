@@ -38,6 +38,6 @@ namespace TCMS.Data.Models
 
         public decimal Price => Product.Price;
 
-        public decimal TotalPrice => Quantity * (Product.Price + Product.ShippingPrice);
+        public decimal TotalPrice => Quantity * (Product.Price);
     }
 }

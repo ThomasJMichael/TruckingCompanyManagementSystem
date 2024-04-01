@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -127,6 +128,9 @@ namespace TCMS.Services.Implementations
                 var manifest = await context.Manifests.FindAsync(manifestId);
                 if (manifest == null) return OperationResult.Failure(new[] { "Manifest not found" });
 
+                var product = await context.Products.FindAsync(manifestItem.ProductId);
+                if (product == null) return OperationResult.Failure(new[] { "Product not found" });
+
                 var newManifestItem = mapper.Map<ManifestItem>(manifestItem);
                 newManifestItem.ManifestId = manifestId;
 
@@ -170,6 +174,9 @@ namespace TCMS.Services.Implementations
 
                 var item = await context.ManifestItems.FindAsync(manifestItem.ManifestItemId);
                 if (item == null) return OperationResult.Failure(new[] { "Manifest item not found" });
+
+                var product = await context.Products.FindAsync(manifestItem.ProductId);
+                if (product == null) return OperationResult.Failure(new[] { "Product not found" });
 
                 mapper.Map(manifestItem, item);
                 await context.SaveChangesAsync();
@@ -220,6 +227,88 @@ namespace TCMS.Services.Implementations
             }
         }
 
+        public async Task<OperationResult> AddProductAsync(ProductDto dto)
+        {
+            try
+            {
+                var product = mapper.Map<Product>(dto);
+                context.Products.Add(product);
+                await context.SaveChangesAsync();
+
+                return OperationResult.Success();
+            }
+            catch (Exception e)
+            {
+                return OperationResult.Failure(new[] { e.Message });
+            }
+        }
+
+        public async Task<OperationResult> UpdateProductAsync(ProductDto dto)
+        {
+            try
+            {
+                var product = await context.Products.FindAsync(dto.ProductId);
+                if (product == null) return OperationResult.Failure(new[] { "Product not found" });
+
+                mapper.Map(dto, product);
+                await context.SaveChangesAsync();
+
+                return OperationResult.Success();
+            }
+            catch (Exception e)
+            {
+                return OperationResult.Failure(new[] { e.Message });
+            }
+        }
+
+        public async Task<OperationResult> DeleteProductAsync(int productId)
+        {
+            try
+            {
+                var product = await context.Products.FindAsync(productId);
+                if (product == null) return OperationResult.Failure(new[] { "Product not found" });
+
+                context.Products.Remove(product);
+                await context.SaveChangesAsync();
+
+                return OperationResult.Success();
+            }
+            catch (Exception e)
+            {
+                return OperationResult.Failure(new[] { e.Message });
+            }
+        }
+
+        public async Task<OperationResult<IEnumerable<ProductDto>>> GetAllProductsAsync()
+        {
+            try
+            {
+                var products = await context.Products.ToListAsync();
+                var productDtos = mapper.Map<IEnumerable<ProductDto>>(products);
+                return OperationResult<IEnumerable<ProductDto>>.Success(productDtos);
+            }
+            catch (Exception e)
+            {
+                return OperationResult<IEnumerable<ProductDto>>.Failure([ e.Message ]);
+            }
+        }
+
+        public async Task<OperationResult<ProductDto>> GetProductByIdAsync(int productId)
+        {
+            try
+            {
+                var product = await context.Products.FindAsync(productId);
+                if (product == null) return OperationResult<ProductDto>.Failure(["Product not found."]);
+
+                var productDto = mapper.Map<ProductDto>(product);
+                return OperationResult<ProductDto>.Success(productDto);
+            }
+            catch (Exception e)
+            {
+                return OperationResult<ProductDto>.Failure([e.Message]);
+            }
+        }
+
         public async Task<OperationResult> AddItemsToManifestAsync(int manifestId, IEnumerable<ManifestItemDto> manifestItems)
         {
             try
@@ -230,6 +319,8 @@ namespace TCMS.Services.Implementations
                 var newManifestItems = mapper.Map<IEnumerable<ManifestItem>>(manifestItems);
                 foreach (var item in newManifestItems)
                 {
+                    var product = await context.Products.FindAsync(item.ProductId);
+                    if (product == null) return OperationResult.Failure(new[] { "Product not found" });
                     item.ManifestId = manifestId;
                 }
 

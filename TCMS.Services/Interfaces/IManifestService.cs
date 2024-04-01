@@ -1,4 +1,5 @@
-﻿using TCMS.Common.DTOs.Shipment;
+﻿using System.Runtime.CompilerServices;
+using TCMS.Common.DTOs.Shipment;
 using TCMS.Common.Operations;
 using TCMS.Data.Models;
 
@@ -18,6 +19,14 @@ public interface IManifestService
     Task<OperationResult> UpdateManifestItemAsync(int manifestId, ManifestItemDto manifestItem);
     Task<OperationResult> UpdateItemStatus(int manifestId, int itemId, ItemStatus status);
     Task<OperationResult<decimal>> CalculateTotalCost(int manifestId);
+
+    // Product operations
+    Task<OperationResult> AddProductAsync(ProductDto dto);
+    Task<OperationResult> UpdateProductAsync(ProductDto dto);
+    Task<OperationResult> DeleteProductAsync(int productId);
+    Task<OperationResult<IEnumerable<ProductDto>>> GetAllProductsAsync();
+    Task<OperationResult<ProductDto>> GetProductByIdAsync(int productId);
+
 
     // Bulk operations
     Task<OperationResult> AddItemsToManifestAsync(int manifestId, IEnumerable<ManifestItemDto> manifestItems);
