@@ -9,6 +9,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Images\customer_page.png" />
+    <None Remove="Assets\Images\home_page.png" />
+    <None Remove="Assets\Images\home_page1.png" />
+    <None Remove="Assets\Images\img_customer.png" />
+    <None Remove="Assets\Images\img_home.png" />
+    <None Remove="Assets\Images\img_order.png" />
+    <None Remove="Assets\Images\img_product.png" />
+    <None Remove="Assets\Images\img_setting.png" />
+    <None Remove="Assets\Images\img_shipment.png" />
+    <None Remove="Assets\Images\img_transaction.png" />
+    <None Remove="Assets\Images\order_page.png" />
+    <None Remove="Assets\Images\product_page.png" />
+    <None Remove="Assets\Images\setting_page.png" />
+    <None Remove="Assets\Images\shipment_page.png" />
+    <None Remove="Assets\Images\shutdown_def.png" />
+    <None Remove="Assets\Images\shutdown_mo.png" />
+    <None Remove="Assets\Images\transaction_page.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Documentation\" />
   </ItemGroup>
 
@@ -21,6 +41,60 @@
   <ItemGroup>
     <ProjectReference Include="..\TCMS.API\TCMS.API.csproj" />
     <ProjectReference Include="..\TCMS.Common\TCMS.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Images\customer_page.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\home_page.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\home_page1.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\img_customer.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\img_home.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\img_order.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\img_product.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\img_setting.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\img_shipment.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\img_transaction.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\order_page.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\product_page.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\setting_page.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\shipment_page.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\shutdown_def.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\shutdown_mo.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\transaction_page.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

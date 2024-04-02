@@ -4,9 +4,179 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TCMS.GUI.Views"
+        xmlns:utilities="clr-namespace:TCMS.GUI.Utilities"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Dashboard"
+        Height="600"
+        Width="850"
+        AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        Background="Transparent">
+
+    <Window.DataContext>
+        <local:NavigationViewModel/>
+    </Window.DataContext>
     <Grid>
-        
+    <!--// Window Border //-->
+    <Border Background="#212529"
+            CornerRadius="20"/>
+
+        <Grid>
+            <!--// Base Grid //-->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="228"/>
+                <ColumnDefinition Width="622"/>
+            </Grid.ColumnDefinitions>
+
+            <!--// Navigation Panel //-->
+
+            <Grid HorizontalAlignment="Left"
+                  Width="228">
+
+                <Border Background="#272B2F"
+                        CornerRadius="20,0,0,20" />
+
+                <StackPanel Height="400"
+                            Width="228">
+
+                    <!--// Home //-->
+
+                    <utilities:Btn Style="{StaticResource BtnStyle}"
+                              Command="{Binding HomeCommand}"
+                              IsChecked="True">
+
+                        <Grid>
+
+                            <Image Source="/Assets/Images/img_home.png"
+                                   Style="{StaticResource Image_Style}" />
+
+                            <TextBlock Text="Home"
+                                       Style="{StaticResource Text_Style}" />
+
+                        </Grid>
+
+                    </utilities:Btn>
+
+                    <!--// Customer //-->
+
+                    <utilities:Btn Style="{StaticResource BtnStyle}"
+                              Command="{Binding CustomersCommand}">
+
+                        <Grid>
+
+                            <Image Source="/Assets/Images/img_customer.png"
+                                   Style="{StaticResource Image_Style}" />
+
+                            <TextBlock Text="Customer"
+                                       Style="{StaticResource Text_Style}" />
+
+                        </Grid>
+
+                    </utilities:Btn>
+
+                    <!--// Products //-->
+
+                    <utilities:Btn Style="{StaticResource BtnStyle}"
+                              Command="{Binding ProductsCommand}">
+
+                        <Grid>
+
+                            <Image Source="/Assets/Images/img_product.png"
+                                   Style="{StaticResource Image_Style}" />
+
+                            <TextBlock Text="Products"
+                                       Style="{StaticResource Text_Style}" />
+
+                        </Grid>
+
+                    </utilities:Btn>
+
+                    <!--// Orders //-->
+
+                    <utilities:Btn Style="{StaticResource BtnStyle}"
+                              Command="{Binding OrdersCommand}">
+
+                        <Grid>
+
+                            <Image Source="/Assets/Images/img_order.png"
+                                   Style="{StaticResource Image_Style}" />
+
+                            <TextBlock Text="Orders"
+                                       Style="{StaticResource Text_Style}" />
+
+                        </Grid>
+
+                    </utilities:Btn>
+
+                    <!--// Transactions //-->
+
+                    <utilities:Btn Style="{StaticResource BtnStyle}"
+                              Command="{Binding TransactionsCommand}">
+
+                        <Grid>
+
+                            <Image Source="/Assets/Images/img_transaction.png"
+                                   Style="{StaticResource Image_Style}" />
+
+                            <TextBlock Text="Transactions"
+                                       Style="{StaticResource Text_Style}" />
+
+                        </Grid>
+
+                    </utilities:Btn>
+
+                    <!--// Shipments //-->
+
+                    <utilities:Btn Style="{StaticResource BtnStyle}"
+                              Command="{Binding ShipmentsCommand}">
+
+                        <Grid>
+
+                            <Image Source="/Assets/Images/img_shipment.png"
+                                   Style="{StaticResource Image_Style}" />
+
+                            <TextBlock Text="Shipments"
+                                       Style="{StaticResource Text_Style}" />
+
+                        </Grid>
+
+                    </utilities:Btn>
+
+                    <!--// Settings //-->
+
+                    <utilities:Btn Style="{StaticResource BtnStyle}"
+                              Command="{Binding SettingsCommand}">
+
+                        <Grid>
+
+                            <Image Source="/Assets/Images/img_setting.png"
+                                   Style="{StaticResource Image_Style}" />
+
+                            <TextBlock Text="Settings"
+                                       Style="{StaticResource Text_Style}" />
+
+                        </Grid>
+
+                    </utilities:Btn>
+
+                </StackPanel>
+
+            </Grid>
+
+            <Grid Grid.Column="1">
+
+                <ContentControl x:Name="Pages"
+                                Content="{Binding CurrentView}" />
+
+            </Grid>
+
+        </Grid>
+
+        <Button x:Name="CloseApp"
+                Style="{StaticResource ExitApp}"
+                Click="CloseApp_Click" />
+
     </Grid>
+
 </Window>

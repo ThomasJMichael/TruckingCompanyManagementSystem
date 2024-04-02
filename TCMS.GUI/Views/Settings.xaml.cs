@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,23 +11,20 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TCMS.GUI.Models;
 
 namespace TCMS.GUI.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for Settings.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class Settings : UserControl
     {
-        public MainWindow()
+        public Settings()
         {
             InitializeComponent();
         }
-        private void CloseApp_Click(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
-        }
-
     }
 }

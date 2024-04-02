@@ -73,9 +73,7 @@ namespace TCMS.GUI
 
             // Resolve the LoginWindow from the service provider.
             var loginWindow = _serviceProvider.GetRequiredService<LoginWindow>();
-            // Although the DataContext is already set in ConfigureServices, 
-            // it demonstrates how you could re-assign or ensure it's set as expected.
-            loginWindow.DataContext = _serviceProvider.GetRequiredService<LoginViewModel>();
+
             // Show the LoginWindow as the application starts.
             loginWindow.Show();
         }
