@@ -20,28 +20,28 @@ namespace TCMS.GUI.Views
         }
 
         public ICommand HomeCommand { get; set; }
-        //public ICommand CustomersCommand { get; set; }
+        public ICommand EmployeesCommand { get; set; }
         //public ICommand ProductsCommand { get; set; }
         //public ICommand OrdersCommand { get; set; }
-        //public ICommand TransactionsCommand { get; set; }
+        public ICommand TimeClockCommand { get; set; }
         public ICommand ShipmentsCommand { get; set; }
         public ICommand SettingsCommand { get; set; }
 
         private void Home(object obj) => CurrentView = new HomeViewModel();
-        // private void Customer(object obj) => CurrentView = new CustomerVM();
+        private void employee(object obj) => CurrentView = new EmployeeViewModel();
         //private void Product(object obj) => CurrentView = new ProductVM();
         //private void Order(object obj) => CurrentView = new OrderVM();
-        //private void Transaction(object obj) => CurrentView = new TransactionVM();
+        private void TimeClock(object obj) => CurrentView = new TimeClockViewModel();
         private void Shipment(object obj) => CurrentView = new ShipmentsViewModel();
         private void Setting(object obj) => CurrentView = new SettingsViewModel();
 
         public NavigationViewModel()
         {
             HomeCommand = new RelayCommand(Home);
-            //CustomersCommand = new RelayCommand(Customer);
+            //EmployeesCommand = new RelayCommand(employee);
             //ProductsCommand = new RelayCommand(Product);
             //OrdersCommand = new RelayCommand(Order);
-            //TransactionsCommand = new RelayCommand(Transaction);
+            TimeClockCommand = new RelayCommand(TimeClock);
             ShipmentsCommand = new RelayCommand(Shipment);
             SettingsCommand = new RelayCommand(Setting);
 

@@ -13,22 +13,31 @@
         <Style x:Key="InputFieldStyle" TargetType="TextBox">
             <Setter Property="Margin" Value="10"/>
             <Setter Property="Height" Value="40"/>
-            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontFamily" Value="Assets/Fonts/Rubik-Regular.ttf"/>
             <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="AntiqueWhite"/>
         </Style>
 
         <Style x:Key="LoginButtonStyle" TargetType="Button">
             <Setter Property="Margin" Value="10"/>
             <Setter Property="Height" Value="40"/>
-            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontFamily" Value="Assets/Fonts/Rubik-Regular.ttf"/>
             <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Background" Value="DarkSlateBlue"/>
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="#FF3399FF"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground">
+                <Setter.Value>
+                    <SolidColorBrush Color="White"/>
+                </Setter.Value>
+            </Setter>
             <Setter Property="BorderBrush" Value="Transparent"/>
         </Style>
         <assets:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
     </Window.Resources>
-    <Grid>
+    <Grid Background="#FF212529">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -36,18 +45,26 @@
         </Grid.RowDefinitions>
 
         <!-- Title -->
-        <TextBlock Text="Login" FontSize="24" FontWeight="Bold" Foreground="DarkSlateBlue" HorizontalAlignment="Center" Margin="0,20,0,20"/>
+        <TextBlock Text="Login" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,20,0,20">
+            <TextBlock.Foreground>
+                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.MenuHighlightColorKey}}"/>
+            </TextBlock.Foreground>
+        </TextBlock>
 
         <!-- Input Fields -->
         <StackPanel Grid.Row="1">
-            <xctk:WatermarkTextBox Style="{StaticResource InputFieldStyle}" Watermark="Username" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"/>
+            <xctk:WatermarkTextBox Style="{StaticResource InputFieldStyle}" Watermark="Username" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" Background="#FF272B2F"/>
 
             <!-- Note: PasswordBox does not directly support data binding for security reasons -->
-            <PasswordBox Margin="10" Height="40" x:Name="passwordBox" PasswordChar="*" FontFamily="Segoe UI" FontSize="14"/>
+            <PasswordBox Margin="10" Height="40" x:Name="passwordBox" PasswordChar="*" FontFamily="Assets/Fonts/Rubik-Regular.ttf" FontSize="14" Background="#FF272B2F" Foreground="AntiqueWhite"/>
             <TextBlock Text="{Binding LoginErrorMessage}" Foreground="Red" Margin="10,5"
                        Visibility="{Binding LoginErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
         </StackPanel>
 
-        <Button Grid.Row="2" Style="{StaticResource LoginButtonStyle}" Command="{Binding LoginCommand}" Content="Login"/>
+        <Button Grid.Row="2" Style="{StaticResource LoginButtonStyle}" Command="{Binding LoginCommand}" Content="Login" BorderBrush="#00000000">
+            <Button.Foreground>
+                <SolidColorBrush Color="#FFA5A5A5"/>
+            </Button.Foreground>
+        </Button>
     </Grid>
 </Window>

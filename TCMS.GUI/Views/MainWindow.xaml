@@ -61,14 +61,14 @@
                     <!--// Customer //-->
 
                     <utilities:Btn Style="{StaticResource BtnStyle}"
-                              Command="{Binding CustomersCommand}">
+                              Command="{Binding Employees}">
 
                         <Grid>
 
                             <Image Source="/Assets/Images/img_customer.png"
                                    Style="{StaticResource Image_Style}" />
 
-                            <TextBlock Text="Customer"
+                            <TextBlock Text="Employees"
                                        Style="{StaticResource Text_Style}" />
 
                         </Grid>
@@ -112,14 +112,14 @@
                     <!--// Transactions //-->
 
                     <utilities:Btn Style="{StaticResource BtnStyle}"
-                              Command="{Binding TransactionsCommand}">
+                              Command="{Binding TimeClockCommand}">
 
                         <Grid>
 
                             <Image Source="/Assets/Images/img_transaction.png"
                                    Style="{StaticResource Image_Style}" />
 
-                            <TextBlock Text="Transactions"
+                            <TextBlock Text="Time Clock"
                                        Style="{StaticResource Text_Style}" />
 
                         </Grid>
