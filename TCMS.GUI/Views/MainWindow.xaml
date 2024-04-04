@@ -107,6 +107,23 @@
 
                     </utilities:Btn>
 
+
+                    <!--// Incidents //-->
+                    <utilities:Btn Style="{StaticResource BtnStyle}"
+                              Command="{Binding IncidentsCommand}">
+
+                        <Grid>
+
+                            <Image Source="/Assets/Images/img_product.png"
+                                   Style="{StaticResource Image_Style}" />
+
+                            <TextBlock Text="Incidents"
+                                       Style="{StaticResource Text_Style}" />
+
+                        </Grid>
+
+                    </utilities:Btn>
+
                     <!--// Transactions //-->
 
                     <utilities:Btn Style="{StaticResource BtnStyle}"
@@ -140,6 +157,7 @@
                         </Grid>
 
                     </utilities:Btn>
+
 
                     <!--// Settings //-->
 

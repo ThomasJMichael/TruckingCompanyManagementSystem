@@ -89,7 +89,7 @@ namespace TCMS.GUI
             services.AddSingleton<TimeClockViewModel>();
             services.AddSingleton<ShipmentsViewModel>();
             services.AddSingleton<SettingsViewModel>();
-            services.AddSingleton<ProductFormViewModel>();
+            services.AddSingleton<IncidentLogViewModel>();
 
 
         }

@@ -16,6 +16,7 @@ namespace TCMS.GUI.Utilities
         ShipmentsViewModel CreateShipmentsViewModel();
         SettingsViewModel CreateSettingsViewModel();
         ProductFormViewModel CreateProductFormViewModel();
+        IncidentLogViewModel CreateIncidentLogViewModel();
     }
 
 }
