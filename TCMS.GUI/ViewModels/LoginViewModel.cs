@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Microsoft.Extensions.DependencyInjection;
 using TCMS.Common.DTOs.User;
 using TCMS.Common.Operations;
 using TCMS.GUI.Services.Interfaces;
@@ -82,7 +83,7 @@ namespace TCMS.GUI.ViewModels
             try
             {
                 // Attempt to log in via the API client. The result can be used to proceed based on success or failure.
-                var result = await _apiClient.PostAsync<OperationResult>("api/auth/login", loginDto);
+                var result = await _apiClient.PostAsync<OperationResult>("auth/login", loginDto);
                 if (result.IsSuccessful) // Assuming IsSuccess is a property that indicates success
                 {
                     // Close the current Login window and open the main window
@@ -101,7 +102,7 @@ namespace TCMS.GUI.ViewModels
                         }
 
                         // Open the main window
-                        var mainWindow = new MainWindow(); 
+                        var mainWindow = App.ServiceProvider.GetRequiredService<MainWindow>();
                         mainWindow.Show();
                     });
                 }

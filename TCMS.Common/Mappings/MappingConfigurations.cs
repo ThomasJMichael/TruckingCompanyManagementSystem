@@ -43,6 +43,9 @@ namespace TCMS.Common.Mappings
 
             // Report mappings
 
+            // Product mappings
+            CreateMap<Product, ProductDto>().ReverseMap();
+
 
             // Shipment mappings
             CreateMap<Shipment, IncomingShipmentDto>().ReverseMap();

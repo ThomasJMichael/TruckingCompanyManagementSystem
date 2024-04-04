@@ -15,6 +15,10 @@
         <view:Shipments/>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type vm:ProductsViewModel}">
+        <view:Products/>
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type vm:TimeClockViewModel}">
         <view:TimeClock/>
     </DataTemplate>

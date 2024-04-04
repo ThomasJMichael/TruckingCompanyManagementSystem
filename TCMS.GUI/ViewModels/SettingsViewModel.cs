@@ -7,7 +7,7 @@ using TCMS.GUI.Models;
 
 namespace TCMS.GUI.ViewModels
 {
-    class SettingsViewModel : Utilities.ViewModelBase
+    public class SettingsViewModel : Utilities.ViewModelBase
     {
         private readonly PageModel _pageModel;
         public bool Settings

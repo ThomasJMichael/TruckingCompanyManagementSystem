@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TCMS.GUI.ViewModels
 {
-    internal class HomeViewModel
+    public class HomeViewModel
     {
     }
 }

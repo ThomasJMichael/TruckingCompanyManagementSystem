@@ -10,24 +10,20 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TCMS.GUI.ViewModels;
 
 namespace TCMS.GUI.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for Products.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class Products : UserControl
     {
-        public MainWindow(NavigationViewModel navigationViewModel)
+        public Products()
         {
             InitializeComponent();
-            DataContext = navigationViewModel;
-        }
-        private void CloseApp_Click(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
         }
 
     }

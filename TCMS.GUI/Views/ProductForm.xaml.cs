@@ -16,19 +16,13 @@ using TCMS.GUI.ViewModels;
 namespace TCMS.GUI.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for ProductForm.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ProductForm : Window
     {
-        public MainWindow(NavigationViewModel navigationViewModel)
+        public ProductForm()
         {
             InitializeComponent();
-            DataContext = navigationViewModel;
         }
-        private void CloseApp_Click(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
-        }
-
     }
 }

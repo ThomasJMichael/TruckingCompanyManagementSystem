@@ -7,7 +7,7 @@ using TCMS.GUI.Models;
 
 namespace TCMS.GUI.ViewModels
 {
-    class ShipmentsViewModel : Utilities.ViewModelBase
+    public class ShipmentsViewModel : Utilities.ViewModelBase
     {
         private readonly PageModel _pageModel;
         public TimeOnly ShipmentTracking

@@ -1,20 +1,62 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
-using System.Runtime.CompilerServices;
 
 namespace TCMS.GUI.Utilities
 {
-    class ViewModelBase : INotifyPropertyChanged
+    public class ViewModelBase : INotifyPropertyChanged
     {
+        private bool _isBusy = false;
+        private string _errorMessage = string.Empty;
+
         public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string propName = null)
+
+        public bool IsBusy
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+            get => _isBusy;
+            set
+            {
+                _isBusy = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string ErrorMessage
+        {
+            get => _errorMessage;
+            set
+            {
+                _errorMessage = value;
+                OnPropertyChanged();
+            }
+        }
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        // Asynchronously executes the provided task and manages the IsBusy state.
+        // Also provides basic error handling.
+        protected async Task ExecuteAsync(Func<Task> operation, Action<Exception> onError = null)
+        {
+            if (IsBusy)
+                return;
+
+            try
+            {
+                IsBusy = true;
+                await operation();
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.Message;
+                onError?.Invoke(ex);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
     }
 }
+

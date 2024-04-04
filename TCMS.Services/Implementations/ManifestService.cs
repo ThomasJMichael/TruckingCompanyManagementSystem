@@ -18,6 +18,13 @@ namespace TCMS.Services.Implementations
     {
         private readonly TcmsContext context;
         private readonly IMapper mapper;
+
+        public ManifestService(TcmsContext context, IMapper mapper)
+        {
+            this.context = context;
+            this.mapper = mapper;
+        }
+
         public async Task<OperationResult<IEnumerable<ManifestDto>>> GetAllManifestsAsync()
         {
             try

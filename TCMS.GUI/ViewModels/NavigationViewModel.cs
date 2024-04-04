@@ -4,15 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 using TCMS.Data.Models;
 using TCMS.GUI.Utilities;
-using TCMS.GUI.ViewModels;
 
-namespace TCMS.GUI.Views
+namespace TCMS.GUI.ViewModels
 {
-    class NavigationViewModel : ViewModelBase
+    public class NavigationViewModel : ViewModelBase
     {
         private object _currentView;
+        private readonly IViewModelFactory _viewModelFactory;
         public object CurrentView
         {
             get { return _currentView; }
@@ -21,25 +22,26 @@ namespace TCMS.GUI.Views
 
         public ICommand HomeCommand { get; set; }
         public ICommand EmployeesCommand { get; set; }
-        //public ICommand ProductsCommand { get; set; }
+        public ICommand ProductsCommand { get; set; }
         //public ICommand OrdersCommand { get; set; }
         public ICommand TimeClockCommand { get; set; }
         public ICommand ShipmentsCommand { get; set; }
         public ICommand SettingsCommand { get; set; }
 
-        private void Home(object obj) => CurrentView = new HomeViewModel();
-        private void employee(object obj) => CurrentView = new EmployeeViewModel();
-        //private void Product(object obj) => CurrentView = new ProductVM();
+        private void Home(object obj) => CurrentView = _viewModelFactory.CreateHomeViewModel();
+        private void employee(object obj) => CurrentView = _viewModelFactory.CreateEmployeeViewModel();
+        private void Product(object obj) => CurrentView = _viewModelFactory.CreateProductsViewModel();
         //private void Order(object obj) => CurrentView = new OrderVM();
-        private void TimeClock(object obj) => CurrentView = new TimeClockViewModel();
-        private void Shipment(object obj) => CurrentView = new ShipmentsViewModel();
-        private void Setting(object obj) => CurrentView = new SettingsViewModel();
+        private void TimeClock(object obj) => CurrentView = _viewModelFactory.CreateTimeClockViewModel();   
+        private void Shipment(object obj) => CurrentView = _viewModelFactory.CreateShipmentsViewModel();
+        private void Setting(object obj) => CurrentView = _viewModelFactory.CreateSettingsViewModel();
 
-        public NavigationViewModel()
+        public NavigationViewModel(IViewModelFactory viewModelFactory)
         {
+            _viewModelFactory = viewModelFactory;
             HomeCommand = new RelayCommand(Home);
             //EmployeesCommand = new RelayCommand(employee);
-            //ProductsCommand = new RelayCommand(Product);
+            ProductsCommand = new RelayCommand(Product);
             //OrdersCommand = new RelayCommand(Order);
             TimeClockCommand = new RelayCommand(TimeClock);
             ShipmentsCommand = new RelayCommand(Shipment);

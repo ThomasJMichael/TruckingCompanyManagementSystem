@@ -2,8 +2,11 @@
 using System.Configuration;
 using System.Data;
 using System.Windows;
+using AutoMapper;
+using TCMS.Common.Mappings;
 using TCMS.GUI.Services.Implementations;
 using TCMS.GUI.Services.Interfaces;
+using TCMS.GUI.Utilities;
 using TCMS.GUI.ViewModels;
 using TCMS.GUI.Views;
 
@@ -16,7 +19,8 @@ namespace TCMS.GUI
     public partial class App : Application
     {
         // ServiceProvider to hold and resolve service instances.
-        private readonly ServiceProvider _serviceProvider;
+        public static ServiceProvider ServiceProvider { get; private set; }
+        private static IMapper _mapper;
 
         // Constructor for the App class.
         public App()
@@ -26,7 +30,7 @@ namespace TCMS.GUI
             // Call the method to configure and register services.
             ConfigureServices(services);
             // Build the ServiceProvider from the service collection.
-            _serviceProvider = services.BuildServiceProvider();
+            ServiceProvider = services.BuildServiceProvider();
         }
 
         // Configures services and registers them with the dependency injection container.
@@ -40,11 +44,27 @@ namespace TCMS.GUI
             // This setup is particularly useful for setting global HTTP client configurations like the base address.
             services.AddHttpClient<IApiClient, ApiClient>(client =>
             {
-                client.BaseAddress = new Uri("https://localhost:7041/"); // API base URL; adjust as needed.
+                client.BaseAddress = new Uri("https://localhost:7041/api/"); // API base URL; adjust as needed.
             });
+
+            // Initialize the AutoMapper for DI
+            var mapperConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new TCMS.Common.Mappings.MappingConfigurations());
+                cfg.AddProfile<GUIAutoMapperProfile>();
+            });
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
+            services.AddSingleton<IDialogService, DialogService>();
 
             // Register the LoginViewModel as a singleton to ensure a single instance is used throughout the application.
             services.AddSingleton<LoginViewModel>();
+
+            services.AddSingleton<ProductsViewModel>(provider => new ProductsViewModel(
+                provider.GetRequiredService<IApiClient>(),
+                provider.GetRequiredService<IMapper>(),
+                provider.GetRequiredService<IDialogService>()));
 
             // Register the LoginWindow and set its DataContext to the LoginViewModel.
             // This demonstrates how to perform more complex service registrations that require factory methods.
@@ -60,7 +80,18 @@ namespace TCMS.GUI
                 return window;
             });
 
-            // Additional services and ViewModels can be registered here following a similar pattern.
+            services.AddSingleton<IViewModelFactory, ViewModelFactory>();
+            services.AddSingleton<MainWindow>();
+            services.AddSingleton<NavigationViewModel>();
+            services.AddSingleton<HomeViewModel>();
+            services.AddSingleton<ProductsViewModel>();
+            services.AddSingleton<EmployeeViewModel>();
+            services.AddSingleton<TimeClockViewModel>();
+            services.AddSingleton<ShipmentsViewModel>();
+            services.AddSingleton<SettingsViewModel>();
+            services.AddSingleton<ProductFormViewModel>();
+
+
         }
 
         // Override the OnStartup method to perform actions when the application starts.
@@ -72,7 +103,7 @@ namespace TCMS.GUI
             this.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
             // Resolve the LoginWindow from the service provider.
-            var loginWindow = _serviceProvider.GetRequiredService<LoginWindow>();
+            var loginWindow = ServiceProvider.GetRequiredService<LoginWindow>();
 
             // Show the LoginWindow as the application starts.
             loginWindow.Show();

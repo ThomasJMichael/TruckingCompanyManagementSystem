@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TCMS.GUI.Views"
         xmlns:utilities="clr-namespace:TCMS.GUI.Utilities"
+        xmlns:viewModels="clr-namespace:TCMS.GUI.ViewModels"
         mc:Ignorable="d"
         Title="Dashboard"
         Height="600"
@@ -14,10 +15,7 @@
         WindowStyle="None"
         Background="Transparent">
 
-    <Window.DataContext>
-        <local:NavigationViewModel/>
-    </Window.DataContext>
-    <Grid>
+        <Grid>
     <!--// Window Border //-->
     <Border Background="#212529"
             CornerRadius="20"/>
