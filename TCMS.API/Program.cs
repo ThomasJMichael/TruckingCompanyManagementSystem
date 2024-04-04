@@ -23,6 +23,7 @@ builder.Services.AddScoped<IVehicleService, VehicleService>();
 builder.Services.AddScoped<IPurchaseOrderService, PurchaseOrderService>();
 builder.Services.AddScoped<IShipmentService, ShipmentService>();
 builder.Services.AddScoped<IReportService, ReportService>();
+builder.Services.AddScoped<IInventoryService, InventoryService>();
 
 
 builder.Services.AddControllers();

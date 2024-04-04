@@ -24,6 +24,7 @@ public class TcmsContext : IdentityDbContext<UserAccount>
     public DbSet<TimeSheet> TimeSheets { get; set; }
     public DbSet<UserAccount> UserAccounts { get; set; }
     public DbSet<Vehicle> Vehicles { get; set; }
+    public DbSet<Inventory> Inventories { get; set; }
 
     // Constructor
     public TcmsContext() { }
@@ -33,6 +34,12 @@ public class TcmsContext : IdentityDbContext<UserAccount>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        // Inventory
+        modelBuilder.Entity<Inventory>()
+            .HasOne(i => i.Product) // Each Inventory item has one Product...
+            .WithOne(p => p.Inventory)
+            .HasForeignKey<Inventory>(i => i.ProductId); // Foreign key in Inventory table
 
         // Assignment
         modelBuilder.Entity<Assignment>()

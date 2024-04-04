@@ -3,6 +3,7 @@ using TCMS.Common.DTOs.Employee;
 using TCMS.Common.DTOs.Equipment;
 using TCMS.Common.DTOs.Financial;
 using TCMS.Common.DTOs.Incident;
+using TCMS.Common.DTOs.Inventory;
 using TCMS.Common.DTOs.Shipment;
 using TCMS.Common.DTOs.User;
 using TCMS.Data.Models;
@@ -42,6 +43,12 @@ namespace TCMS.Common.Mappings
 
 
             // Report mappings
+
+            // Inventory mappings
+            CreateMap<Inventory, InventoryDto>().ReverseMap();
+            CreateMap<Inventory, InventoryCreateDto>().ReverseMap();
+            CreateMap<Inventory, InventoryUpdateDto>().ReverseMap();
+
 
             // Product mappings
             CreateMap<Product, ProductDto>().ReverseMap();
