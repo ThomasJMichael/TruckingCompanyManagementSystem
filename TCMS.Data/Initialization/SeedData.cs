@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using TCMS.Data.Data;
+using Bogus;
 
 namespace TCMS.Data.Initialization
 {
@@ -52,16 +53,29 @@ namespace TCMS.Data.Initialization
 
         private static async Task SeedProductsAsync(IServiceProvider serviceProvider)
         {
-            // Use the context service directly to avoid DI scope issues
-            var context = serviceProvider.GetRequiredService<TcmsContext>(); // Adjust the context type and namespace
+            var context = serviceProvider.GetRequiredService<TcmsContext>(); // Adjust the context type and namespace as needed
+
+            //await DatabaseResetter.ResetDatabaseAsync(context);
 
             if (!context.Products.Any())
             {
+                var faker = new Faker();
                 var products = ProductGenerator.GenerateProducts(100); // Generate 100 fake products
                 context.Products.AddRange(products);
                 await context.SaveChangesAsync();
+
+                // After saving, each product now has a ProductId set by EF Core
+                var inventories = products.Select(product => new Inventory
+                {
+                    ProductId = product.ProductId,
+                    QuantityOnHand = faker.Random.Int(0, 100) // Generate a random initial inventory quantity
+                }).ToList();
+
+                context.Inventories.AddRange(inventories);
+                await context.SaveChangesAsync();
             }
         }
+
     }
 }
 

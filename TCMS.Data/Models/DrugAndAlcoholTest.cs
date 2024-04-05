@@ -12,7 +12,8 @@ namespace TCMS.Data.Models
     Positive,
     Refused,
     Adulterated,
-    Invalid
+    Invalid,
+    PendingIncident
     }
     public enum TestType
     {

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using TCMS.Common.DTOs.Inventory;
 using TCMS.Common.DTOs.Shipment;
 using TCMS.Common.Operations;
 using TCMS.Data.Data;
@@ -234,18 +235,35 @@ namespace TCMS.Services.Implementations
             }
         }
 
-        public async Task<OperationResult> AddProductAsync(ProductDto dto)
+        public async Task<OperationResult> AddProductAsync(AddProductDto dto)
         {
+            await using var transaction = await context.Database.BeginTransactionAsync();
             try
             {
-                var product = mapper.Map<Product>(dto);
+                var product = new Product
+                {
+                    Name = dto.Name,
+                    Description = dto.Description,
+                    Price = dto.Price
+                };
                 context.Products.Add(product);
                 await context.SaveChangesAsync();
 
+                var inventory = new Inventory
+                {
+                    ProductId = product.ProductId,
+                    QuantityOnHand = dto.InitialQuantityOnHand
+                };
+
+                context.Inventories.Add(inventory);
+                await context.SaveChangesAsync();
+
+                await transaction.CommitAsync();
                 return OperationResult.Success();
             }
             catch (Exception e)
             {
+                _ = transaction.RollbackAsync();
                 return OperationResult.Failure(new[] { e.Message });
             }
         }

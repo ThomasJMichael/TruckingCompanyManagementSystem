@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TCMS.Common.DTOs.Incident;
 using TCMS.Common.DTOs.Inventory;
 using TCMS.Common.Operations;
 using TCMS.Services.Interfaces;
@@ -25,6 +26,41 @@ namespace TCMS.API.Controllers
             return result.IsSuccessful ? Ok(result) : BadRequest(result);
         }
 
+        [HttpGet("all-details")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult<IEnumerable<InventoryProductDetailDto>>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(OperationResult<IEnumerable<InventoryProductDetailDto>>))]
+        public async Task<ActionResult<OperationResult<IEnumerable<InventoryProductDetailDto>>>> GetAllInventoryProductDetails()
+        {
+            var result = await _inventoryService.GetAllInventoryProductDetailsAsync();
+            if (result.IsSuccessful)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
+
+        [HttpPut("update")]
+        public async Task<ActionResult<OperationResult>> UpdateInventoryAndProduct([FromBody] InventoryProductDetailDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _inventoryService.UpdateInventoryAndProduct(dto);
+            if (result.IsSuccessful)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
+
         [HttpGet("{productId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -48,7 +84,7 @@ namespace TCMS.API.Controllers
             return result.IsSuccessful ? Ok(result) : BadRequest(result);
         }
 
-        [HttpPut("update")]
+        [HttpPut("update-inventory")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<OperationResult>> UpdateInventory(
