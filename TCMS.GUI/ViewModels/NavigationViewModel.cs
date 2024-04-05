@@ -27,6 +27,7 @@ namespace TCMS.GUI.ViewModels
         public ICommand TimeClockCommand { get; set; }
         public ICommand ShipmentsCommand { get; set; }
         public ICommand SettingsCommand { get; set; }
+        public ICommand IncidentsCommand { get; set; }
 
         private void Home(object obj) => CurrentView = _viewModelFactory.CreateHomeViewModel();
         private void employee(object obj) => CurrentView = _viewModelFactory.CreateEmployeeViewModel();
@@ -35,6 +36,7 @@ namespace TCMS.GUI.ViewModels
         private void TimeClock(object obj) => CurrentView = _viewModelFactory.CreateTimeClockViewModel();   
         private void Shipment(object obj) => CurrentView = _viewModelFactory.CreateShipmentsViewModel();
         private void Setting(object obj) => CurrentView = _viewModelFactory.CreateSettingsViewModel();
+        private void Incident(object obj) => CurrentView = _viewModelFactory.CreateIncidentLogViewModel();
 
         public NavigationViewModel(IViewModelFactory viewModelFactory)
         {
@@ -46,6 +48,7 @@ namespace TCMS.GUI.ViewModels
             TimeClockCommand = new RelayCommand(TimeClock);
             ShipmentsCommand = new RelayCommand(Shipment);
             SettingsCommand = new RelayCommand(Setting);
+            IncidentsCommand = new RelayCommand(Incident);
 
             // Startup Page
             CurrentView = new HomeViewModel();
