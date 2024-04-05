@@ -48,6 +48,18 @@ namespace TCMS.Common.Mappings
             CreateMap<Inventory, InventoryDto>().ReverseMap();
             CreateMap<Inventory, InventoryCreateDto>().ReverseMap();
             CreateMap<Inventory, InventoryUpdateDto>().ReverseMap();
+            CreateMap<Product, InventoryProductDetailDto>()
+                .ForMember(dest => dest.QuantityOnHand, opt => opt.Ignore());
+
+            CreateMap<Inventory, InventoryProductDetailDto>()
+                .ForMember(dest => dest.QuantityOnHand, opt => opt.MapFrom(src => src.QuantityOnHand))
+                // Assume ProductId matches and is already correctly set
+                .AfterMap((src, dest, ctx) => {
+                    var productDto = ctx.Mapper.Map<InventoryProductDetailDto>(src.Product);
+                    dest.Name = productDto.Name;
+                    dest.Description = productDto.Description;
+                    dest.Price = productDto.Price;
+                });
 
 
             // Product mappings

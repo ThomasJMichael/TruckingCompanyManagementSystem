@@ -12,6 +12,8 @@ namespace TCMS.Services.Interfaces
     {
         // Inventory CRUD
         Task<OperationResult<IEnumerable<InventoryDto>>> GetAllInventoryAsync();
+        Task<OperationResult<IEnumerable<InventoryProductDetailDto>>> GetAllInventoryProductDetailsAsync();
+        Task<OperationResult> UpdateInventoryAndProduct(InventoryProductDetailDto dto);
         Task<OperationResult<InventoryDto>> GetInventoryByProductIdAsync(int productId);
         Task<OperationResult<InventoryDto>> CreateInventoryRecordAsync(InventoryCreateDto inventoryDto);
         Task<OperationResult> UpdateInventoryAsync(InventoryUpdateDto inventoryDto);
