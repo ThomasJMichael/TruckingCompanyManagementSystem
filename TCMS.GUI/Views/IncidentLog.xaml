@@ -110,22 +110,22 @@
 
 
             <utilities:Btn Grid.Column="0" Style="{StaticResource DynamicWidthBtnStyle}" 
-                           Command="{Binding AddProductCommand}">
+                           Command="{Binding AddIncidentCommand}">
                 <TextBlock Text="Add" Style="{StaticResource ViewsButtonText}"/>
             </utilities:Btn>
 
             <utilities:Btn Grid.Column="1" Style="{StaticResource DynamicWidthBtnStyle}" 
-                           Command="{Binding EditProductCommand}">
+                           Command="{Binding EditIncidentCommand}">
                 <TextBlock Text="Edit" Style="{StaticResource ViewsButtonText}"/>
             </utilities:Btn>
 
             <utilities:Btn Grid.Column="2" Style="{StaticResource DynamicWidthBtnStyle}" 
-                           Command="{Binding DeleteProductCommand}">
+                           Command="{Binding DeleteIncidentCommand}">
                 <TextBlock Text="Delete" Style="{StaticResource ViewsButtonText}"/>
             </utilities:Btn>
 
             <utilities:Btn Grid.Column="3" Style="{StaticResource DynamicWidthBtnStyle}" 
-                           Command="{Binding RefreshProductsCommand}">
+                           Command="{Binding RefreshIncidentsCommand}">
                 <TextBlock Text="Refresh" Style="{StaticResource ViewsButtonText}"/>
             </utilities:Btn>
         </Grid>
@@ -137,15 +137,15 @@
             </Grid.ColumnDefinitions>
 
             <ListView Grid.Column="0"
-                      x:Name="ProductsListView"
-                      ItemsSource="{Binding FilteredProducts}"
-                      SelectedItem="{Binding SelectedProduct, Mode=TwoWay}"
+                      x:Name="IncidentsListView"
+                      ItemsSource="{Binding FilteredIncidents}"
+                      SelectedItem="{Binding SelectedIncident, Mode=TwoWay}"
                       BorderBrush="{x:Null}" Background="#FF272B2F"
                       ScrollViewer.VerticalScrollBarVisibility="Hidden">
                 <ListView.View>
                     <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
-                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ProductId}" Width="50"/>
-                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="160"/>
+                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding IncidentId}" Width="50"/>
+                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding IncidentDate}" Width="160"/>
                         <!-- Add more columns as needed -->
                     </GridView>
                 </ListView.View>
@@ -171,17 +171,17 @@
             </ListView>
 
             <Border Grid.Column="1" Background="{StaticResource DetailBackgroundBrush}">
-                <StackPanel Visibility="{Binding SelectedProduct, Converter={StaticResource NullToVisibilityConverter}}">
-                    <TextBlock Text="Product Details" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold" FontSize="18" />
+                <StackPanel Visibility="{Binding SelectedIncident, Converter={StaticResource NullToVisibilityConverter}}">
+                    <TextBlock Text="Incident Details" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold" FontSize="18" />
                     <Separator/>
                     <TextBlock Text="ID:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding SelectedProduct.ProductId}" Style="{StaticResource DetailTextBlockStyle}"/>
-                    <TextBlock Text="Name:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding SelectedProduct.Name}" Style="{StaticResource DetailTextBlockStyle}"/>
+                    <TextBlock Text="{Binding SelectedIncident.IncidentReportId}" Style="{StaticResource DetailTextBlockStyle}"/>
+                    <TextBlock Text="Location:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding SelectedIncident.Location}" Style="{StaticResource DetailTextBlockStyle}"/>
                     <TextBlock Text="Description:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding SelectedProduct.Description}" Style="{StaticResource DetailTextBlockStyle}" TextWrapping="Wrap"/>
-                    <TextBlock Text="Price:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding SelectedProduct.Price, StringFormat=C}" Style="{StaticResource DetailTextBlockStyle}"/>
+                    <TextBlock Text="{Binding SelectedIncident.Description}" Style="{StaticResource DetailTextBlockStyle}" TextWrapping="Wrap"/>
+                    <TextBlock Text="Date:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding SelectedIncident.IncidentDate, StringFormat=C}" Style="{StaticResource DetailTextBlockStyle}"/>
                 </StackPanel>
             </Border>
 

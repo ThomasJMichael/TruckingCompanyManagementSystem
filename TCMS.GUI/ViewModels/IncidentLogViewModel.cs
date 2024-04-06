@@ -3,12 +3,15 @@ using System.Diagnostics;
 using System.Net.Mime;
 using System.Windows.Input;
 using AutoMapper;
+using TCMS.Common.DTOs.Incident;
 using TCMS.Common.Operations;
+using TCMS.Data.Models;
 using TCMS.GUI.Models;
 using TCMS.GUI.Services.Interfaces;
 using TCMS.GUI.Utilities;
 using TCMS.GUI.Views;
 using Xceed.Wpf.Toolkit;
+using IncidentReport = TCMS.GUI.Models.IncidentReport;
 
 namespace TCMS.GUI.ViewModels
 {
@@ -19,29 +22,29 @@ namespace TCMS.GUI.ViewModels
         private readonly IMapper _mapper;
         private readonly IDialogService _dialogService;
 
-        private Lazy<Task> _LazyProductsLoader;
+        private Lazy<Task> _LazyIncidentLoader;
 
-        private ObservableCollection<Product> _products;
-        private ObservableCollection<Product> _filteredProducts;
+        private ObservableCollection<IncidentReport> _Incidents;
+        private ObservableCollection<IncidentReport> _filteredIncidents;
 
-        public ObservableCollection<Product> FilteredProducts
+        public ObservableCollection<IncidentReport> FilteredIncidents
         {
-            get => _filteredProducts;
+            get => _filteredIncidents;
             private set
             {
-                _filteredProducts = value;
+                _filteredIncidents = value;
                 OnPropertyChanged();
             }
         }
 
-        private Product _selectedProduct;
+        private IncidentReport _selectedIncident;
 
         private string _searchText = "Search Products...";
 
-        public Product SelectedProduct
+        public IncidentReport SelectedIncident
         {
-            get { return _selectedProduct; }
-            set { _selectedProduct = value; OnPropertyChanged(); }
+            get { return _selectedIncident; }
+            set { _selectedIncident = value; OnPropertyChanged(); }
         }
 
         public string SearchText
@@ -52,12 +55,12 @@ namespace TCMS.GUI.ViewModels
                 _searchText = value;
                 OnPropertyChanged();
                 // Try to ensure the products are loaded before filtering.
-                _ = EnsureProductsLoadedAsync().ContinueWith(t =>
+                _ = EnsureIncidentsLoadedAsync().ContinueWith(t =>
                 {
                     if (t.IsCompletedSuccessfully)
                     {
                         // Products are loaded, perform the filter.
-                        FilterProducts();
+                        FilterIncidents();
                     }
                     // If the task is not completed, it's either still running or failed.
                     // If it's still running, the search will be triggered once it completes.
@@ -79,14 +82,14 @@ namespace TCMS.GUI.ViewModels
             }
         }
 
-        private void FilterProducts()
+        private void FilterIncidents()
         {
             Console.WriteLine("FilterProducts called");
 
-            if (_products == null)
+            if (_Incidents == null)
             {
                 Console.WriteLine("Products collection is null, loading products.");
-                EnsureProductsLoadedAsync();
+                EnsureIncidentsLoadedAsync();
                 return;
             }
 
@@ -94,7 +97,7 @@ namespace TCMS.GUI.ViewModels
             if (string.IsNullOrEmpty(SearchText) || SearchText == "Search Products...")
             {
                 Console.WriteLine("SearchText is empty or placeholder text, setting filteredProducts to all products.");
-                FilteredProducts = new ObservableCollection<Product>(_products);
+                FilteredIncidents = new ObservableCollection<IncidentReport>(_Incidents);
             }
             else
             {
@@ -103,29 +106,27 @@ namespace TCMS.GUI.ViewModels
                 bool isNumericSearch = int.TryParse(SearchText, out int searchId);
                 Console.WriteLine($"isNumericSearch: {isNumericSearch}, searchId: {searchId}");
 
-                var filtered = _products.Where(product =>
-                        (isNumericSearch && product.ProductId.ToString().Contains(SearchText)) ||
-                        (!isNumericSearch && product.Name.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0))
-                    .ToList();
+                var filtered = _Incidents.Where(Incident =>
+                    (isNumericSearch && Incident.IncidentReportId.ToString().Contains(SearchText))).ToList();
 
                 Console.WriteLine($"Found {filtered.Count} products after filtering.");
-                FilteredProducts = new ObservableCollection<Product>(filtered);
+                FilteredIncidents = new ObservableCollection<IncidentReport>(filtered);
             }
 
-            Console.WriteLine($"FilteredProducts count after filtering: {FilteredProducts.Count}");
+            Console.WriteLine($"FilteredProducts count after filtering: {FilteredIncidents.Count}");
         }
 
 
         private void PerformSearch()
         {
-            FilterProducts();
+            FilterIncidents();
         }
 
         // Commands
-        public ICommand AddProductCommand { get; private set; }
-        public ICommand EditProductCommand { get; private set; }
-        public ICommand DeleteProductCommand { get; private set; }
-        public ICommand RefreshProductsCommand { get; private set; }
+        public ICommand AddIncidentCommand { get; private set; }
+        public ICommand EditIncidentCommand { get; private set; }
+        public ICommand DeleteIncidentCommand { get; private set; }
+        public ICommand RefreshIncidentsCommand { get; private set; }
         public ICommand SearchCommand { get; }
         public ICommand SearchBoxGotFocusCommand { get; }
         public ICommand SearchBoxLostFocusCommand { get; }
@@ -136,16 +137,16 @@ namespace TCMS.GUI.ViewModels
             _mapper = mapper;
             _dialogService = dialogService;
             // Initialize commands
-            AddProductCommand = new RelayCommand(AddProduct);
-            EditProductCommand = new RelayCommand(EditProduct, CanExecuteEditOrDelete);
-            DeleteProductCommand = new RelayCommand(DeleteProduct, CanExecuteEditOrDelete);
-            RefreshProductsCommand = new RelayCommand(RefreshProducts);
-            SearchCommand = new RelayCommand((obj) => FilterProducts());
+            AddIncidentCommand = new RelayCommand(AddIncident);
+            EditIncidentCommand = new RelayCommand(EditIncident, CanExecuteEditOrDelete);
+            DeleteIncidentCommand = new RelayCommand(DeleteIncident, CanExecuteEditOrDelete);
+            RefreshIncidentsCommand = new RelayCommand(RefreshIncidents);
+            SearchCommand = new RelayCommand((obj) => FilterIncidents());
             SearchBoxGotFocusCommand = new RelayCommand(SearchBoxGotFocus);
             SearchBoxLostFocusCommand = new RelayCommand(SearchBoxLostFocus);
 
-            _products = new ObservableCollection<Product>();
-            _filteredProducts = new ObservableCollection<Product>();
+            _Incidents = new ObservableCollection<IncidentReport>();
+            _filteredIncidents = new ObservableCollection<IncidentReport>();
 
             InitializeLazyLoader();
 
@@ -153,25 +154,25 @@ namespace TCMS.GUI.ViewModels
 
         private void InitializeLazyLoader()
         {
-            _LazyProductsLoader = new Lazy<Task>(() => LoadProductsAsync(), isThreadSafe: true);
+            _LazyIncidentLoader = new Lazy<Task>(() => LoadIncidentAsync(), isThreadSafe: true);
         }
 
-        private async Task LoadProductsAsync()
+        private async Task LoadIncidentAsync()
         {
             try
             {
-                var result = await _apiClient.GetAsync<OperationResult<IEnumerable<ProductDto>>>("manifest/product/all");
+                var result = await _apiClient.GetAsync<OperationResult<IEnumerable<IncidentReportDto>>>("incident/all");
                 if (result.IsSuccessful && result.Data != null)
                 {
-                    var products = _mapper.Map<IEnumerable<Product>>(result.Data);
+                    var incidents = _mapper.Map<IEnumerable<IncidentReport>>(result.Data);
                     App.Current.Dispatcher.Invoke(() =>
                     {
-                        _products.Clear();
-                        foreach (var product in products)
+                        _Incidents.Clear();
+                        foreach (var incident in incidents)
                         {
-                            _products.Add(product);
+                            _Incidents.Add(incident);
                         }
-                        FilterProducts();
+                        FilterIncidents();
                     });
                 }
                 else
@@ -188,11 +189,11 @@ namespace TCMS.GUI.ViewModels
         }
 
 
-        public async Task EnsureProductsLoadedAsync()
+        public async Task EnsureIncidentsLoadedAsync()
         {
-            if (!_LazyProductsLoader.IsValueCreated)
+            if (!_LazyIncidentLoader.IsValueCreated)
             {
-                await _LazyProductsLoader.Value;
+                await _LazyIncidentLoader.Value;
             }
         }
 
@@ -225,34 +226,34 @@ namespace TCMS.GUI.ViewModels
         }
 
 
-        private void AddProduct(object obj)
+        private void AddIncident(object obj)
         {
             var newIncidentLogForm = new IncidentLogFormViewModel(_apiClient, _mapper);
-            newIncidentLogForm.ProductUpdated += OnProductUpdated;
+            newIncidentLogForm.IncidentUpdated += OnIncidentUpdated;
             _dialogService.ShowDialog(newIncidentLogForm);
-            newIncidentLogForm.ProductUpdated -= OnProductUpdated;
+            newIncidentLogForm.IncidentUpdated -= OnIncidentUpdated;
         }
 
-        private void OnProductUpdated(object sender, EventArgs e)
+        private void OnIncidentUpdated(object sender, EventArgs e)
         {
-            RefreshProducts(null);
+            RefreshIncidents(null);
         }
 
 
         private void Refresh()
         {
-            _ = LoadProductsAsync();
+            _ = LoadIncidentAsync();
         }
 
-        private void EditProduct(object obj)
+        private void EditIncident(object obj)
         {
-            if (SelectedProduct != null)
+            if (SelectedIncident != null)
             {
-                var editIncidentLogForm = new IncidentLogFormViewModel(_apiClient, _mapper, SelectedProduct);
-                editIncidentLogForm.ProductUpdated += OnProductUpdated;
+                var editIncidentLogForm = new IncidentLogFormViewModel(_apiClient, _mapper, SelectedIncident);
+                editIncidentLogForm.IncidentUpdated += OnIncidentUpdated;
                 _dialogService.ShowDialog(editIncidentLogForm);
                 editIncidentLogForm.Cleanup();
-                editIncidentLogForm.ProductUpdated -= OnProductUpdated;
+                editIncidentLogForm.IncidentUpdated -= OnIncidentUpdated;
             }
         }
 
@@ -262,12 +263,12 @@ namespace TCMS.GUI.ViewModels
             return true; // Example logic
         }
 
-        private void DeleteProduct(object obj)
+        private void DeleteIncident(object obj)
         {
             // Implementation for deleting a selected product
         }
 
-        private void RefreshProducts(object obj)
+        private void RefreshIncidents(object obj)
         {
             Refresh();
         }

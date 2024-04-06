@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using AutoMapper;
+using TCMS.Common.DTOs.Incident;
 using TCMS.Common.Operations;
 using TCMS.GUI.Models;
 using TCMS.GUI.Services.Interfaces;
@@ -20,13 +21,13 @@ namespace TCMS.GUI.ViewModels
         private readonly IApiClient _apiClient;
         private readonly IMapper _mapper;
 
-        private Product _currentProduct;
+        private IncidentReport _currentIncident;
 
-        public event EventHandler ProductUpdated;
+        public event EventHandler IncidentUpdated;
 
-        protected virtual void OnProductUpdated()
+        protected virtual void OnIncidentUpdated()
         {
-            ProductUpdated?.Invoke(this, EventArgs.Empty);
+            IncidentUpdated?.Invoke(this, EventArgs.Empty);
         }
         public Action CloseAction { get; set; }
 
@@ -43,15 +44,15 @@ namespace TCMS.GUI.ViewModels
                 }
             }
         }
-        public Product CurrentProduct
+        public IncidentReport CurrentIncident
         {
-            get => _currentProduct;
+            get => _currentIncident;
             set
             {
-                if (_currentProduct != value)
+                if (_currentIncident != value)
                 {
-                    _currentProduct = value;
-                    OnPropertyChanged(nameof(CurrentProduct));
+                    _currentIncident = value;
+                    OnPropertyChanged(nameof(CurrentIncident));
                 }
             }
         }
@@ -72,7 +73,7 @@ namespace TCMS.GUI.ViewModels
             }
         }
 
-        private string _name = "Enter product name...";
+        private string _name = "Enter Incident ID...";
         public string Name
         {
             get => string.IsNullOrEmpty(_name) ? "Name" : _name;
@@ -128,20 +129,20 @@ namespace TCMS.GUI.ViewModels
 
         public ICommand ConfirmCommand { get; }
 
-        public IncidentLogFormViewModel(IApiClient apiClient, IMapper mapper, Product product = null)
+        public IncidentLogFormViewModel(IApiClient apiClient, IMapper mapper, IncidentReport incident = null)
         {
             _apiClient = apiClient;
             _mapper = mapper;
             IsEditMode = false;
 
-            if (product != null)
+            if (incident != null)
             {
-                CurrentProduct = product;
+                CurrentIncident = incident;
                 IsEditMode = true;
             }
             else
             {
-                CurrentProduct = new Product();
+                CurrentIncident = new IncidentReport();
                 IsEditMode = false;
             }
 
@@ -152,31 +153,31 @@ namespace TCMS.GUI.ViewModels
         {
             if (IsEditMode)
             {
-                await UpdateProductAsync();
+                await UpdateIncidentAsync();
             }
             else
             {
-                await AddProductAsync();
+                await AddIncidentAsync();
             }
 
             // Close the window or navigate back as appropriate
             CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
         }
 
-        private async Task AddProductAsync()
+        private async Task AddIncidentAsync()
         {
             try
             {
-                var newProductDto = _mapper.Map<ProductDto>(this);
+                var newIncidentReportDto = _mapper.Map<IncidentReportDto>(this);
 
-                var result = await _apiClient.PostAsync<OperationResult>("manifest/product/add", newProductDto);
+                var result = await _apiClient.PostAsync<OperationResult>("manifest/product/add", newIncidentReportDto);
                 if (!result.IsSuccessful)
                 {
                     Debug.WriteLine(result.Messages);
                 }
                 else if (result.IsSuccessful)
                 {
-                    ProductUpdated?.Invoke(this, EventArgs.Empty);
+                    IncidentUpdated?.Invoke(this, EventArgs.Empty);
                 }
             }
             catch (Exception ex)
@@ -185,22 +186,22 @@ namespace TCMS.GUI.ViewModels
             }
         }
 
-        private async Task UpdateProductAsync()
+        private async Task UpdateIncidentAsync()
         {
             try
             {
 
-                var updatedProductDto = _mapper.Map<ProductDto>(this);
-                updatedProductDto.ProductId = CurrentProduct.ProductId;
+                var updatedIncidentDto = _mapper.Map<IncidentReportDto>(this);
+                updatedIncidentDto.IncidentReportId = CurrentIncident.IncidentReportId;
 
-                var result = await _apiClient.PutAsync<OperationResult>("manifest/product/update", updatedProductDto);
+                var result = await _apiClient.PutAsync<OperationResult>("manifest/product/update", updatedIncidentDto);
                 if (!result.IsSuccessful)
                 {
                     Debug.WriteLine(result.Messages);
                 }
                 else if (result.IsSuccessful)
                 {
-                    ProductUpdated?.Invoke(this, EventArgs.Empty);
+                    IncidentUpdated?.Invoke(this, EventArgs.Empty);
                 }
 
             }
@@ -212,7 +213,7 @@ namespace TCMS.GUI.ViewModels
 
         public void Cleanup()
         {
-            ProductUpdated = null;
+            IncidentUpdated = null;
         }
     }
 }
