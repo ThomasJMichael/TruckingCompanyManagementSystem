@@ -96,12 +96,12 @@ namespace TCMS.Services.Implementations
             }
         }
 
-        public async Task<OperationResult<IEnumerable<DrugTestDto>>> GetTestsByDriverIdAsync(int driverId)
+        public async Task<OperationResult<IEnumerable<DrugTestDto>>> GetTestsByEmployeeId (int employeeId)
         {
             try
             {
                 var tests = await context.DrugAndAlcoholTests
-                    .Where(test => test.DriverId.Equals(driverId))
+                    .Where(test => test.EmployeeId.Equals(employeeId))
                     .ToListAsync();
 
                 var testDtos = mapper.Map<IEnumerable<DrugTestDto>>(tests);

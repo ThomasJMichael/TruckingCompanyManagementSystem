@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,7 +29,8 @@ namespace TCMS.Data.Models
     public class DrugAndAlcoholTest
     {
         public int DrugAndAlcoholTestId { get; set; }
-        public string DriverId { get; set; }
+        [ForeignKey("Driver")]
+        public string EmployeeId { get; set; }
         public virtual Driver? Driver { get; set; } //Virtual for lazy loading
         public DateTime TestDate { get; set; }
         public TestType TestType { get; set; }
@@ -37,7 +39,7 @@ namespace TCMS.Data.Models
 
         // Potential reference to an incident if the test is post-accident
         public int? IncidentReportId { get; set; }
-        public virtual IncidentReport IncidentReport { get; set; } //Virtual for lazy loading
+        public virtual IncidentReport? IncidentReport { get; set; } //Virtual for lazy loading
 
         // Foll-up details, if applicable
         public DateTime? FollowUpTestDate { get; set; } //Next scheduled test date

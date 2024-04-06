@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,7 +27,8 @@ namespace TCMS.Data.Models
         public Vehicle Vehicle { get; set; }
 
         // Foreign key for the involved driver
-        public string DriverId { get; set; }
+        [ForeignKey("Driver")]
+        public string EmployeeId { get; set; }
         public Driver Driver { get; set; }
 
         // Specific to accidents

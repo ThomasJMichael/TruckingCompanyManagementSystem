@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Net.Mime;
 using System.Windows.Input;
 using AutoMapper;
+using TCMS.Common.DTOs.Inventory;
 using TCMS.Common.Operations;
 using TCMS.GUI.Models;
 using TCMS.GUI.Services.Interfaces;
@@ -36,7 +37,6 @@ namespace TCMS.GUI.ViewModels
 
         private Product _selectedProduct;
 
-        private string _searchText = "Search Products...";
 
         public Product SelectedProduct
         {
@@ -44,6 +44,7 @@ namespace TCMS.GUI.ViewModels
             set { _selectedProduct = value; OnPropertyChanged(); }
         }
 
+        private string _searchText = "Search Inventory...";
         public string SearchText
         {
             get => _searchText;
@@ -91,7 +92,7 @@ namespace TCMS.GUI.ViewModels
             }
 
             Console.WriteLine($"Current SearchText: '{SearchText}'");
-            if (string.IsNullOrEmpty(SearchText) || SearchText == "Search Products...")
+            if (string.IsNullOrEmpty(SearchText) || SearchText == "Search Inventory...")
             {
                 Console.WriteLine("SearchText is empty or placeholder text, setting filteredProducts to all products.");
                 FilteredProducts = new ObservableCollection<Product>(_products);
@@ -160,7 +161,7 @@ namespace TCMS.GUI.ViewModels
         {
             try
             {
-                var result = await _apiClient.GetAsync<OperationResult<IEnumerable<ProductDto>>>("manifest/product/all");
+                var result = await _apiClient.GetAsync<OperationResult<IEnumerable<InventoryProductDetailDto>>>("inventory/all-details");
                 if (result.IsSuccessful && result.Data != null)
                 {
                     var products = _mapper.Map<IEnumerable<Product>>(result.Data);
@@ -198,19 +199,19 @@ namespace TCMS.GUI.ViewModels
 
         private void AdjustSearchTextOnFocus()
         {
-            if (_isSearchBoxFocused && SearchText == "Search Products...")
+            if (_isSearchBoxFocused && SearchText == "Search Inventory...")
             {
                 SearchText = string.Empty;
             }
             else if (!_isSearchBoxFocused && string.IsNullOrWhiteSpace(SearchText))
             {
-                SearchText = "Search Products...";
+                SearchText = "Search Inventory...";
             }
         }
 
         private void SearchBoxGotFocus(object obj)
         {
-            if (SearchText == "Search Products...")
+            if (SearchText == "Search Inventory...")
             {
                 SearchText = string.Empty;
             }
@@ -220,7 +221,7 @@ namespace TCMS.GUI.ViewModels
         {
             if (string.IsNullOrWhiteSpace(SearchText))
             {
-                SearchText = "Search Products...";
+                SearchText = "Search Inventory...";
             }
         }
 

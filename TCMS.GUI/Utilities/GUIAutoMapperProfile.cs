@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using TCMS.Common.DTOs.Incident;
+using TCMS.Common.DTOs.Inventory;
 using TCMS.GUI.Models;
 using TCMS.GUI.ViewModels;
-
+using TCMS.Common.DTOs.Inventory;
+using TCMS.Common.DTOs.Incident;
 namespace TCMS.GUI.Utilities
 {
 
@@ -21,6 +23,10 @@ namespace TCMS.GUI.Utilities
                 .ForMember(dest => dest.IncidentReportId, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
                 .ForMember(dest => dest.IncidentDate, opt => opt.MapFrom(src => src.Price));
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price)); 
+
+            CreateMap<InventoryProductDetailDto, Product>().ReverseMap();
+
         }
 
     };

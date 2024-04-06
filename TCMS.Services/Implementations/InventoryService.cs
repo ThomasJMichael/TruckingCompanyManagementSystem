@@ -17,6 +17,13 @@ namespace TCMS.Services.Implementations
     {
         private readonly IMapper _mapper;
         private readonly TcmsContext _context;
+
+        public InventoryService(IMapper mapper, TcmsContext context)
+        {
+            _mapper = mapper;
+            _context = context;
+        }
+
         public async Task<OperationResult<IEnumerable<InventoryDto>>> GetAllInventoryAsync()
         {
             try
