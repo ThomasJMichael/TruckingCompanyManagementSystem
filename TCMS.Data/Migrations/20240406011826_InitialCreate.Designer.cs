@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TCMS.Data.Data;
 
@@ -10,9 +11,11 @@ using TCMS.Data.Data;
 namespace TCMS.Data.Migrations
 {
     [DbContext(typeof(TcmsContext))]
-    partial class TcmsContextModelSnapshot : ModelSnapshot
+    [Migration("20240406011826_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.2");
@@ -155,7 +158,7 @@ namespace TCMS.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("EmployeeId")
+                    b.Property<string>("DriverId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -174,7 +177,7 @@ namespace TCMS.Data.Migrations
 
                     b.HasKey("AssignmentId");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("DriverId");
 
                     b.HasIndex("ShipmentId");
 
@@ -187,7 +190,7 @@ namespace TCMS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("EmployeeId")
+                    b.Property<string>("DriverId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -215,7 +218,7 @@ namespace TCMS.Data.Migrations
 
                     b.HasKey("DrugAndAlcoholTestId");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("DriverId");
 
                     b.HasIndex("IncidentReportId")
                         .IsUnique();
@@ -303,12 +306,12 @@ namespace TCMS.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("DrugAndAlcoholTestId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("EmployeeId")
+                    b.Property<string>("DriverId")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int?>("DrugAndAlcoholTestId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("HasInjuries")
                         .HasColumnType("INTEGER");
@@ -334,7 +337,7 @@ namespace TCMS.Data.Migrations
 
                     b.HasKey("IncidentReportId");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("DriverId");
 
                     b.HasIndex("VehicleId");
 
@@ -913,7 +916,7 @@ namespace TCMS.Data.Migrations
                 {
                     b.HasOne("TCMS.Data.Models.Driver", "Driver")
                         .WithMany("Assignments")
-                        .HasForeignKey("EmployeeId")
+                        .HasForeignKey("DriverId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -932,7 +935,7 @@ namespace TCMS.Data.Migrations
                 {
                     b.HasOne("TCMS.Data.Models.Driver", "Driver")
                         .WithMany("DrugAndAlcoholTests")
-                        .HasForeignKey("EmployeeId")
+                        .HasForeignKey("DriverId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -960,7 +963,7 @@ namespace TCMS.Data.Migrations
                 {
                     b.HasOne("TCMS.Data.Models.Driver", "Driver")
                         .WithMany("IncidentReports")
-                        .HasForeignKey("EmployeeId")
+                        .HasForeignKey("DriverId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

@@ -11,8 +11,8 @@ using TCMS.Data.Data;
 namespace TCMS.Data.Migrations
 {
     [DbContext(typeof(TcmsContext))]
-    [Migration("20240404010737_AddInventory")]
-    partial class AddInventory
+    [Migration("20240406020647_FixOnModelCreate")]
+    partial class FixOnModelCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -158,7 +158,7 @@ namespace TCMS.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("DriverId")
+                    b.Property<string>("EmployeeId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -177,7 +177,7 @@ namespace TCMS.Data.Migrations
 
                     b.HasKey("AssignmentId");
 
-                    b.HasIndex("DriverId");
+                    b.HasIndex("EmployeeId");
 
                     b.HasIndex("ShipmentId");
 
@@ -190,7 +190,7 @@ namespace TCMS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("DriverId")
+                    b.Property<string>("EmployeeId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -218,7 +218,7 @@ namespace TCMS.Data.Migrations
 
                     b.HasKey("DrugAndAlcoholTestId");
 
-                    b.HasIndex("DriverId");
+                    b.HasIndex("EmployeeId");
 
                     b.HasIndex("IncidentReportId")
                         .IsUnique();
@@ -229,6 +229,7 @@ namespace TCMS.Data.Migrations
             modelBuilder.Entity("TCMS.Data.Models.Employee", b =>
                 {
                     b.Property<string>("EmployeeId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Address")
@@ -261,7 +262,6 @@ namespace TCMS.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("MiddleName")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("PayRate")
@@ -306,12 +306,12 @@ namespace TCMS.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("DriverId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<int?>("DrugAndAlcoholTestId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("EmployeeId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("HasInjuries")
                         .HasColumnType("INTEGER");
@@ -337,11 +337,31 @@ namespace TCMS.Data.Migrations
 
                     b.HasKey("IncidentReportId");
 
-                    b.HasIndex("DriverId");
+                    b.HasIndex("EmployeeId");
 
                     b.HasIndex("VehicleId");
 
                     b.ToTable("IncidentReports");
+                });
+
+            modelBuilder.Entity("TCMS.Data.Models.Inventory", b =>
+                {
+                    b.Property<int>("InventoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("QuantityOnHand")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("InventoryId");
+
+                    b.HasIndex("ProductId")
+                        .IsUnique();
+
+                    b.ToTable("Inventories");
                 });
 
             modelBuilder.Entity("TCMS.Data.Models.MaintenanceRecord", b =>
@@ -896,7 +916,7 @@ namespace TCMS.Data.Migrations
                 {
                     b.HasOne("TCMS.Data.Models.Driver", "Driver")
                         .WithMany("Assignments")
-                        .HasForeignKey("DriverId")
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -915,7 +935,7 @@ namespace TCMS.Data.Migrations
                 {
                     b.HasOne("TCMS.Data.Models.Driver", "Driver")
                         .WithMany("DrugAndAlcoholTests")
-                        .HasForeignKey("DriverId")
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -943,7 +963,7 @@ namespace TCMS.Data.Migrations
                 {
                     b.HasOne("TCMS.Data.Models.Driver", "Driver")
                         .WithMany("IncidentReports")
-                        .HasForeignKey("DriverId")
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -954,6 +974,17 @@ namespace TCMS.Data.Migrations
                     b.Navigation("Driver");
 
                     b.Navigation("Vehicle");
+                });
+
+            modelBuilder.Entity("TCMS.Data.Models.Inventory", b =>
+                {
+                    b.HasOne("TCMS.Data.Models.Product", "Product")
+                        .WithOne("Inventory")
+                        .HasForeignKey("TCMS.Data.Models.Inventory", "ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("TCMS.Data.Models.MaintenanceRecord", b =>
@@ -1102,6 +1133,12 @@ namespace TCMS.Data.Migrations
             modelBuilder.Entity("TCMS.Data.Models.Manifest", b =>
                 {
                     b.Navigation("ManifestItems");
+                });
+
+            modelBuilder.Entity("TCMS.Data.Models.Product", b =>
+                {
+                    b.Navigation("Inventory")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TCMS.Data.Models.PurchaseOrder", b =>

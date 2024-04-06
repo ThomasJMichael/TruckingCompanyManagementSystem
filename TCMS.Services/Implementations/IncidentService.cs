@@ -69,7 +69,7 @@ namespace TCMS.Services.Implementations
                         // Create a new test
                         drugAndAlcoholTest = new DrugAndAlcoholTest
                         {
-                            DriverId = incidentReport.DriverId,
+                            EmployeeId = incidentReport.EmployeeId,
                             TestDate = DateTime.Now, // Assuming the test date is now
                             TestType = TestType.PostAccident, 
                             IncidentReportId = incidentReport.IncidentReportId
@@ -166,7 +166,7 @@ namespace TCMS.Services.Implementations
                 {
                     var drugAndAlcoholTest = new DrugAndAlcoholTest
                     {
-                        DriverId = incidentReport.DriverId,
+                        EmployeeId = incidentReport.EmployeeId,
                         TestDate = testDate ?? DateTime.UtcNow,
                         TestType = TestType.PostAccident,
 

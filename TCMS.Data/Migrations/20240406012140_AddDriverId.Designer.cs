@@ -11,8 +11,8 @@ using TCMS.Data.Data;
 namespace TCMS.Data.Migrations
 {
     [DbContext(typeof(TcmsContext))]
-    [Migration("20240321145138_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240406012140_AddDriverId")]
+    partial class AddDriverId
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -229,6 +229,7 @@ namespace TCMS.Data.Migrations
             modelBuilder.Entity("TCMS.Data.Models.Employee", b =>
                 {
                     b.Property<string>("EmployeeId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Address")
@@ -261,7 +262,6 @@ namespace TCMS.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("MiddleName")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("PayRate")
@@ -344,6 +344,26 @@ namespace TCMS.Data.Migrations
                     b.ToTable("IncidentReports");
                 });
 
+            modelBuilder.Entity("TCMS.Data.Models.Inventory", b =>
+                {
+                    b.Property<int>("InventoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("QuantityOnHand")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("InventoryId");
+
+                    b.HasIndex("ProductId")
+                        .IsUnique();
+
+                    b.ToTable("Inventories");
+                });
+
             modelBuilder.Entity("TCMS.Data.Models.MaintenanceRecord", b =>
                 {
                     b.Property<int>("MaintenanceRecordId")
@@ -359,6 +379,9 @@ namespace TCMS.Data.Migrations
 
                     b.Property<DateTime>("MaintenanceDate")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("RecordType")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("VehicleId")
                         .HasColumnType("TEXT");
@@ -430,6 +453,9 @@ namespace TCMS.Data.Migrations
 
                     b.Property<DateTime?>("DateShipped")
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("ManifestId")
                         .HasColumnType("INTEGER");
@@ -570,9 +596,6 @@ namespace TCMS.Data.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("ShippingPrice")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("ProductId");
 
                     b.ToTable("Products");
@@ -663,11 +686,20 @@ namespace TCMS.Data.Migrations
                     b.Property<DateTime?>("EstimatedArrivalTime")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsShippingCostPaid")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("ManifestId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("PurchaseOrderId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("ShippingCost")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ShippingCostPaymentDate")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("State")
                         .IsRequired()
@@ -944,6 +976,17 @@ namespace TCMS.Data.Migrations
                     b.Navigation("Vehicle");
                 });
 
+            modelBuilder.Entity("TCMS.Data.Models.Inventory", b =>
+                {
+                    b.HasOne("TCMS.Data.Models.Product", "Product")
+                        .WithOne("Inventory")
+                        .HasForeignKey("TCMS.Data.Models.Inventory", "ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("TCMS.Data.Models.MaintenanceRecord", b =>
                 {
                     b.HasOne("TCMS.Data.Models.Vehicle", "Vehicle")
@@ -1090,6 +1133,12 @@ namespace TCMS.Data.Migrations
             modelBuilder.Entity("TCMS.Data.Models.Manifest", b =>
                 {
                     b.Navigation("ManifestItems");
+                });
+
+            modelBuilder.Entity("TCMS.Data.Models.Product", b =>
+                {
+                    b.Navigation("Inventory")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TCMS.Data.Models.PurchaseOrder", b =>

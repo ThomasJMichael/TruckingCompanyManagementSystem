@@ -72,12 +72,12 @@ namespace TCMS.API.Controllers
             return result.IsSuccessful ? Ok(result) : BadRequest(result);
         }
 
-        [HttpGet("tests/{driverId}")]
+        [HttpGet("tests/{employeeId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult<IEnumerable<DrugTestDto>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<OperationResult<IEnumerable<DrugTestDto>>>> GetTestsByDriverId(int driverId)
+        public async Task<ActionResult<OperationResult<IEnumerable<DrugTestDto>>>> GetTestsByDriverId(int employeeId)
         {
-            var result = await _drugTestService.GetTestsByDriverIdAsync(driverId);
+            var result = await _drugTestService.GetTestsByEmployeeId(employeeId);
             return result.IsSuccessful ? Ok(result) : BadRequest(result);
         }
 
