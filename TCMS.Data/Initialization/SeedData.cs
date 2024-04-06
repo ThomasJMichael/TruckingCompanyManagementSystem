@@ -31,6 +31,15 @@ namespace TCMS.Data.Initialization
             Console.WriteLine("Seeding incidents and tests...");
             await SeedIncidentsAndTests(serviceProvider);
 
+            Console.WriteLine("Seeding timesheets...");
+            await SeedTimeSheets(serviceProvider);
+
+        }
+
+        private static async Task ResetDatabase(IServiceProvider serviceProvider)
+        {
+            var context = serviceProvider.GetRequiredService<TcmsContext>();
+            await DatabaseResetter.ResetDatabaseAsync(context);
         }
 
         private static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
@@ -62,8 +71,6 @@ namespace TCMS.Data.Initialization
         private static async Task SeedProductsAsync(IServiceProvider serviceProvider)
         {
             var context = serviceProvider.GetRequiredService<TcmsContext>(); // Adjust the context type and namespace as needed
-
-            //await DatabaseResetter.ResetDatabaseAsync(context);
 
             if (!context.Products.Any())
             {
@@ -153,6 +160,34 @@ namespace TCMS.Data.Initialization
                 await transaction.RollbackAsync();
             }
         }
+
+        private static async Task SeedTimeSheets(IServiceProvider serviceProvider)
+        {
+            var context = serviceProvider.GetRequiredService<TcmsContext>();
+
+            // Check before fetching all employees
+            if (await context.TimeSheets.AnyAsync())
+            {
+                return; // If any timesheets exist, exit early
+            }
+
+            await using var transaction = await context.Database.BeginTransactionAsync();
+            try
+            {
+                var employees = await context.Employees.ToListAsync();
+                var timesheets = TimeSheetGenerator.GenerateTimeSheetsForEmployees(employees, 22);
+                context.TimeSheets.AddRange(timesheets);
+                await context.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error during timesheet seeding: {e.Message}");
+                await transaction.RollbackAsync();
+            }
+        }
+
 
 
 
