@@ -145,7 +145,8 @@
                 <ListView.View>
                     <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
                         <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ProductId}" Width="50"/>
-                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="160"/>
+                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="150"/>
+                        <GridViewColumn Header="Quantity" DisplayMemberBinding="{Binding QuantityOnHand}" Width="100"/>
                         <!-- Add more columns as needed -->
                     </GridView>
                 </ListView.View>
@@ -182,6 +183,8 @@
                     <TextBlock Text="{Binding SelectedProduct.Description}" Style="{StaticResource DetailTextBlockStyle}" TextWrapping="Wrap"/>
                     <TextBlock Text="Price:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
                     <TextBlock Text="{Binding SelectedProduct.Price, StringFormat=C}" Style="{StaticResource DetailTextBlockStyle}"/>
+                    <TextBlock Text="Quantity On Hand:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding SelectedProduct.QuantityOnHand}" Style="{StaticResource DetailTextBlockStyle}"/>
                 </StackPanel>
             </Border>
 

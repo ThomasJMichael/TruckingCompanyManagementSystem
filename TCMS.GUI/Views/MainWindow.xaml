@@ -73,7 +73,7 @@
 
                     </utilities:Btn>
 
-                    <!--// Products //-->
+                    <!--// Inventory //-->
 
                     <utilities:Btn Style="{StaticResource BtnStyle}"
                               Command="{Binding ProductsCommand}">
@@ -83,7 +83,7 @@
                             <Image Source="/Assets/Images/img_product.png"
                                    Style="{StaticResource Image_Style}" />
 
-                            <TextBlock Text="Products"
+                            <TextBlock Text="Inventory"
                                        Style="{StaticResource Text_Style}" />
 
                         </Grid>

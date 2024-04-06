@@ -3,40 +3,69 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TCMS.GUI.Views" xmlns:viewmodels="clr-namespace:TCMS.GUI.ViewModels" 
+        xmlns:local="clr-namespace:TCMS.GUI.Views"
+        xmlns:viewmodels="clr-namespace:TCMS.GUI.ViewModels" 
+        xmlns:assets="clr-namespace:TCMS.GUI.Assets"
+        xmlns:util="clr-namespace:TCMS.GUI.Utilities" 
+        xmlns:converters="clr-namespace:TCMS.GUI.Converters"
         d:DataContext="{d:DesignInstance Type=viewmodels:ProductFormViewModel}"
         mc:Ignorable="d"
-        Title="{Binding WindowTitle}" Height="200" Width="300">
+        Title="{Binding WindowTitle}" Height="390" Width="300">
+    <Window.Resources>
+        <assets:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </Window.Resources>
+
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="20"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Name TextBox -->
-        <TextBox Grid.Row="0"
-                 Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                 Style="{StaticResource PlaceholderTextBoxStyle}"/>
+        <!-- Name -->
+        <Label Content="Name" Grid.Row="0"/>
+        <TextBox Grid.Row="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
 
-        <!-- Description TextBox -->
-        <TextBox Grid.Row="2"
-                 Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
-                 Style="{StaticResource PlaceholderTextBoxStyle}"/>
+        <!-- Description -->
+        <Label Content="Description" Grid.Row="3"/>
+        <TextBox Grid.Row="4" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
 
-        <!-- Price TextBox -->
-        <TextBox Grid.Row="4"
-                 Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}"
-                 Style="{StaticResource PlaceholderTextBoxStyle}"/>
+        <!-- Price Input and Error Message -->
+        <Label Content="Price" Grid.Row="6"/>
+        <TextBox Grid.Row="7" Text="{Binding Price, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"/>
+        <TextBlock Text="{Binding PriceError}" Foreground="Red" Grid.Row="8" Visibility="{Binding PriceError, Converter={StaticResource StringToVisibilityConverter}}"/>
+        <!-- Quantity On Hand Input and Error Message -->
+        <Label Content="Quantity On Hand" Grid.Row="9"/>
+        <TextBox Grid.Row="10" Text="{Binding QuantityOnHand, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"/>
+        <TextBlock Text="{Binding QuantityOnHandError}" Foreground="Red" Grid.Row="11" Visibility="{Binding QuantityOnHandError, Converter={StaticResource StringToVisibilityConverter}}"/>
+        <!-- General Error Message Display -->
+        <TextBlock Grid.Row="12" Foreground="Red" Margin="0,5,0,5"
+                   Visibility="{Binding HasErrors, Converter={StaticResource BoolToVisibilityConverter}}">
+            <TextBlock.Text>
+                <!-- This assumes you have a method in the ViewModel to aggregate errors into a single string -->
+                <MultiBinding StringFormat="{}{0}{1}">
+                    <Binding Path="PriceError"/>
+                    <Binding Path="QuantityOnHandError"/>
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
 
         <!-- Confirm Button -->
-        <Button Content="Confirm"
-                Grid.Row="5"
-                Command="{Binding ConfirmCommand}"
-                HorizontalAlignment="Right"
-                Margin="0,20,0,0"/>
+        <Button Content="Confirm" Grid.Row="14" Command="{Binding ConfirmCommand}" HorizontalAlignment="Right" Margin="0,20,0,0"/>
     </Grid>
 </Window>
+

@@ -107,7 +107,7 @@ namespace TCMS.Data.Initialization
             // Seed regular Employees next
             // This count now includes both Employees and Drivers due to TPH inheritance
             var totalEmployeeCount = await context.Employees.CountAsync();
-            if (totalEmployeeCount < 150) // Assuming you want a total of 150 employees, including drivers
+            if (totalEmployeeCount < 150) 
             {
                 // Generate additional regular Employees, excluding the Drivers already counted
                 var newEmployees = WorkforceGenerator.GenerateRegularEmployees(150 - totalEmployeeCount);

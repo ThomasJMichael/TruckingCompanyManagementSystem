@@ -39,7 +39,7 @@ namespace TCMS.Common.DTOs.Incident
 
         [Required]
         [Display(Name = "Driver ID")]
-        public int EmployeeId { get; set; }
+        public string EmployeeId { get; set; }
 
         [Display(Name = "Is Fatal")]
         public bool IsFatal { get; set; }
