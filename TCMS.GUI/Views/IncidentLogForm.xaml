@@ -6,44 +6,129 @@
         xmlns:local="clr-namespace:TCMS.GUI.Views" xmlns:viewmodels="clr-namespace:TCMS.GUI.ViewModels" 
         d:DataContext="{d:DesignInstance Type=viewmodels:IncidentLogFormViewModel}"
         mc:Ignorable="d"
-        Title="blah" Height="600" Width="622">
+        Title="blah" Height="600" Width="715">
+                
     <Grid Margin="20">
         <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="200"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="20"/>
-            <RowDefinition Height="10"/>
-            <RowDefinition Height="200"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
+
         </Grid.ColumnDefinitions>
-
-        <Grid>
-            <CheckBox Content="Enable Feature" 
-                  HorizontalAlignment="Center" 
-                  VerticalAlignment="Center"
-                  IsChecked ="{Binding IsFatal, Mode=TwoWay}"/>
-        </Grid>
-
-        <!-- Name TextBox -->
-        <TextBox Grid.Row="1"
+        <Grid Grid.Row="0" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="500"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="162"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0"
+                 Grid.Row="0"
                  Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                  Style="{StaticResource PlaceholderTextBoxStyle}"/>
+            <TextBox Grid.Column="2"
+               Grid.Row="0"
+               Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+               Style="{StaticResource PlaceholderTextBoxStyle}"/>
+        </Grid>
+        <!-- Name TextBox -->
+
+  
 
         <!-- Description TextBox -->
-        <TextBox Grid.Row="3"
+        <TextBox Grid.Row="2"
+                 Grid.Column="0"
                  Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
                  Style="{StaticResource PlaceholderTextBoxStyle}"/>
+        
 
         <!-- Confirm Button -->
         <Button Content="Confirm"
-                Grid.Row="5"
+                Grid.Row="7"
                 Command="{Binding ConfirmCommand}"
                 HorizontalAlignment="Right"
                 Margin="0,20,0,0"/>
+        <Grid Grid.Row="4" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+
+        </Grid>
+        <Grid Grid.Row="5" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="127"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="126"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="126"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="126"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="127"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0"
+                     Grid.Row="0"
+                     Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource PlaceholderTextBoxStyle}"/>
+            <TextBox Grid.Column="2"
+                     Grid.Row="0"
+                     Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource PlaceholderTextBoxStyle}"/>
+            <TextBox Grid.Column="4"
+                     Grid.Row="0"
+                     Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource PlaceholderTextBoxStyle}"/>
+            <TextBox Grid.Column="6"
+                     Grid.Row="0"
+                     Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource PlaceholderTextBoxStyle}"/>
+            <TextBox Grid.Column="8"
+                     Grid.Row="0"
+                     Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource PlaceholderTextBoxStyle}"/>
+        </Grid>
+            <CheckBox
+                  Content="Enable Feature" 
+                  HorizontalAlignment="Center" 
+                  VerticalAlignment="Bottom"
+                  
+                  IsChecked ="{Binding IsFatal, Mode=TwoWay}" Margin="0,25,0,0" Grid.Row="6"/>
+        <CheckBox
+                  Content="Enable Feature" 
+                  HorizontalAlignment="Left" 
+                  VerticalAlignment="Bottom"
+                  
+                  IsChecked ="{Binding IsFatal, Mode=TwoWay}" Margin="0,25,0,0" Grid.Row="6"/>
+       
+        <CheckBox
+                  Content="Enable Feature" 
+                  HorizontalAlignment="Right" 
+                  VerticalAlignment="Bottom"
+                  
+                  IsChecked ="{Binding IsFatal, Mode=TwoWay}" Margin="0,25,0,0" Grid.Row="6"/>
+        <CheckBox
+                  Content="Enable Feature" 
+                  HorizontalAlignment="Left" 
+                  VerticalAlignment="Bottom"
+                  
+                  IsChecked ="{Binding IsFatal, Mode=TwoWay}" Margin="0,25,0,0" Grid.Row="7"/>
+        
+        <CheckBox
+                  Content="Enable Feature" 
+                  HorizontalAlignment="Center" 
+                  VerticalAlignment="Bottom"
+                  
+                  IsChecked ="{Binding IsFatal, Mode=TwoWay}" Margin="0,25,0,0" Grid.Row="7"/>
     </Grid>
+
 </Window>
