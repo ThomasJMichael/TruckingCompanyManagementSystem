@@ -7,7 +7,7 @@ namespace TCMS.Common.DTOs.DrugTest
     public class DrugTestCreateDto
     {
         [Required]
-        public int DriverId { get; set; }
+        public int EmployeeId { get; set; }
 
         [Required]
         [EnumDataType(typeof(TestType))]

@@ -37,15 +37,15 @@ public class TcmsContext : IdentityDbContext<UserAccount>
 
         // Inventory
         modelBuilder.Entity<Inventory>()
-            .HasOne(i => i.Product) // Each Inventory item has one Product...
+            .HasOne(i => i.Product) 
             .WithOne(p => p.Inventory)
-            .HasForeignKey<Inventory>(i => i.ProductId); // Foreign key in Inventory table
+            .HasForeignKey<Inventory>(i => i.ProductId); 
 
         // Assignment
         modelBuilder.Entity<Assignment>()
             .HasOne(a => a.Driver)
             .WithMany(d => d.Assignments)
-            .HasForeignKey(a => a.DriverId)
+            .HasForeignKey(a => a.EmployeeId)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Assignment>()
@@ -58,19 +58,19 @@ public class TcmsContext : IdentityDbContext<UserAccount>
         modelBuilder.Entity<Driver>()
             .HasMany(d => d.Assignments)
             .WithOne(a => a.Driver)
-            .HasForeignKey(a => a.DriverId)
+            .HasForeignKey(a => a.EmployeeId)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Driver>()
             .HasMany(d => d.IncidentReports)
             .WithOne(i => i.Driver)
-            .HasForeignKey(i => i.DriverId)
+            .HasForeignKey(i => i.EmployeeId)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Driver>()
             .HasMany(d => d.DrugAndAlcoholTests)
             .WithOne(t => t.Driver)
-            .HasForeignKey(t => t.DriverId)
+            .HasForeignKey(t => t.EmployeeId)
             .OnDelete(DeleteBehavior.Restrict);
 
         // Employee
@@ -139,7 +139,7 @@ public class TcmsContext : IdentityDbContext<UserAccount>
         modelBuilder.Entity<IncidentReport>()
             .HasOne(i => i.Driver)
             .WithMany(d => d.IncidentReports)
-            .HasForeignKey(i => i.DriverId)
+            .HasForeignKey(i => i.EmployeeId)
             .OnDelete(DeleteBehavior.Restrict);
 
         // IncidentReport and DrugAndAlcoholTest
@@ -176,5 +176,74 @@ public class TcmsContext : IdentityDbContext<UserAccount>
             .HasForeignKey(p => p.MaintenanceRecordId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        // Inventory
+        modelBuilder.Entity<Inventory>()
+            .Property(i => i.InventoryId)
+            .ValueGeneratedOnAdd();
+
+        // Assignment
+        modelBuilder.Entity<Assignment>()
+            .Property(a => a.AssignmentId)
+            .ValueGeneratedOnAdd();
+
+        // Employee
+        modelBuilder.Entity<Employee>()
+            .Property(e => e.EmployeeId)
+            .ValueGeneratedOnAdd();
+
+        // Manifest
+        modelBuilder.Entity<Manifest>()
+            .Property(m => m.ManifestId)
+            .ValueGeneratedOnAdd();
+
+        // ManifestItem
+        modelBuilder.Entity<ManifestItem>()
+            .Property(mi => mi.ManifestItemId)
+            .ValueGeneratedOnAdd();
+
+        // PartDetails
+        modelBuilder.Entity<PartDetails>()
+            .Property(p => p.PartDetailsId)
+            .ValueGeneratedOnAdd();
+
+        // Payroll
+        modelBuilder.Entity<Payroll>()
+            .Property(p => p.PayrollId)
+            .ValueGeneratedOnAdd();
+
+        // PurchaseOrder
+        modelBuilder.Entity<PurchaseOrder>()
+            .Property(po => po.PurchaseOrderId)
+            .ValueGeneratedOnAdd();
+
+        // RepairRecord
+        modelBuilder.Entity<RepairRecord>()
+            .Property(rr => rr.RepairRecordId)
+            .ValueGeneratedOnAdd();
+
+        // TimeSheet
+        modelBuilder.Entity<TimeSheet>()
+            .Property(t => t.TimeSheetId)
+            .ValueGeneratedOnAdd();
+
+        // IncidentReport
+        modelBuilder.Entity<IncidentReport>()
+            .Property(ir => ir.IncidentReportId)
+            .ValueGeneratedOnAdd();
+
+        // DrugAndAlcoholTest
+        modelBuilder.Entity<DrugAndAlcoholTest>()
+            .Property(dat => dat.DrugAndAlcoholTestId)
+            .ValueGeneratedOnAdd();
+
+        // Shipment
+        modelBuilder.Entity<Shipment>()
+            .Property(s => s.ShipmentId)
+            .ValueGeneratedOnAdd();
+
+        // MaintenanceRecord
+        modelBuilder.Entity<MaintenanceRecord>()
+            .Property(mr => mr.MaintenanceRecordId)
+            .ValueGeneratedOnAdd();
     }
 }

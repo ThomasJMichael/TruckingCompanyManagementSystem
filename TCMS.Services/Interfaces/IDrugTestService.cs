@@ -13,7 +13,7 @@ namespace TCMS.Services.Interfaces
         Task<OperationResult> DeleteTestAsync(int drugTestId);
 
         // Specialized operations
-        Task<OperationResult<IEnumerable<DrugTestDto>>> GetTestsByDriverIdAsync(int driverId);
+        Task<OperationResult<IEnumerable<DrugTestDto>>> GetTestsByEmployeeId (int employeeId);
         Task<OperationResult> ScheduleFollowUpTestAsync(int drugTestId, DateTime followUpDate);
         Task<OperationResult> CompleteFollowUpTestAsync(int drugTestId, TestResult result);
     }

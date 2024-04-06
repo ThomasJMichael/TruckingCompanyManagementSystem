@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TCMS.Common.DTOs.Inventory;
 using TCMS.Common.DTOs.Shipment;
 using TCMS.Common.Operations;
 using TCMS.Services.Interfaces;
@@ -151,7 +152,7 @@ namespace TCMS.API.Controllers
         [HttpPost("product/add")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<OperationResult>> AddProduct(ProductDto dto)
+        public async Task<ActionResult<OperationResult>> AddProduct(AddProductDto dto)
         {
             if (!ModelState.IsValid)
             {

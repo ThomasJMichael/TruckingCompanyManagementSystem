@@ -1,4 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
+using TCMS.Common.DTOs.Inventory;
 using TCMS.Common.DTOs.Shipment;
 using TCMS.Common.Operations;
 using TCMS.Data.Models;
@@ -21,7 +23,7 @@ public interface IManifestService
     Task<OperationResult<decimal>> CalculateTotalCost(int manifestId);
 
     // Product operations
-    Task<OperationResult> AddProductAsync(ProductDto dto);
+    Task<OperationResult> AddProductAsync(AddProductDto dto);
     Task<OperationResult> UpdateProductAsync(ProductDto dto);
     Task<OperationResult> DeleteProductAsync(int productId);
     Task<OperationResult<IEnumerable<ProductDto>>> GetAllProductsAsync();

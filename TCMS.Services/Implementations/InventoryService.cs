@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using TCMS.Common.DTOs.Inventory;
 using TCMS.Common.Operations;
 using TCMS.Data.Data;
@@ -27,6 +28,66 @@ namespace TCMS.Services.Implementations
             catch (Exception e)
             {
                 return OperationResult<IEnumerable<InventoryDto>>.Failure(new List<string> {e.Message});
+            }
+        }
+
+        public async Task<OperationResult<IEnumerable<InventoryProductDetailDto>>> GetAllInventoryProductDetailsAsync()
+        {
+            try
+            {
+                var inventoryQuery = from inventory in _context.Inventories
+                    join product in _context.Products on inventory.ProductId equals product.ProductId
+                    select new { inventory, product };
+
+                var inventoryList = await inventoryQuery.ToListAsync();
+                var inventoryProductDetailDtos = inventoryList.Select(i => new InventoryProductDetailDto
+                {
+                    ProductId = i.product.ProductId,
+                    Name = i.product.Name,
+                    Description = i.product.Description,
+                    Price = i.product.Price,
+                    QuantityOnHand = i.inventory.QuantityOnHand,
+                }).ToList();
+
+                return OperationResult<IEnumerable<InventoryProductDetailDto>>.Success(inventoryProductDetailDtos);
+            }
+            catch (Exception e)
+            {
+                return OperationResult<IEnumerable<InventoryProductDetailDto>>.Failure(new List<string> { e.Message});
+            }
+        }
+
+        public async Task<OperationResult> UpdateInventoryAndProduct(InventoryProductDetailDto dto)
+        {
+            await using var transaction = _context.Database.BeginTransaction();
+            try
+            {
+                var inventory = _context.Inventories.FirstOrDefault(i => i.ProductId == dto.ProductId);
+                if (inventory == null)
+                {
+                    return OperationResult.Failure(new List<string> { "Inventory record not found" });
+                }
+
+                var product = _context.Products.FirstOrDefault(p => p.ProductId == dto.ProductId);
+                if (product == null)
+                {
+                    return OperationResult.Failure(new List<string> { "Product record not found" });
+                }
+
+                _mapper.Map(dto, product);
+                _mapper.Map(dto, inventory);
+
+                _context.Products.Update(product);
+                _context.Inventories.Update(inventory);
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+                return OperationResult.Success();
+            }
+            catch (Exception e)
+            {
+                await transaction.RollbackAsync();
+                return OperationResult.Failure(new List<string> { e.Message });
             }
         }
 
