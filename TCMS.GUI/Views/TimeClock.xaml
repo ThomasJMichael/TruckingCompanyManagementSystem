@@ -3,10 +3,56 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:TCMS.GUI.Views"
+             xmlns:utilities="clr-namespace:TCMS.GUI.Utilities" 
+             xmlns:viewmodels="clr-namespace:TCMS.GUI.ViewModels" 
+             d:DataContext="{d:DesignInstance Type=viewmodels:ProductsViewModel}"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="600" d:DesignWidth="622"
+             Style="{StaticResource Page_Style}">
+
+    <UserControl.Resources>
+        <utilities:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+        <SolidColorBrush x:Key="DetailBackgroundBrush" Color="#FF272B2F"/>
+        <!-- Define the TextBlock style for details -->
+        <Style x:Key="DetailTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontFamily" Value="pack://application:,,,/;component/Assets/Fonts/#Rubik Regular"/>
+            <!-- Add the path to your font file here, adjust the path if necessary -->
+            <Setter Property="FontSize" Value="14"/>
+            <!-- Set any other common properties you need for your TextBlocks -->
+        </Style>
+        <!-- Style for the GridView Column Header -->
+        <Style x:Key="GridViewColumnHeaderStyle" TargetType="GridViewColumnHeader">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <!-- Add additional Setters for other properties if needed -->
+        </Style>
+    </UserControl.Resources>
     <Grid>
-            
+        <!--// Base Grid //-->
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <utilities:Btn Style="{StaticResource DynamicWidthBtnStyle}" 
+                        Command="{Binding ClockInOutCommand}">
+            <TextBlock Text="Clock In/Out" Style="{StaticResource ViewsButtonText}"/>
+        </utilities:Btn>
+
+        <!-- Your existing Grid with other controls goes here -->
+
     </Grid>
+
 </UserControl>
