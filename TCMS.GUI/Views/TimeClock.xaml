@@ -46,13 +46,71 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <utilities:Btn Style="{StaticResource DynamicWidthBtnStyle}" 
-                        Command="{Binding ClockInOutCommand}">
-            <TextBlock Text="Clock In/Out" Style="{StaticResource ViewsButtonText}"/>
-        </utilities:Btn>
+        <Grid x:Name="SearchBarGrid" 
+              Margin="10" 
+              Background="Transparent" 
+              Height="40" 
+              HorizontalAlignment="Left" 
+              Width="550"
+              VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" 
+                    Background="Transparent" 
+                    CornerRadius="20" 
+                    BorderBrush="#666" 
+                    BorderThickness="1">
+                <TextBox x:Name="SearchTextBox" 
+                         Style="{StaticResource SearchTextBoxStyle}" 
+                         BorderThickness="0" 
+                         Background="Transparent"
+                         VerticalAlignment="Center"
+                         FontSize="16"
+                         FontWeight="Light"
+                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="GotFocus">
+                        <i:InvokeCommandAction Command="{Binding SearchBoxGotFocusCommand}" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="LostFocus">
+                        <i:InvokeCommandAction Command="{Binding SearchBoxLostFocusCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Border>
+
+            <Button Grid.Column="1"
+                    Style="{StaticResource RoundCornerButtonStyle}"
+                    Width="40"
+                    Background="#FF272B2F"
+                    BorderThickness="0"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Padding="10"
+                    Command="{Binding SearchCommand}">
+                <Button.Content>
+                    <Image Source="pack://application:,,,/Assets/Images/search_logo.png" 
+                           Width="20" 
+                           Height="20" OpacityMask="#FF272B2F"/>
+                </Button.Content>
+            </Button>
+        </Grid>
+
+        <Grid Grid.Row="1" >
+            <Grid.ColumnDefinitions>
+                <!-- Each column gets an equal share of the available space -->
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <utilities:Btn Style="{StaticResource DynamicWidthBtnStyle}" 
+                            Command="{Binding ClockInOutCommand}">
+                <TextBlock Text="Clock In/Out" Style="{StaticResource ViewsButtonText}"/>
+            </utilities:Btn>
+        </Grid>
 
         <!-- Your existing Grid with other controls goes here -->
 
     </Grid>
-
 </UserControl>
