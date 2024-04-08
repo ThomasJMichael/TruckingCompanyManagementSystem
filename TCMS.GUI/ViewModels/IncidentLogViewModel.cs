@@ -106,8 +106,11 @@ namespace TCMS.GUI.ViewModels
                 bool isNumericSearch = int.TryParse(SearchText, out int searchId);
                 Console.WriteLine($"isNumericSearch: {isNumericSearch}, searchId: {searchId}");
 
-                var filtered = _Incidents.Where(Incident =>
-                    (isNumericSearch && Incident.IncidentReportId.ToString().Contains(SearchText))).ToList();
+                var filtered = _Incidents.Where(incident =>
+                    (isNumericSearch && incident.IncidentReportId.ToString().Contains(SearchText)) ||
+                    (isNumericSearch && incident.IncidentDate.ToString().Contains(SearchText)) ||
+                    (!isNumericSearch && incident.Location.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0)) 
+                  .ToList();
 
                 Console.WriteLine($"Found {filtered.Count} products after filtering.");
                 FilteredIncidents = new ObservableCollection<IncidentReport>(filtered);

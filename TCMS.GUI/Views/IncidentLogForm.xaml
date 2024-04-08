@@ -21,15 +21,10 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
 
         </Grid.ColumnDefinitions>
         <Grid Grid.Row="0" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="500"/>
-                <ColumnDefinition Width="10"/>
-                <ColumnDefinition Width="162"/>
-            </Grid.ColumnDefinitions>
+
         </Grid>
         <!-- Name TextBox -->
         <Label  Content="Choose incident date" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="392,20,0,0" Grid.Row="7" Grid.RowSpan="2"/>
@@ -38,9 +33,15 @@
         <!-- Description TextBox -->
         <Label Grid.Row="2" Content="Enter a description" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,-26,0,0"/>
         <TextBox Grid.Row="2"
-                 Grid.Column="0"
+                 Grid.Column="1"
                  Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
-                 Style="{StaticResource PlaceholderTextBoxStyle}"/>
+                 Style="{StaticResource PlaceholderTextBoxStyle}"
+                 TextWrapping="Wrap"
+                 AcceptsReturn="True"
+                 VerticalScrollBarVisibility="Auto"
+                 HorizontalScrollBarVisibility="Disabled"
+                 MinLines="5"
+                 MaxLines="10"/>
 
 
         <!-- Confirm Button -->
