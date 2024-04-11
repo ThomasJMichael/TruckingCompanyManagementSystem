@@ -10,11 +10,15 @@
         xmlns:converters="clr-namespace:TCMS.GUI.Converters"
         d:DataContext="{d:DesignInstance Type=viewmodels:ProductFormViewModel}"
         mc:Ignorable="d"
-        Title="{Binding WindowTitle}" Height="390" Width="300">
+        Background="Azure"
+        Title="{Binding WindowTitle}" Height="420" Width="300">
     <Window.Resources>
         <assets:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Key="Enter" Command="{Binding ConfirmCommand}"></KeyBinding>
+    </Window.InputBindings>
 
     <Grid Margin="20">
         <Grid.RowDefinitions>

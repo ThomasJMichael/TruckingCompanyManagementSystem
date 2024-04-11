@@ -60,10 +60,14 @@ namespace TCMS.Common.Mappings
                     dest.Description = productDto.Description;
                     dest.Price = productDto.Price;
                 });
+            CreateMap<InventoryProductDetailDto, Inventory>()
+                .ForMember(dest => dest.QuantityOnHand, opt => opt.MapFrom(src => src.QuantityOnHand))
+                .ForMember(dest => dest.Product, opt => opt.Ignore());
 
 
             // Product mappings
             CreateMap<Product, ProductDto>().ReverseMap();
+            CreateMap<Product, InventoryProductDetailDto>().ReverseMap();
 
 
             // Shipment mappings

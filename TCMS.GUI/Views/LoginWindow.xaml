@@ -37,6 +37,9 @@
         </Style>
         <assets:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
     </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Key="Enter" Command="{Binding LoginCommand}"></KeyBinding>
+    </Window.InputBindings>
     <Grid Background="#FF212529">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

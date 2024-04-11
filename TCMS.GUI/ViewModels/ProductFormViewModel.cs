@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.DirectoryServices.ActiveDirectory;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -63,34 +64,32 @@ namespace TCMS.GUI.ViewModels
             }
         }
 
-        private string _name = "Enter product name...";
+        private string _name = "";
         public string Name
         {
-            get => string.IsNullOrEmpty(_name) ? "Name" : _name;
+            get => string.IsNullOrEmpty(_name) ? "" : _name;
             set
             {
                 _name = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(NamePlaceholderVisible));
             }
         }
 
-        private string _description = "Enter product description...";
+        private string _description = "";
         public string Description
         {
-            get => string.IsNullOrEmpty(_description) ? "Description" : _description;
+            get => string.IsNullOrEmpty(_description) ? "" : _description;
             set
             {
                 _description = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(DescriptionPlaceholderVisible));
             }
         }
 
-        private string _price = "Enter product price...";
+        private string _price = "";
         public string Price
         {
-            get => string.IsNullOrEmpty(_price) ? "Price" : _price;
+            get => string.IsNullOrEmpty(_price) ? "" : _price;
             set
             {
                 _price = value;
@@ -99,11 +98,11 @@ namespace TCMS.GUI.ViewModels
             }
         }
 
-        private string _quantityOnHand = "Enter quantity on hand...";
+        private string _quantityOnHand = "";
 
         public string QuantityOnHand
         {
-            get => string.IsNullOrEmpty(_quantityOnHand) ? "Quantity on hand" : _quantityOnHand;
+            get => string.IsNullOrEmpty(_quantityOnHand) ? "" : _quantityOnHand;
             set
             {
                 _quantityOnHand = value;
@@ -126,9 +125,6 @@ namespace TCMS.GUI.ViewModels
             }
         }
 
-        public Visibility NamePlaceholderVisible => string.IsNullOrEmpty(_name) ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility DescriptionPlaceholderVisible => string.IsNullOrEmpty(_description) ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility PricePlaceholderVisible => string.IsNullOrEmpty(_price) ? Visibility.Visible : Visibility.Collapsed;
 
         private bool _submissionAttempted = false;
         public ICommand ConfirmCommand { get; }
@@ -148,6 +144,14 @@ namespace TCMS.GUI.ViewModels
             {
                 CurrentProduct = new Product(); 
                 IsEditMode = false;
+            }
+
+            if (IsEditMode)
+            {
+                Name = CurrentProduct.Name;
+                Description = CurrentProduct.Description;
+                Price = CurrentProduct.Price.ToString("F2");
+                QuantityOnHand = CurrentProduct.QuantityOnHand.ToString();
             }
 
             ConfirmCommand = new RelayCommand(Confirm);
@@ -189,7 +193,7 @@ namespace TCMS.GUI.ViewModels
         {
             try
             {
-                var newProductDto = _mapper.Map<InventoryProductDetailDto>(this);
+                var newProductDto = _mapper.Map<AddProductDto>(this);
 
                 var result = await _apiClient.PostAsync<OperationResult>("manifest/product/add", newProductDto);
                 if (!result.IsSuccessful)
@@ -212,10 +216,10 @@ namespace TCMS.GUI.ViewModels
             try
             {
 
-                var updatedProductDto = _mapper.Map<ProductDto>(this);
+                var updatedProductDto = _mapper.Map<InventoryProductDetailDto>(this);
                 updatedProductDto.ProductId = CurrentProduct.ProductId;
 
-                var result = await _apiClient.PutAsync<OperationResult>("manifest/product/update", updatedProductDto);
+                var result = await _apiClient.PutAsync<OperationResult>("inventory/update", updatedProductDto);
                 if (!result.IsSuccessful)
                 {
                     Debug.WriteLine(result.Messages);
