@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TCMS.GUI.Views" xmlns:viewmodels="clr-namespace:TCMS.GUI.ViewModels" 
         d:DataContext="{d:DesignInstance Type=viewmodels:IncidentLogFormViewModel}"
         mc:Ignorable="d"
-        Title="blah" Height="600" Width="722">
+        Title="Create Incident" Height="600" Width="722">
 
     <Grid Margin="20">
         <Grid.RowDefinitions>
@@ -21,25 +21,27 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
 
         </Grid.ColumnDefinitions>
         <Grid Grid.Row="0" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="500"/>
-                <ColumnDefinition Width="10"/>
-                <ColumnDefinition Width="162"/>
-            </Grid.ColumnDefinitions>
+
         </Grid>
         <!-- Name TextBox -->
-
-        <DatePicker HorizontalAlignment="Left" Grid.Row="0" VerticalAlignment="Top"/>
+        <Label  Content="Choose incident date" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="392,20,0,0" Grid.Row="7" Grid.RowSpan="2"/>
+        <DatePicker x:Name ="datePicker" HorizontalAlignment="Center" Grid.Row="7" VerticalAlignment="bottom" SelectedDate="{Binding SelectedDate, Mode=TwoWay}"/>
 
         <!-- Description TextBox -->
+        <Label Grid.Row="2" Content="Enter a description" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,-26,0,0"/>
         <TextBox Grid.Row="2"
-                 Grid.Column="0"
+                 Grid.Column="1"
                  Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
-                 Style="{StaticResource PlaceholderTextBoxStyle}"/>
+                 Style="{StaticResource PlaceholderTextBoxStyle}"
+                 TextWrapping="Wrap"
+                 AcceptsReturn="True"
+                 VerticalScrollBarVisibility="Auto"
+                 HorizontalScrollBarVisibility="Disabled"
+                 MinLines="5"
+                 MaxLines="10"/>
 
 
         <!-- Confirm Button -->
@@ -64,58 +66,59 @@
                 <ColumnDefinition Width="10"/>
                 <ColumnDefinition Width="126"/>
                 <ColumnDefinition Width="10"/>
-                <ColumnDefinition Width="126"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="10"/>
-                <ColumnDefinition Width="127"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Grid.Row="2" Content="Enter the vehicle id" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-26,0,0"/>
             <TextBox Grid.Column="0"
                      Grid.Row="0"
-                     Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                     Text="{Binding VehicleId, UpdateSourceTrigger=PropertyChanged}"
                      Style="{StaticResource PlaceholderTextBoxStyle}"/>
-            <TextBox Grid.Column="2"
-                     Grid.Row="0"
-                     Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                     Style="{StaticResource PlaceholderTextBoxStyle}"/>
+            <Label Grid.Column="2" Grid.Row="2" Content="Enter the employee id" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-26,0,0"/>
+            <Label Grid.Column="4" Grid.Row="2" Content="Enter the location" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-26,0,0"/>
+            <ComboBox Grid.Row="5" Grid.Column="2"
+                  ItemsSource="{Binding EmployeeId}"
+                  SelectedItem="{Binding SelectedIncident}"/>
             <TextBox Grid.Column="4"
                      Grid.Row="0"
-                     Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                     Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}"
                      Style="{StaticResource PlaceholderTextBoxStyle}"/>
-            <ComboBox Grid.Column="6" HorizontalAlignment="Left" Grid.Row="5" VerticalAlignment="Center" Width="120"/>
+            <Label Grid.Column="6" Grid.Row="2" Content="Select the Incident Type" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-26,0,0"/>
+            <ComboBox Grid.Column="6"  Grid.Row="5" Width="200" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <ComboBoxItem Content="Item 1"/>
+                <ComboBoxItem Content="Item 2"/>
+                <ComboBoxItem Content="Item 3"/>
+                <!-- Add more items as needed -->
+            </ComboBox>
 
 
         </Grid>
         <CheckBox
-                  Content="Enable Feature" 
+                  Content="Has Injuries?" 
                   HorizontalAlignment="Center" 
                   VerticalAlignment="Bottom"
                   
-                  IsChecked ="{Binding IsFatal, Mode=TwoWay}" Margin="0,25,0,0" Grid.Row="6"/>
+                  IsChecked ="{Binding HasInjuries, Mode=TwoWay}" Margin="0,25,0,0" Grid.Row="6"/>
         <CheckBox
-                  Content="Enable Feature" 
+                  Content="Is Fatal?" 
                   HorizontalAlignment="Left" 
                   VerticalAlignment="Bottom"
                   
                   IsChecked ="{Binding IsFatal, Mode=TwoWay}" Margin="0,25,0,0" Grid.Row="6"/>
 
         <CheckBox
-                  Content="Enable Feature" 
+                  Content="Towed Vehicle?" 
                   HorizontalAlignment="Right" 
                   VerticalAlignment="Bottom"
                   
-                  IsChecked ="{Binding IsFatal, Mode=TwoWay}" Margin="0,25,0,0" Grid.Row="6"/>
+                  IsChecked ="{Binding HasTowedVehicle, Mode=TwoWay}" Margin="0,25,0,0" Grid.Row="6"/>
         <CheckBox
-                  Content="Enable Feature" 
+                  Content="Citation Issued to driver?" 
                   HorizontalAlignment="Left" 
                   VerticalAlignment="Bottom"
                   
-                  IsChecked ="{Binding IsFatal, Mode=TwoWay}" Margin="0,25,0,0" Grid.Row="7"/>
-
-        <CheckBox
-                  Content="Enable Feature" 
-                  HorizontalAlignment="Center" 
-                  VerticalAlignment="Bottom"
-                  
-                  IsChecked ="{Binding IsFatal, Mode=TwoWay}" Margin="0,25,0,0" Grid.Row="7"/>
+                  IsChecked ="{Binding CitationIssued, Mode=TwoWay}" Margin="0,25,0,0" Grid.Row="7"/>
 
 
     </Grid>

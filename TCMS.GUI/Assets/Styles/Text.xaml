@@ -55,6 +55,7 @@
         <!-- You can adjust the Margin or remove it if not necessary -->
     </Style>
 
+    <!-- New style for checkbox -->
     <Style TargetType="CheckBox" x:Key="CustomCheckBoxStyle">
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>

@@ -21,9 +21,9 @@ namespace TCMS.GUI.Utilities
                 .ForMember(dest => dest.QuantityOnHand, opt => opt.MapFrom(src => src.QuantityOnHand));
             CreateMap<IncidentReportDto, IncidentReport>().ReverseMap();
             CreateMap<IncidentLogFormViewModel, IncidentReportDto>()
-                .ForMember(dest => dest.IncidentReportId, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.IncidentReportId, opt => opt.MapFrom(src => src.IncidentReportId))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
-                .ForMember(dest => dest.IncidentDate, opt => opt.MapFrom(src => src.Price));
+                .ForMember(dest => dest.IncidentDate, opt => opt.MapFrom(src => src.SelectedDate));
 
             CreateMap<InventoryProductDetailDto, Product>().ReverseMap();
             CreateMap<AddProductDto, ProductFormViewModel>().ReverseMap()

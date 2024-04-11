@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
@@ -7,8 +9,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Navigation;
 using AutoMapper;
 using TCMS.Common.DTOs.Incident;
+using TCMS.Common.DTOs.Inventory;
 using TCMS.Common.Operations;
 using TCMS.GUI.Models;
 using TCMS.GUI.Services.Interfaces;
@@ -32,6 +36,11 @@ namespace TCMS.GUI.ViewModels
         public Action CloseAction { get; set; }
 
         private bool _isFatal;
+        private bool _hasInjuries;
+        private bool _hasTowedVehicle;
+        private bool _citationIssued;
+        private bool _requiresDrugAndAlchoholTest;
+
         public bool IsFatal
         {
             get => _isFatal;
@@ -41,6 +50,54 @@ namespace TCMS.GUI.ViewModels
                 {
                     _isFatal = value;
                     OnPropertyChanged(nameof(IsFatal));
+                }
+            }
+        }
+        public bool HasInjuries
+        {
+            get => _hasInjuries;
+            set
+            {
+                if (_hasInjuries != value)
+                {
+                    _hasInjuries = value;
+                    OnPropertyChanged(nameof(HasInjuries));
+                }
+            }
+        }
+        public bool HasTowedVehicle
+        {
+            get => _hasTowedVehicle;
+            set
+            {
+                if (_hasTowedVehicle != value)
+                {
+                    _hasTowedVehicle = value;
+                    OnPropertyChanged(nameof(HasTowedVehicle));
+                }
+            }
+        }
+        public bool CitationIssued
+        {
+            get => _citationIssued;
+            set
+            {
+                if (_citationIssued != value)
+                {
+                    _citationIssued = value;
+                    OnPropertyChanged(nameof(CitationIssued));
+                }
+            }
+        }
+        public bool RequiresDrugAndAlchoholTest
+        {
+            get => _requiresDrugAndAlchoholTest;
+            set
+            {
+                if (_requiresDrugAndAlchoholTest != value)
+                {
+                    _requiresDrugAndAlchoholTest = value;
+                    OnPropertyChanged(nameof(RequiresDrugAndAlchoholTest));
                 }
             }
         }
@@ -73,19 +130,65 @@ namespace TCMS.GUI.ViewModels
             }
         }
 
-        private string _name = "Enter Incident ID...";
-        public string Name
+        private string _incidentReportId = "Enter Vehicle ID...";
+        public string IncidentReportId
         {
-            get => string.IsNullOrEmpty(_name) ? "Name" : _name;
+            get => string.IsNullOrEmpty(_incidentReportId) ? "Name" : _incidentReportId;
             set
             {
-                _name = value;
+                _incidentReportId = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(NamePlaceholderVisible));
+            }
+        }
+        private DateTime? _selectedDate;
+        public DateTime? SelectedDate
+        {
+            get => _selectedDate;
+            set
+            {
+                _selectedDate = value;
+                OnPropertyChanged();
+            }
+        }
+        private string _vehicleId = "Enter Vehicle ID...";
+        public string VehicleId
+        {
+            get => string.IsNullOrEmpty(_vehicleId) ? "Name" : _vehicleId;
+            set
+            {
+                _vehicleId = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(NamePlaceholderVisible));
             }
         }
 
-        private string _description = "Enter product description...";
+        private string _employeeId = "Enter Employee ID...";
+        public string EmployeeId
+        {
+            get => string.IsNullOrEmpty(_employeeId) ? "Name" : _employeeId;
+            set
+            {
+                _employeeId = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(NamePlaceholderVisible));
+            }
+        }
+
+        private string _location = "Enter Location...";
+        public string Location
+        {
+            get => string.IsNullOrEmpty(_location) ? "Name" : _location;
+            set
+            {
+                _location = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(NamePlaceholderVisible));
+            }
+        }
+
+
+        private string _description = "Enter Incident description...";
         public string Description
         {
             get => string.IsNullOrEmpty(_description) ? "Description" : _description;
@@ -94,18 +197,6 @@ namespace TCMS.GUI.ViewModels
                 _description = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(DescriptionPlaceholderVisible));
-            }
-        }
-
-        private string _price = "Enter product price...";
-        public string Price
-        {
-            get => string.IsNullOrEmpty(_price) ? "Price" : _price;
-            set
-            {
-                _price = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(PricePlaceholderVisible));
             }
         }
 
@@ -123,9 +214,9 @@ namespace TCMS.GUI.ViewModels
             }
         }
 
-        public Visibility NamePlaceholderVisible => string.IsNullOrEmpty(_name) ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility NamePlaceholderVisible => string.IsNullOrEmpty(_incidentReportId) ? Visibility.Visible : Visibility.Collapsed;
         public Visibility DescriptionPlaceholderVisible => string.IsNullOrEmpty(_description) ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility PricePlaceholderVisible => string.IsNullOrEmpty(_price) ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility PricePlaceholderVisible => string.IsNullOrEmpty(_location) ? Visibility.Visible : Visibility.Collapsed;
 
         public ICommand ConfirmCommand { get; }
 
@@ -170,7 +261,7 @@ namespace TCMS.GUI.ViewModels
             {
                 var newIncidentReportDto = _mapper.Map<IncidentReportDto>(this);
 
-                var result = await _apiClient.PostAsync<OperationResult>("manifest/product/add", newIncidentReportDto);
+                var result = await _apiClient.PostAsync<OperationResult>("incident/all", newIncidentReportDto);
                 if (!result.IsSuccessful)
                 {
                     Debug.WriteLine(result.Messages);
@@ -194,7 +285,7 @@ namespace TCMS.GUI.ViewModels
                 var updatedIncidentDto = _mapper.Map<IncidentReportDto>(this);
                 updatedIncidentDto.IncidentReportId = CurrentIncident.IncidentReportId;
 
-                var result = await _apiClient.PutAsync<OperationResult>("manifest/product/update", updatedIncidentDto);
+                var result = await _apiClient.PutAsync<OperationResult>("incident/all", updatedIncidentDto);
                 if (!result.IsSuccessful)
                 {
                     Debug.WriteLine(result.Messages);
