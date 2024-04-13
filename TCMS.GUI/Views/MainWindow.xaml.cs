@@ -30,5 +30,11 @@ namespace TCMS.GUI.Views
             Application.Current.Shutdown();
         }
 
+        private void Grid_Mousedown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+                DragMove();
+        }
+
     }
 }

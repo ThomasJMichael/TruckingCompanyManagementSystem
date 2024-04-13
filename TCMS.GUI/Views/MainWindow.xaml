@@ -20,7 +20,7 @@
     <Border Background="#212529"
             CornerRadius="20"/>
 
-        <Grid>
+        <Grid MouseDown="Grid_Mousedown">
             <!--// Base Grid //-->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="228"/>
