@@ -229,24 +229,34 @@ namespace TCMS.Services.Implementations
             }
         }
 
-    public async Task<OperationResult<IEnumerable<UserAccountDto>>> GetAllUserAccountsAsync()
+        public async Task<OperationResult<IEnumerable<UserAccountDto>>> GetAllUserAccountsAsync()
         {
             try
             {
                 var userAccounts = await context.UserAccounts.ToListAsync();
-                var userAccountDtos = userAccounts.Select(u => new UserAccountDto
+                var userAccountDtos = new List<UserAccountDto>();
+
+                foreach (var user in userAccounts)
                 {
-                    EmployeeId = u.EmployeeId,
-                    Username = u.UserName,
-                    UserRole = roleManager.Roles.FirstOrDefault(r => r.Id == userManager.GetRolesAsync(u).Result.FirstOrDefault())?.Name,
-                }).ToList();
+                    var roles = await userManager.GetRolesAsync(user);
+                    var role = roleManager.Roles.FirstOrDefault(r => roles.Contains(r.Name))?.Name;
+
+                    userAccountDtos.Add(new UserAccountDto
+                    {
+                        EmployeeId = user.Id,
+                        Username = user.UserName,
+                        UserRole = role
+                    });
+                }
+
                 return OperationResult<IEnumerable<UserAccountDto>>.Success(userAccountDtos);
             }
             catch (Exception e)
             {
-                return OperationResult<IEnumerable<UserAccountDto>>.Failure([e.Message]);
+                return OperationResult<IEnumerable<UserAccountDto>>.Failure(new List<string> { e.Message });
             }
         }
+
 
         public async Task<OperationResult<IEnumerable<string>>> GetRolesAsync(string userId)
         {

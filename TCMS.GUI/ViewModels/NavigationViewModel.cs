@@ -42,7 +42,7 @@ namespace TCMS.GUI.ViewModels
         {
             _viewModelFactory = viewModelFactory;
             HomeCommand = new RelayCommand(Home);
-            //EmployeesCommand = new RelayCommand(employee);
+            EmployeesCommand = new RelayCommand(employee);
             ProductsCommand = new RelayCommand(Product);
             //OrdersCommand = new RelayCommand(Order);
             TimeClockCommand = new RelayCommand(TimeClock);

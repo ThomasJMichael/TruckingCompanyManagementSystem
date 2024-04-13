@@ -20,12 +20,16 @@ namespace TCMS.Data.Initialization
             context.Inventories.RemoveRange(context.Inventories);
             context.Products.RemoveRange(context.Products);
             context.TimeSheets.RemoveRange(context.TimeSheets.ToList());
+            context.Employees.RemoveRange(context.Employees.ToList());
+            context.Users.RemoveRange(context.Users.ToList());
             await context.SaveChangesAsync();
 
             // Reset the auto-increment ID counters
             await context.Database.ExecuteSqlRawAsync("DELETE FROM sqlite_sequence WHERE name='Inventories';");
             await context.Database.ExecuteSqlRawAsync("DELETE FROM sqlite_sequence WHERE name='Products';");
             await context.Database.ExecuteSqlRawAsync("DELETE FROM sqlite_sequence WHERE name='TimeSheets';");
+            await context.Database.ExecuteSqlRawAsync("DELETE FROM sqlite_sequence WHERE name='Employees';");
+            await context.Database.ExecuteSqlRawAsync("DELETE FROM sqlite_sequence WHERE name='Users';");
 
             // Re-enable foreign key checks
             await context.Database.ExecuteSqlRawAsync("PRAGMA foreign_keys = ON;");
