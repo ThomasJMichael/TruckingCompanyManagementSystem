@@ -57,6 +57,7 @@ namespace TCMS.GUI
             services.AddSingleton(mapper);
 
             services.AddSingleton<IDialogService, DialogService>();
+            services.AddSingleton<IEmployeeUserService, EmployeeUserService>();
 
             // Register the LoginViewModel as a singleton to ensure a single instance is used throughout the application.
             services.AddSingleton<LoginViewModel>();

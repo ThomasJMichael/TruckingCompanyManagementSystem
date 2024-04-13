@@ -7,6 +7,10 @@
         <view:Home/>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type vm:EmployeeViewModel}">
+        <view:Employees/>
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
         <view:Settings/>
     </DataTemplate>

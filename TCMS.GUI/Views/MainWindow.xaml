@@ -56,10 +56,10 @@
 
                     </utilities:Btn>
 
-                    <!--// Customer //-->
+                    <!--// Employees //-->
 
                     <utilities:Btn Style="{StaticResource BtnStyle}"
-                              Command="{Binding Employees}">
+                              Command="{Binding EmployeesCommand}">
 
                         <Grid>
 

@@ -16,6 +16,7 @@ namespace TCMS.Data.Initialization
         public static async Task Initialize(IServiceProvider serviceProvider, UserManager<UserAccount> userManager)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            await ResetDatabase(serviceProvider);
             Console.WriteLine("Seeding roles...");
             await SeedRolesAsync(roleManager);
 
@@ -33,6 +34,9 @@ namespace TCMS.Data.Initialization
 
             Console.WriteLine("Seeding timesheets...");
             await SeedTimeSheets(serviceProvider);
+
+            Console.WriteLine("Seeding employees with user accounts...");
+            await SeedEmployeesWithAccountsAsync(serviceProvider);
 
         }
 
@@ -187,9 +191,50 @@ namespace TCMS.Data.Initialization
                 await transaction.RollbackAsync();
             }
         }
+        private static async Task SeedEmployeesWithAccountsAsync(IServiceProvider serviceProvider)
+        {
+            var userManager = serviceProvider.GetRequiredService<UserManager<UserAccount>>();
+            var context = serviceProvider.GetRequiredService<TcmsContext>();
 
+            var nonDriverRoles = RoleHelpers.GetAllRoles().Where(role => role != Role.Driver).ToList();
+            var random = new Random();
 
+            // Generate employees
+            var employees = WorkforceGenerator.GenerateRegularEmployees(10);
+            var drivers = WorkforceGenerator.GenerateDrivers(5);
+            var allWorkforce = employees.Concat(drivers).ToList();
 
+            foreach (var person in allWorkforce)
+            {
+                var username = $"{person.FirstName}.{person.LastName}".ToLower();
+                if (await userManager.FindByNameAsync(username) == null)
+                {
+                    var email = $"{username}@example.com";
+                    var user = new UserAccount
+                    {
+                        UserName = username,
+                        Email = email
+                    };
+
+                    var createUserResult = await userManager.CreateAsync(user, "SecurePassword123!");
+                    if (createUserResult.Succeeded)
+                    {
+                        var role = person is Driver ? Role.Driver : nonDriverRoles[random.Next(nonDriverRoles.Count)];
+                        await userManager.AddToRoleAsync(user, role);
+
+                        // Now, use the ID from the newly created UserAccount as EmployeeId
+                        person.EmployeeId = user.Id;
+                        context.Employees.Add(person);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Failed to create user account for {username}: {string.Join(", ", createUserResult.Errors.Select(e => e.Description))}");
+                    }
+                }
+            }
+
+            await context.SaveChangesAsync();
+        }
 
     }
 }
