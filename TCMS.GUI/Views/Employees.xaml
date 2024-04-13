@@ -144,7 +144,7 @@
                       ScrollViewer.VerticalScrollBarVisibility="Hidden">
                 <ListView.View>
                     <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
-                        <GridViewColumn Header="Role" DisplayMemberBinding="{Binding UserRole}" Width="50"/>
+                        <GridViewColumn Header="Role" DisplayMemberBinding="{Binding UserRole}" Width="Auto"/>
                         <GridViewColumn Header="Full Name" DisplayMemberBinding="{Binding FullName}" Width="Auto"/>
                         <!-- Add more columns as needed -->
                     </GridView>
@@ -174,16 +174,19 @@
                 <StackPanel Visibility="{Binding SelectedEmployee, Converter={StaticResource NullToVisibilityConverter}}">
                     <TextBlock Text="Employee Details" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold" FontSize="18" />
                     <Separator/>
-                    <TextBlock Text="ID:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="Full Name:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
                     <TextBlock Text="{Binding SelectedEmployee.FullName}" Style="{StaticResource DetailTextBlockStyle}"/>
-                    <TextBlock Text="Name:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="Role:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
                     <TextBlock Text="{Binding SelectedEmployee.UserRole}" Style="{StaticResource DetailTextBlockStyle}"/>
-                    <TextBlock Text="Description:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="Pay Rate:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
                     <TextBlock Text="{Binding SelectedEmployee.PayRate}" Style="{StaticResource DetailTextBlockStyle}" TextWrapping="Wrap"/>
-                    <TextBlock Text="Price:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding SelectedEmployee.Price, StringFormat=C}" Style="{StaticResource DetailTextBlockStyle}"/>
-                    <TextBlock Text="Quantity On Hand:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding SelectedEmployee.QuantityOnHand}" Style="{StaticResource DetailTextBlockStyle}"/>
+                    <TextBlock Text="Address:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding SelectedEmployee.Address, StringFormat=C}" Style="{StaticResource DetailTextBlockStyle}"/>
+                    <TextBlock Text="{Binding SelectedEmployee.AddressLine2}" Style="{StaticResource DetailTextBlockStyle}"/>
+                    <TextBlock Text="Cell Phone Number:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding SelectedEmployee.CellPhoneNumber}" Style="{StaticResource DetailTextBlockStyle}"/>
+                    <TextBlock Text="Home Phone Number:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding SelectedEmployee.HomePhoneNumber}" Style="{StaticResource DetailTextBlockStyle}"/>
                 </StackPanel>
             </Border>
 
