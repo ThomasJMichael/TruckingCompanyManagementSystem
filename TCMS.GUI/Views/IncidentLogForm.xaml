@@ -75,11 +75,18 @@
                      Grid.Row="0"
                      Text="{Binding VehicleId, UpdateSourceTrigger=PropertyChanged}"
                      Style="{StaticResource PlaceholderTextBoxStyle}"/>
-            <Label Grid.Column="2" Grid.Row="2" Content="Enter the employee id" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-26,0,0"/>
+            <Label Grid.Column="2" Grid.Row="2" Content="Enter the employee" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-26,0,0"/>
             <Label Grid.Column="4" Grid.Row="2" Content="Enter the location" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-26,0,0"/>
             <ComboBox Grid.Row="5" Grid.Column="2"
-                  ItemsSource="{Binding EmployeeId}"
-                  SelectedItem="{Binding SelectedIncident}"/>
+                      ItemsSource="{Binding FilteredEmployees}"
+                      SelectedItem="{Binding SelectedEmployee}"
+                      DisplayMemberPath="FullName"
+                      IsEditable="True"
+                      IsReadOnly="False"
+                      TextSearch.TextPath="FullName"
+                      StaysOpenOnEdit="True"/>
+
+
             <TextBox Grid.Column="4"
                      Grid.Row="0"
                      Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}"

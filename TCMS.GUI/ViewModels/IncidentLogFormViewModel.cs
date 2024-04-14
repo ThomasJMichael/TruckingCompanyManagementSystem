@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using AutoMapper;
+using TCMS.Common.DTOs.Employee;
 using TCMS.Common.DTOs.Incident;
 using TCMS.Common.DTOs.Inventory;
 using TCMS.Common.Operations;
@@ -26,6 +27,98 @@ namespace TCMS.GUI.ViewModels
         private readonly IMapper _mapper;
 
         private IncidentReport _currentIncident;
+        private ObservableCollection<Employee> _employees;
+        private ObservableCollection<Employee> _filteredEmployees;
+        private Employee _selectedEmployee;
+        public ObservableCollection<Employee> FilteredEmployees
+        {
+            get => _filteredEmployees;
+            set
+            {
+                _filteredEmployees = value;
+                OnPropertyChanged();
+            }
+        }
+        private string _filterString;
+
+        public string FilterString
+        {
+            get => _filterString;
+            set
+            {
+                if (_filterString != value)
+                {
+                    _filterString = value;
+                    OnPropertyChanged();
+                    FilterEmployees(value);
+                }
+            }
+        }
+
+
+        public Employee SelectedEmployee
+        {
+            get => _selectedEmployee;
+            set
+            {
+                _selectedEmployee = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private async Task LoadEmployees()
+        {
+            try
+            {
+                var allEmployeesResult = await _apiClient.GetAsync<OperationResult<IEnumerable<EmployeeDto>>>("employee/all");
+                if (allEmployeesResult.IsSuccessful)
+                {
+                    var employees = _mapper.Map<IEnumerable<Employee>>(allEmployeesResult.Data);
+                    App.Current.Dispatcher.Invoke(() =>
+                    {
+                        _employees.Clear();
+                        foreach (var employee in employees)
+                        {
+                            _employees.Add(employee);
+                        }
+                        FilterEmployees(FilterString);
+                    });
+                }
+                else
+                {
+                    Debug.WriteLine("Failed to load employees or no employees returned.");
+                }
+
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+        }
+        private void FilterEmployees(string filterInput)
+        {
+            if (string.IsNullOrEmpty(filterInput))
+            {
+                if (_filteredEmployees.Count != _employees.Count)
+                {
+                    _filteredEmployees.Clear();
+                    foreach (var employee in _employees)
+                    {
+                        _filteredEmployees.Add(employee);
+                    }
+                }
+            }
+            else
+            {
+                _filteredEmployees.Clear();
+                var lowerCaseFilter = filterInput.ToLower();
+                foreach (var employee in _employees.Where(e => e.FullName.ToLower().Contains(lowerCaseFilter)))
+                {
+                    _filteredEmployees.Add(employee);
+                }
+            }
+        }
+
 
         public event EventHandler IncidentUpdated;
 
@@ -271,6 +364,10 @@ namespace TCMS.GUI.ViewModels
             }
 
             ConfirmCommand = new RelayCommand(Confirm);
+            _employees = new ObservableCollection<Employee>();
+            _filteredEmployees = new ObservableCollection<Employee>();
+            _ = LoadEmployees();
+
         }
 
         private async void Confirm(object obj)
