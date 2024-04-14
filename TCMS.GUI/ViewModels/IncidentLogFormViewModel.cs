@@ -199,6 +199,39 @@ namespace TCMS.GUI.ViewModels
                 OnPropertyChanged(nameof(DescriptionPlaceholderVisible));
             }
         }
+        private string _incidentType1 = "Accident";
+        public string IncidentType1
+        {
+            get => string.IsNullOrEmpty(_incidentType1) ? "IncidentType" : _incidentType1;
+            set
+            {
+                _incidentType1 = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(DescriptionPlaceholderVisible));
+            }
+        }
+        private string _incidentType2 = "SafetyViolation";
+        public string IncidentType2
+        {
+            get => string.IsNullOrEmpty(_incidentType2) ? "IncidentType" : _incidentType2;
+            set
+            {
+                _incidentType2 = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(DescriptionPlaceholderVisible));
+            }
+        }
+        private string _incidentType3 = "Other";
+        public string IncidentType3
+        {
+            get => string.IsNullOrEmpty(_incidentType3) ? "IncidentType" : _incidentType3;
+            set
+            {
+                _incidentType3 = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(DescriptionPlaceholderVisible));
+            }
+        }
 
         private string _windowTitle = "Add Product";
 
