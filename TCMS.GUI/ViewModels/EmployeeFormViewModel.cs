@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -31,6 +32,7 @@ namespace TCMS.GUI.ViewModels
         }
         public Action CloseAction { get; set; }
 
+        public ObservableCollection<string> Roles { get; } = new ObservableCollection<string>();
 
         public Employee CurrentEmployee
         {
@@ -91,7 +93,6 @@ namespace TCMS.GUI.ViewModels
             {
                 _LastName = value;
                 OnPropertyChanged();
-                ValidateProperty(nameof(LastName));
             }
         }
 
@@ -104,7 +105,6 @@ namespace TCMS.GUI.ViewModels
             {
                 _address = value;
                 OnPropertyChanged(nameof(Address));
-                ValidateProperty(nameof(Address));
             }
         }
         private string _city = "";
@@ -114,7 +114,7 @@ namespace TCMS.GUI.ViewModels
             get => string.IsNullOrEmpty(_city) ? "" : _city;
             set
             {
-                City = value;
+                _city = value;
                 OnPropertyChanged(nameof(City));
                 ValidateProperty(nameof(City));
             }
@@ -160,7 +160,7 @@ namespace TCMS.GUI.ViewModels
 
         private string _cellPhoneNumber = "";
 
-        private string CellPhoneNumber
+        public string CellPhoneNumber
         {
             get => string.IsNullOrEmpty(_cellPhoneNumber) ? "" : _cellPhoneNumber;
             set
@@ -229,6 +229,8 @@ namespace TCMS.GUI.ViewModels
             _mapper = mapper;
             IsEditMode = false;
 
+            LoadRoles();
+
             if (employee != null)
             {
                 CurrentEmployee = employee;
@@ -243,13 +245,13 @@ namespace TCMS.GUI.ViewModels
             if (IsEditMode)
             {
                 FirstName = CurrentEmployee.FirstName;
-                MiddleName = CurrentEmployee.MiddleName;
+                MiddleName = CurrentEmployee.MiddleName ?? "";
                 LastName = CurrentEmployee.LastName;
                 Address = CurrentEmployee.Address;
                 City = CurrentEmployee.City;
                 State = CurrentEmployee.State;
                 Zip = CurrentEmployee.Zip;
-                HomePhoneNumber = CurrentEmployee.HomePhoneNumber;
+                HomePhoneNumber = CurrentEmployee.HomePhoneNumber ?? "";
                 CellPhoneNumber = CurrentEmployee.CellPhoneNumber;
                 PayRate = CurrentEmployee.PayRate;
                 StartDate = CurrentEmployee.StartDate;
@@ -257,6 +259,29 @@ namespace TCMS.GUI.ViewModels
             }
 
             ConfirmCommand = new RelayCommand(Confirm);
+        }
+
+        private async void LoadRoles()
+        {
+            try
+            {
+                var roles = await _apiClient.GetAsync<OperationResult<IEnumerable<string>>>("user/roles/all");
+                if (roles.IsSuccessful)
+                {
+                    foreach (var role in roles.Data)
+                    {
+                        Roles.Add(role);
+                    }
+                }
+                else if (!roles.IsSuccessful)
+                {
+                    Debug.WriteLine(roles.Errors);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
         }
 
         private async void Confirm(object obj)

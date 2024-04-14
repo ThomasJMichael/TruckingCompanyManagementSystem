@@ -18,6 +18,7 @@ public interface IUserService
     Task<OperationResult> AddRoleToUserAsync(UserRoleDto userRoleDto);
     Task<OperationResult> RemoveRoleFromUserAsync(UserRoleDto userRoleDto);
     Task<OperationResult<IEnumerable<string>>> GetRolesAsync(string userId);
+    Task<OperationResult<IEnumerable<string>>> GetAllRolesAsync();
 
     // Account information retrieval
     Task<OperationResult<UserAccountDto>> GetUserAccountByIdAsync(string id);

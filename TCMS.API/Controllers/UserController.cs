@@ -132,6 +132,16 @@ namespace TCMS.API.Controllers
             var result = await _userService.GetAllUserAccountsAsync();
             return result.IsSuccessful ? Ok(result) : BadRequest(result);
         }
+
+        // Get all roles
+        [HttpGet("roles/all")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult<IEnumerable<string>>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<OperationResult<IEnumerable<string>>>> GetAllRoles()
+        {
+            var result = await _userService.GetAllRolesAsync();
+            return result.IsSuccessful ? Ok(result) : BadRequest(result);
+        }
     }
 
 }

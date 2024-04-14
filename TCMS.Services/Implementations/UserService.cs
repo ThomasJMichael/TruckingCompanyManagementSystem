@@ -270,5 +270,10 @@ namespace TCMS.Services.Implementations
             return OperationResult<IEnumerable<string>>.Success(roles);
         }
 
+        public async Task<OperationResult<IEnumerable<string>>> GetAllRolesAsync()
+        {
+            var roles = await roleManager.Roles.Select(r => r.Name).ToListAsync();
+            return OperationResult<IEnumerable<string>>.Success(roles);
+        }
     }
 }

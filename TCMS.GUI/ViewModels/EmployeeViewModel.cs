@@ -12,6 +12,7 @@ using TCMS.Common.Operations;
 using TCMS.GUI.Models;
 using TCMS.GUI.Services.Interfaces;
 using TCMS.GUI.Utilities;
+using TCMS.GUI.Views;
 
 namespace TCMS.GUI.ViewModels
 {
@@ -221,13 +222,13 @@ namespace TCMS.GUI.ViewModels
 
         private void AddEmployee(object obj)
         {
-            var newProductForm = new ProductFormViewModel(_apiClient, _mapper);
-            newProductForm.ProductUpdated += OnProductUpdated;
-            _dialogService.ShowDialog(newProductForm);
-            newProductForm.ProductUpdated -= OnProductUpdated;
+            var newEmployeeForm = new EmployeeFormViewModel(_apiClient, _mapper);
+            newEmployeeForm.EmployeeUpdated += OnEmployeeUpdated;
+            _dialogService.ShowDialog(newEmployeeForm);
+            newEmployeeForm.EmployeeUpdated -= OnEmployeeUpdated;
         }
 
-        private void OnProductUpdated(object sender, EventArgs e)
+        private void OnEmployeeUpdated(object sender, EventArgs e)
         {
             RefreshEmployees(null);
         }
@@ -242,18 +243,17 @@ namespace TCMS.GUI.ViewModels
         {
             if (SelectedEmployee != null)
             {
-                // var editProductFormViewModel = new ProductFormViewModel(_apiClient, _mapper, SelectedProduct);
-                //editProductFormViewModel.ProductUpdated += OnProductUpdated;
-                //_dialogService.ShowDialog(editProductFormViewModel);
-                //editProductFormViewModel.Cleanup();
-                //editProductFormViewModel.ProductUpdated -= OnProductUpdated;
+                var editEmployeeFormViewModel = new EmployeeFormViewModel(_apiClient, _mapper, SelectedEmployee);
+                editEmployeeFormViewModel.EmployeeUpdated += OnEmployeeUpdated;
+                _dialogService.ShowDialog(editEmployeeFormViewModel);
+                editEmployeeFormViewModel.EmployeeUpdated -= OnEmployeeUpdated;
             }
         }
 
         private bool CanExecuteEditOrDelete(object obj)
         {
             // Determine if the edit/delete command can execute, e.g., based on if a product is selected
-            return true; // Example logic
+            return true; 
         }
 
         private void DeleteEmployee(object obj)
