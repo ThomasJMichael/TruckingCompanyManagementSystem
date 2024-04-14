@@ -191,7 +191,7 @@ namespace TCMS.GUI.ViewModels
         private string _description = "Enter Incident description...";
         public string Description
         {
-            get => string.IsNullOrEmpty(_description) ? "Description" : _description;
+            get => string.IsNullOrEmpty(_description) ? "MiddleName" : _description;
             set
             {
                 _description = value;

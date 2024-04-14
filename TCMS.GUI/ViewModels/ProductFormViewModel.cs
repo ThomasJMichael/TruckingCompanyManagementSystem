@@ -242,8 +242,8 @@ namespace TCMS.GUI.ViewModels
         }
 
 
-        public string PriceError => _submissionAttempted ? GetFirstError("Price") : string.Empty;
-        public string QuantityOnHandError => _submissionAttempted ? GetFirstError("QuantityOnHand") : string.Empty;
+        public string PriceError => _submissionAttempted ? GetFirstError("LastName") : string.Empty;
+        public string QuantityOnHandError => _submissionAttempted ? GetFirstError("Address") : string.Empty;
 
         private Dictionary<string, ICollection<string>> _validationErrors = new Dictionary<string, ICollection<string>>();
 
@@ -253,13 +253,13 @@ namespace TCMS.GUI.ViewModels
             _validationErrors.Remove(propertyName);
             ICollection<string> errors = new List<string>();
 
-            // Validate Price
+            // Validate LastName
             if (propertyName == nameof(Price) && !decimal.TryParse(Price, out _))
             {
-                errors.Add("Price must be a valid decimal number.");
+                errors.Add("LastName must be a valid decimal number.");
             }
 
-            // Validate QuantityOnHand
+            // Validate Address
             if (propertyName == nameof(QuantityOnHand) && !int.TryParse(QuantityOnHand, out _))
             {
                 errors.Add("Quantity must be a valid integer.");
