@@ -53,11 +53,11 @@
 
         <!-- Pay Rate -->
         <TextBlock Text="Pay Rate" FontWeight="Bold"/>
-        <TextBox Text="{Binding Employee.PayRate, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" Margin="0,0,0,10"/>
+        <TextBox Text="{Binding PayRate, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" Margin="0,0,0,10"/>
 
         <!-- Start Date -->
         <TextBlock Text="Start Date" FontWeight="Bold"/>
-        <DatePicker SelectedDate="{Binding Employee.StartDate, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+        <DatePicker SelectedDate="{Binding StartDate, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
 
         <!-- User Role Dropdown -->
         <TextBlock Text="User Role" FontWeight="Bold"/>
@@ -65,7 +65,7 @@
                   SelectedItem="{Binding UserRole, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
 
         <!-- Confirm Button -->
-        <Button Content="Confirm" Command="{Binding UpdateEmployeeCommand}" HorizontalAlignment="Right" Margin="0,20,0,0"/>
+        <Button Content="Confirm" Command="{Binding ConfirmCommand}" HorizontalAlignment="Right" Margin="0,20,0,0"/>
     </StackPanel>
 </Window>
 

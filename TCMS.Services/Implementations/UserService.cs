@@ -158,16 +158,29 @@ namespace TCMS.Services.Implementations
                 var user = await userManager.FindByIdAsync(userRoleDto.UserId);
                 if (user == null) return OperationResult.UserNotFound();
 
-                var result = await userManager.AddToRoleAsync(user, userRoleDto.RoleName);
-                return result.Succeeded
-                    ? OperationResult.Success()
-                    : OperationResult.Failure(result.Errors.Select(e => e.Description));
+                // Remove all existing roles
+                var currentRoles = await userManager.GetRolesAsync(user);
+                var removalResult = await userManager.RemoveFromRolesAsync(user, currentRoles);
+                if (!removalResult.Succeeded)
+                {
+                    return OperationResult.Failure(removalResult.Errors.Select(e => e.Description));
+                }
+
+                // Add the new role
+                var addRoleResult = await userManager.AddToRoleAsync(user, userRoleDto.RoleName);
+                if (!addRoleResult.Succeeded)
+                {
+                    return OperationResult.Failure(addRoleResult.Errors.Select(e => e.Description));
+                }
+
+                return OperationResult.Success();
             }
             catch (Exception e)
             {
-                return OperationResult.Failure([e.Message]);
+                return OperationResult.Failure(new[] { e.Message });
             }
         }
+
 
         public async Task<OperationResult> RemoveRoleFromUserAsync(UserRoleDto userRoleDto)
         {

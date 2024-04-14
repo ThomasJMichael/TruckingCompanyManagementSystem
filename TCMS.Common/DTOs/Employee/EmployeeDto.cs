@@ -18,5 +18,6 @@ namespace TCMS.Common.DTOs.Employee
         public DateTime StartDate { get; set; }
         public int YearsWithCompany => (DateTime.Now - StartDate).Days / 365;
         public string? UserAccountId { get; set; }
+        public string? UserRole { get; set; }
     }
 }

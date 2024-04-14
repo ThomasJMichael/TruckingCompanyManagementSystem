@@ -346,12 +346,24 @@ namespace TCMS.GUI.ViewModels
                 var updatedEmployeeDto = _mapper.Map<EmployeeDto>(this);
                 updatedEmployeeDto.EmployeeId = CurrentEmployee.EmployeeId;
 
-                var result = await _apiClient.PutAsync<OperationResult>("inventory/update", updatedEmployeeDto);
+                var result = await _apiClient.PutAsync<OperationResult>("employee", updatedEmployeeDto);
                 if (!result.IsSuccessful)
                 {
                     Debug.WriteLine(result.Messages);
                 }
                 else if (result.IsSuccessful)
+                {
+                    EmployeeUpdated?.Invoke(this, EventArgs.Empty);
+                }
+
+                var updateRole = _mapper.Map<UserRoleDto>(this);
+                updateRole.UserId = CurrentEmployee.EmployeeId;
+                var roleResult = await _apiClient.PostAsync<OperationResult>("user/add-role", updateRole);
+                if (!roleResult.IsSuccessful)
+                {
+                    Debug.WriteLine(roleResult.Messages);
+                }
+                else if (roleResult.IsSuccessful)
                 {
                     EmployeeUpdated?.Invoke(this, EventArgs.Empty);
                 }
