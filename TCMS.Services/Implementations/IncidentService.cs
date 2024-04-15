@@ -8,33 +8,41 @@ using TCMS.Services.Interfaces;
 
 namespace TCMS.Services.Implementations
 {
-    public class IncidentService(TcmsContext context, IMapper mapper) : IIncidentService
+    public class IncidentService : IIncidentService
     {
+        private readonly TcmsContext _context;
+        private readonly IMapper _mapper;
+
+        public IncidentService(TcmsContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
         public async Task<OperationResult<IncidentReportDto>> CreateIncidentReportAsync(IncidentReportDto incidentReportDto)
         {
-            await using var transaction = await context.Database.BeginTransactionAsync();
+            await using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                var incidentReport = mapper.Map<IncidentReport>(incidentReportDto);
+                var incidentReport = _mapper.Map<IncidentReport>(incidentReportDto);
 
-                context.IncidentReports.Add(incidentReport);
-                await context.SaveChangesAsync();
+                _context.IncidentReports.Add(incidentReport);
+                await _context.SaveChangesAsync();
 
                 // If the incident requires a drug and alcohol test, create a new test record
                 if (incidentReport.RequiresDrugAndAlcoholTest)
                 {
-                    var drugAndAlcoholTest = mapper.Map<DrugAndAlcoholTest>(incidentReportDto);
+                    var drugAndAlcoholTest = _mapper.Map<DrugAndAlcoholTest>(incidentReportDto);
 
-                    context.DrugAndAlcoholTests.Add(drugAndAlcoholTest);
-                    await context.SaveChangesAsync();
+                    _context.DrugAndAlcoholTests.Add(drugAndAlcoholTest);
+                    await _context.SaveChangesAsync();
 
                     incidentReport.DrugAndAlcoholTestId = drugAndAlcoholTest.DrugAndAlcoholTestId;
                 }
 
-                await context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
                 // Create a new DTO to return the new incident report
-                var newIncidentReportDto = mapper.Map<IncidentReportDto>(incidentReport);
+                var newIncidentReportDto = _mapper.Map<IncidentReportDto>(incidentReport);
 
                 return OperationResult<IncidentReportDto>.Success(newIncidentReportDto);
             }
@@ -47,13 +55,13 @@ namespace TCMS.Services.Implementations
 
         public async Task<OperationResult> UpdateIncidentReportAsync(IncidentReportDto incidentReportDto)
         {
-            await using var transaction = await context.Database.BeginTransactionAsync();
+            await using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                var incidentReport = await context.IncidentReports.FindAsync(incidentReportDto.IncidentReportId);
+                var incidentReport = await _context.IncidentReports.FindAsync(incidentReportDto.IncidentReportId);
                 if (incidentReport == null) return OperationResult.Failure(new[] { "Incident report not found" });
 
-                mapper.Map(incidentReportDto, incidentReport);
+                _mapper.Map(incidentReportDto, incidentReport);
 
                 // Update or create drug and alcohol test if required
                 if (incidentReport.RequiresDrugAndAlcoholTest)
@@ -62,7 +70,7 @@ namespace TCMS.Services.Implementations
                     if (incidentReport.DrugAndAlcoholTestId.HasValue)
                     {
                         // Update existing test
-                        drugAndAlcoholTest = await context.DrugAndAlcoholTests.FindAsync(incidentReport.DrugAndAlcoholTestId.Value);
+                        drugAndAlcoholTest = await _context.DrugAndAlcoholTests.FindAsync(incidentReport.DrugAndAlcoholTestId.Value);
                     }
                     else
                     {
@@ -74,7 +82,7 @@ namespace TCMS.Services.Implementations
                             TestType = TestType.PostAccident, 
                             IncidentReportId = incidentReport.IncidentReportId
                         };
-                        context.DrugAndAlcoholTests.Add(drugAndAlcoholTest);
+                        _context.DrugAndAlcoholTests.Add(drugAndAlcoholTest);
                     }
 
                     // Link the test to the incident report
@@ -82,12 +90,12 @@ namespace TCMS.Services.Implementations
                 }
                 else if (incidentReport.DrugAndAlcoholTestId.HasValue)
                 {
-                    var existingTest = await context.DrugAndAlcoholTests.FindAsync(incidentReport.DrugAndAlcoholTestId.Value);
-                    context.DrugAndAlcoholTests.Remove(existingTest);
+                    var existingTest = await _context.DrugAndAlcoholTests.FindAsync(incidentReport.DrugAndAlcoholTestId.Value);
+                    _context.DrugAndAlcoholTests.Remove(existingTest);
                     incidentReport.DrugAndAlcoholTestId = null; // Unlink the test from the incident report
                 }
 
-                await context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
                 return OperationResult.Success();
             }
@@ -101,13 +109,13 @@ namespace TCMS.Services.Implementations
 
         public async Task<OperationResult> DeleteIncidentReportAsync(int incidentReportId)
         {
-            var incidentReport = await context.IncidentReports.FindAsync(incidentReportId);
+            var incidentReport = await _context.IncidentReports.FindAsync(incidentReportId);
             if (incidentReport == null) return OperationResult.Failure(new[] { "Incident report not found" });
 
             try
             {
-                context.IncidentReports.Remove(incidentReport);
-                await context.SaveChangesAsync();
+                _context.IncidentReports.Remove(incidentReport);
+                await _context.SaveChangesAsync();
                 return OperationResult.Success();
             }
             catch (Exception ex)
@@ -120,11 +128,11 @@ namespace TCMS.Services.Implementations
         {
             try
             {
-                var incidentReports = await context.IncidentReports
-                    .Include(incident => incident.Driver)
+                var incidentReports = await _context.IncidentReports
+                    //.Include(incident => incident.Driver)
                     .ToListAsync();
 
-                var incidentReportsDto = mapper.Map<IEnumerable<IncidentReportDto>>(incidentReports);
+                var incidentReportsDto = _mapper.Map<IEnumerable<IncidentReportDto>>(incidentReports);
                 return OperationResult<IEnumerable<IncidentReportDto>>.Success(incidentReportsDto);
             }
             catch (Exception ex)
@@ -137,11 +145,11 @@ namespace TCMS.Services.Implementations
         {
             try
             {
-                var incidentReport = await context.IncidentReports.FindAsync(incidentReportId);
+                var incidentReport = await _context.IncidentReports.FindAsync(incidentReportId);
                 if (incidentReport == null)
                     return OperationResult<IncidentReportDto>.Failure(["Incident report not found."]);
 
-                var incidentReportDto = mapper.Map<IncidentReportDto>(incidentReport);
+                var incidentReportDto = _mapper.Map<IncidentReportDto>(incidentReport);
                 return OperationResult<IncidentReportDto>.Success(incidentReportDto);
             }
             catch (Exception ex)
@@ -152,10 +160,10 @@ namespace TCMS.Services.Implementations
 
         public async Task<OperationResult> EvaluateAndInitiateDrugTestForIncidentAsync(int incidentReportId, DateTime? testDate = null)
         {
-            await using var transaction = await context.Database.BeginTransactionAsync();
+            await using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                var incidentReport = await context.IncidentReports.FindAsync(incidentReportId);
+                var incidentReport = await _context.IncidentReports.FindAsync(incidentReportId);
                 if (incidentReport == null)
                 {
                     return OperationResult.Failure(new List<string> { "Incident report not found." });
@@ -172,12 +180,12 @@ namespace TCMS.Services.Implementations
 
                     };
 
-                    context.DrugAndAlcoholTests.Add(drugAndAlcoholTest);
-                    await context.SaveChangesAsync();
+                    _context.DrugAndAlcoholTests.Add(drugAndAlcoholTest);
+                    await _context.SaveChangesAsync();
 
                     // Update the incident report with the test ID
                     incidentReport.DrugAndAlcoholTestId = drugAndAlcoholTest.DrugAndAlcoholTestId;
-                    await context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();
 
                     await transaction.CommitAsync();
                 }
