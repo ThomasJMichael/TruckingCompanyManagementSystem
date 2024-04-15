@@ -26,7 +26,7 @@ namespace TCMS.GUI.Models
         public string? VehicleId { get; set; }
 
         // Foreign key for the involved driver
-        public string DriverId { get; set; }
+        public string EmployeeId { get; set; }
 
         // Specific to accidents
         public bool IsFatal { get; set; }

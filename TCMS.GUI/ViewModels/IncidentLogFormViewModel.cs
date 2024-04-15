@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using AutoMapper;
+using Bogus.DataSets;
 using TCMS.Common.DTOs.Employee;
 using TCMS.Common.DTOs.Incident;
 using TCMS.Common.DTOs.Inventory;
@@ -363,6 +364,17 @@ namespace TCMS.GUI.ViewModels
                 IsEditMode = false;
             }
 
+            if (IsEditMode)
+            {
+                Location = CurrentIncident.Location;
+                VehicleId = CurrentIncident.VehicleId;
+                IsFatal = CurrentIncident.IsFatal;
+                HasInjuries = CurrentIncident.HasInjuries;
+                HasTowedVehicle = CurrentIncident.HasTowedVehicle;
+                CitationIssued = CurrentIncident.CitationIssued;
+                Description = CurrentIncident.Description;
+                SelectedDate = CurrentIncident.IncidentDate;
+            }
             ConfirmCommand = new RelayCommand(Confirm);
             _employees = new ObservableCollection<Employee>();
             _filteredEmployees = new ObservableCollection<Employee>();
