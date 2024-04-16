@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:TCMS.GUI.Views"
         xmlns:utilities="clr-namespace:TCMS.GUI.Utilities"
         xmlns:viewModels="clr-namespace:TCMS.GUI.ViewModels"
+        d:DataContext="{d:DesignInstance Type=viewModels:NavigationViewModel}"
         mc:Ignorable="d"
         Title="Dashboard"
         Height="600"
@@ -59,7 +60,8 @@
                     <!--// Employees //-->
 
                     <utilities:Btn Style="{StaticResource BtnStyle}"
-                              Command="{Binding EmployeesCommand}">
+                              Command="{Binding EmployeesCommand}"
+                              Visibility="{Binding EmployeesVisibility}">
 
                         <Grid>
 
@@ -76,7 +78,8 @@
                     <!--// Inventory //-->
 
                     <utilities:Btn Style="{StaticResource BtnStyle}"
-                              Command="{Binding ProductsCommand}">
+                              Command="{Binding ProductsCommand}"
+                              Visibility="{Binding ProductsVisibility}">
 
                         <Grid>
 
@@ -93,7 +96,8 @@
                     <!--// Orders //-->
 
                     <utilities:Btn Style="{StaticResource BtnStyle}"
-                              Command="{Binding OrdersCommand}">
+                              Command="{Binding OrdersCommand}"
+                              Visibility="{Binding OrdersVisibility}">
 
                         <Grid>
 
@@ -110,7 +114,8 @@
 
                     <!--// Incidents //-->
                     <utilities:Btn Style="{StaticResource BtnStyle}"
-                              Command="{Binding IncidentsCommand}">
+                              Command="{Binding IncidentsCommand}"
+                              Visibility="{Binding IncidentsVisibility}">
 
                         <Grid>
 
@@ -124,10 +129,11 @@
 
                     </utilities:Btn>
 
-                    <!--// Transactions //-->
+                    <!--// TimeClock //-->
 
                     <utilities:Btn Style="{StaticResource BtnStyle}"
-                              Command="{Binding TimeClockCommand}">
+                              Command="{Binding TimeClockCommand}"
+                              Visibility="{Binding TimeClockVisibility}">
 
                         <Grid>
 
@@ -144,7 +150,8 @@
                     <!--// Shipments //-->
 
                     <utilities:Btn Style="{StaticResource BtnStyle}"
-                              Command="{Binding ShipmentsCommand}">
+                              Command="{Binding ShipmentsCommand}"
+                              Visibility="{Binding ShipmentsVisibility}">
 
                         <Grid>
 

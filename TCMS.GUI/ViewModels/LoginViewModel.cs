@@ -83,9 +83,9 @@ namespace TCMS.GUI.ViewModels
             try
             {
                 // Attempt to log in via the API client. The result can be used to proceed based on success or failure.
-                var result = await _apiClient.PostAsync<OperationResult>("auth/login", loginDto);
-                if (result.IsSuccessful) // Assuming IsSuccess is a property that indicates success
-                {
+                var result = await _apiClient.PostAsync<OperationResult<UserAccountDto>>("auth/login", loginDto);
+                if (result.IsSuccessful)                {
+                    App.Current.Properties["UserRole"] = result.Data.UserRole; // Store the user role in application properties
                     // Close the current Login window and open the main window
                     // This should run on the UI thread
                     Application.Current.Dispatcher.Invoke(() =>

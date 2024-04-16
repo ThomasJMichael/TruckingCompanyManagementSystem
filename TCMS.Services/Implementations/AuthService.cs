@@ -9,13 +9,22 @@ namespace TCMS.Services.Implementations;
 public class AuthService(UserManager<UserAccount> userManager, SignInManager<UserAccount> signInManager)
     : IAuthService
 {
-    public async Task<OperationResult> LoginAsync(LoginDto loginDto)
+    public async Task<OperationResult<UserAccountDto>> LoginAsync(LoginDto loginDto)
     {
         var user = await userManager.FindByNameAsync(loginDto.Username);
-        if (user == null) return OperationResult.UserNotFound();
+        if (user == null) return OperationResult<UserAccountDto>.Failure(["Failed to find user."]);
         var result = await signInManager.PasswordSignInAsync(user, loginDto.Password, false, false);
-        return result.Succeeded ? OperationResult.Success() 
-                                : OperationResult.InvalidUsernamePassword();
+        if (result.Succeeded)
+        {
+            var userRole = await userManager.GetRolesAsync(user);
+            return OperationResult<UserAccountDto>.Success(new UserAccountDto
+            {
+                Username = user.UserName,
+                EmployeeId = user.EmployeeId,
+                UserRole = userRole.FirstOrDefault()
+            });
+        }
+        return OperationResult<UserAccountDto>.Failure(["Failed to login."]);
     }
     
     public async Task<OperationResult> LogoutAsync()

@@ -19,7 +19,7 @@ namespace TCMS.API.Controllers
         [HttpPost("login")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<OperationResult>> Login(LoginDto loginDto)
+        public async Task<ActionResult<OperationResult<UserAccountDto>>> Login(LoginDto loginDto)
         {
             if (!ModelState.IsValid)
             {

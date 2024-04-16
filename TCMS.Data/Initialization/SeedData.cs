@@ -24,6 +24,9 @@ namespace TCMS.Data.Initialization
             Console.WriteLine("Seeding default admin user...");
             await SeedAdminUserAsync(userManager);
 
+            Console.WriteLine("Seeding default user...");
+            await SeedDefaultUser(userManager);
+
             Console.WriteLine("Seeding products and related data...");
             await SeedProductsAsync(serviceProvider);
 
@@ -70,6 +73,18 @@ namespace TCMS.Data.Initialization
                 var adminUser = new UserAccount { UserName = adminUserName, Email = "admin@admin.com" };
                 await userManager.CreateAsync(adminUser, "Admin1!");
                 await userManager.AddToRoleAsync(adminUser, Role.Admin); 
+            }
+        }
+
+        private static async Task SeedDefaultUser(UserManager<UserAccount> userManager)
+        {
+            const string defaultUserName = "default";
+            var defaultAdmin = await userManager.FindByNameAsync(defaultUserName);
+            if (defaultAdmin == null)
+            {
+                var adminUser = new UserAccount { UserName = defaultUserName, Email = "default@default.com" };
+                await userManager.CreateAsync(adminUser, "Admin1!");
+                await userManager.AddToRoleAsync(adminUser, Role.Default);
             }
         }
 

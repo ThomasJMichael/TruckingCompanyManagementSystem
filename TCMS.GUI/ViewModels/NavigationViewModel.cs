@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using TCMS.Data.Models;
@@ -18,6 +19,24 @@ namespace TCMS.GUI.ViewModels
         {
             get { return _currentView; }
             set { _currentView = value; OnPropertyChanged(); }
+        }
+
+        private string _userRole;
+
+        public string UserRole
+        {
+            get { return _userRole; }
+            set
+            {
+                _userRole = value;
+                OnPropertyChanged();
+                UpdateCommandVisibility();
+            }
+        }
+
+        private void UpdateCommandVisibility()
+        {
+            CommandManager.InvalidateRequerySuggested();
         }
 
         public ICommand HomeCommand { get; set; }
@@ -50,8 +69,42 @@ namespace TCMS.GUI.ViewModels
             SettingsCommand = new RelayCommand(Setting);
             IncidentsCommand = new RelayCommand(Incident);
 
+            UserRole = App.Current.Properties["UserRole"] as string;
+
             // Startup Page
             CurrentView = new HomeViewModel();
+        }
+        public Visibility EmployeesVisibility => IsVisibleForRole("Employee") ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility ProductsVisibility => IsVisibleForRole("Products") ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility OrdersVisibility => IsVisibleForRole("Orders") ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility ShipmentsVisibility => IsVisibleForRole("Shipments") ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility TimeClockVisibility => IsVisibleForRole("TimeClock") ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility AssignmentsVisibility => IsVisibleForRole("Assignments") ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility IncidentsVisibility => IsVisibleForRole("Incidents") ? Visibility.Visible : Visibility.Collapsed;
+
+        private bool IsVisibleForRole(string featureName)
+        {
+            switch (featureName)
+            {
+                case "Home":
+                    return true;
+                case "Employees":
+                    return UserRole == "Admin";
+                case "Products":
+                    return UserRole is "Admin" or "ShippingManager";
+                case "Orders":
+                    return UserRole is "Admin" or "ShippingManager";
+                case "TimeClock":
+                    return true;
+                case "Shipments":
+                    return UserRole is "Admin" or "ShippingManager";
+                case "Assignments":
+                    return UserRole is "Admin" or "Driver";
+                case "Incidents":
+                    return UserRole == "Admin";
+                default:
+                    return false;
+            }
         }
     }
 }
