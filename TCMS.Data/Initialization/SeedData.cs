@@ -45,6 +45,9 @@ namespace TCMS.Data.Initialization
             Console.WriteLine("Seeding employees with user accounts...");
             await SeedEmployeesWithAccountsAsync(serviceProvider);
 
+            Console.WriteLine("Seeding vehicle related data...");
+            await SeedVehicleRelatedData(serviceProvider);
+
         }
 
         private static async Task ResetDatabase(IServiceProvider serviceProvider)
@@ -268,6 +271,45 @@ namespace TCMS.Data.Initialization
             }
         }
 
+        private static async Task SeedVehicleRelatedData(IServiceProvider serviceProvider)
+        {
+            var context = serviceProvider.GetRequiredService<TcmsContext>();
+
+            // Fetch all vehicles from the database, including any existing Parts and MaintenanceRecords.
+            var vehicles = await context.Vehicles
+                .Include(v => v.Parts)
+                .Include(v => v.MaintenanceRecords)
+                .ToListAsync();
+
+            foreach (var vehicle in vehicles)
+            {
+                // Check if the vehicle already has maintenance records, if not, generate them
+                if (!vehicle.MaintenanceRecords.Any())
+                {
+                    var maintenanceRecords = MaintenanceGenerator.GenerateMaintenanceRecordsForVehicle(vehicle, 5); // Generate 5 maintenance records per vehicle
+                    context.MaintenanceRecords.AddRange(maintenanceRecords);
+                }
+
+                // Check if the vehicle already has parts, if not, generate them
+                if (!vehicle.Parts.Any())
+                {
+                    // Since MaintenanceRecords are now associated with Parts, ensure that Parts are generated after MaintenanceRecords
+                    var partsForVehicle = MaintenanceGenerator.GeneratePartDetails(20); // Generate 20 parts for each vehicle
+                    foreach (var part in partsForVehicle)
+                    {
+                        part.VehicleId = vehicle.VehicleId; // Associate part with the vehicle
+                        // Optionally associate parts with a randomly selected maintenance record
+                        part.MaintenanceRecordId = vehicle.MaintenanceRecords.Any() ?
+                            new Faker().PickRandom(vehicle.MaintenanceRecords).MaintenanceRecordId :
+                            (int?)null;
+                    }
+                    context.PartDetails.AddRange(partsForVehicle);
+                }
+            }
+
+            // Save all changes to the database.
+            await context.SaveChangesAsync();
+        }
     }
 }
 

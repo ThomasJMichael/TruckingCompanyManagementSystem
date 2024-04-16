@@ -88,8 +88,8 @@ namespace TCMS.GUI.ViewModels
             {
                 case "Home":
                     return true;
-                case "Employees":
-                    return UserRole == "Admin";
+                case "Employee":
+                    return UserRole is "Admin";
                 case "Products":
                     return UserRole is "Admin" or "ShippingManager";
                 case "Orders":
