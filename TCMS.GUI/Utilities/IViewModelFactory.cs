@@ -14,9 +14,9 @@ namespace TCMS.GUI.Utilities
         ProductsViewModel CreateProductsViewModel();
         TimeClockViewModel CreateTimeClockViewModel();
         ShipmentsViewModel CreateShipmentsViewModel();
-        EquipmentViewModel CreateSettingsViewModel();
         ProductFormViewModel CreateProductFormViewModel();
         IncidentLogViewModel CreateIncidentLogViewModel();
+        DrugTestViewModel CreateDrugTestViewModel();
         AssignmentsViewModel CreateAssignmentsViewModel();
     }
 

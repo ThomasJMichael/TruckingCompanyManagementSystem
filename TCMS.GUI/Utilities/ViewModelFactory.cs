@@ -20,7 +20,6 @@ namespace TCMS.GUI.Utilities
 
         public HomeViewModel CreateHomeViewModel() => _serviceProvider.GetRequiredService<HomeViewModel>();
         public ShipmentsViewModel CreateShipmentsViewModel() => _serviceProvider.GetRequiredService<ShipmentsViewModel>();
-        public EquipmentViewModel CreateSettingsViewModel() => _serviceProvider.GetRequiredService<EquipmentViewModel>();
         public EmployeeViewModel CreateEmployeeViewModel() => _serviceProvider.GetRequiredService<EmployeeViewModel>();
         public ProductsViewModel CreateProductsViewModel() => _serviceProvider.GetRequiredService<ProductsViewModel>();
         public TimeClockViewModel CreateTimeClockViewModel() => _serviceProvider.GetRequiredService<TimeClockViewModel>();
@@ -29,5 +28,6 @@ namespace TCMS.GUI.Utilities
 
         public AssignmentsViewModel CreateAssignmentsViewModel() =>
             _serviceProvider.GetRequiredService<AssignmentsViewModel>();
+        public DrugTestViewModel CreateDrugTestViewModel() => _serviceProvider.GetRequiredService<DrugTestViewModel>();
     }
 }
