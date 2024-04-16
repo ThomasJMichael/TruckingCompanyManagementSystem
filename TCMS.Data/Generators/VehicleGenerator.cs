@@ -15,10 +15,9 @@ namespace TCMS.Data.Generators
         public static List<Vehicle> GenerateVehicles(int count)
         {
             var vehicleFaker = new Faker<Vehicle>()
-                .RuleFor(v => v.VehicleId, f => f.Random.AlphaNumeric(5)) // Generates a 5-character alphanumeric string
                 .RuleFor(v => v.Brand, f => f.Vehicle.Manufacturer())
                 .RuleFor(v => v.Model, f => f.Vehicle.Model())
-                .RuleFor(v => v.Year, f => f.Date.Past(10).Year) // Vehicles from the last 10 years
+                .RuleFor(v => v.Year, f => f.Date.Past(20).Year) // Vehicles from the last 20 years
                 .RuleFor(v => v.Type, f => f.PickRandom(vehicleTypes))
 
                 // Initially, related collections might be empty; they can be populated as needed

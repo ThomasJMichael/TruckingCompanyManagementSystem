@@ -245,5 +245,10 @@ public class TcmsContext : IdentityDbContext<UserAccount>
         modelBuilder.Entity<MaintenanceRecord>()
             .Property(mr => mr.MaintenanceRecordId)
             .ValueGeneratedOnAdd();
+
+        // Vehicle
+        modelBuilder.Entity<Vehicle>()
+            .Property(v => v.VehicleId)
+            .ValueGeneratedOnAdd();
     }
 }

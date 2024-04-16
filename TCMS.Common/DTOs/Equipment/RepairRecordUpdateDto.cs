@@ -22,7 +22,7 @@ namespace TCMS.Common.DTOs.Equipment
         public DateTime? RepairDate { get; set; }
 
         // VehicleId may be updated if the repair record needs to be reassigned.
-        public string? VehicleId { get; set; }
+        public int? VehicleId { get; set; }
 
         [StringLength(500, ErrorMessage = "The cause must be less than 500 characters.")]
         public string Cause { get; set; }

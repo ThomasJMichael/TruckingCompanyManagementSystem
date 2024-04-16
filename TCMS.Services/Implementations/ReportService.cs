@@ -84,7 +84,7 @@ namespace TCMS.Services.Implementations
                 {
                     csv.AppendLine(string.Join(",", new string[]
                     {
-                        record.VehicleId,
+                        record.VehicleId.ToString(),
                         record.Description,
                         record.MaintenanceDate.ToString("yyyy-MM-dd"),
                         record.Cost.ToString("F2"),
@@ -113,7 +113,7 @@ namespace TCMS.Services.Implementations
 
                 // Assuming requestDto includes VehicleId, StartDate, and EndDate
                 var maintenanceRecords =
-                    await maintenanceService.GetMaintenanceRecordsByVehicleIdAsync(vehicleId: requestDto.VehicleId);
+                    await maintenanceService.GetMaintenanceRecordsByVehicleIdAsync(requestDto.VehicleId);
 
                 if (!maintenanceRecords.IsSuccessful)
                 {
@@ -128,7 +128,7 @@ namespace TCMS.Services.Implementations
                 {
                     csv.AppendLine(string.Join(",", new string[]
                     {
-                        record.VehicleId,
+                        record.VehicleId.ToString(),
                         record.MaintenanceDate.ToString("yyyy-MM-dd"),
                         record.Description,
                         record.Cost.ToString("F2"),

@@ -9,7 +9,7 @@ public interface IMaintenanceService
     // Maintenance Records
     Task<OperationResult<IEnumerable<MaintenanceRecordDto>>> GetAllMaintenanceRecordsAsync();
     Task<OperationResult<MaintenanceRecordDto>> GetMaintenanceRecordByIdAsync(int maintenanceRecordId);
-    Task<OperationResult<IEnumerable<MaintenanceRecordDto>>> GetMaintenanceRecordsByVehicleIdAsync(string vehicleId);
+    Task<OperationResult<IEnumerable<MaintenanceRecordDto>>> GetMaintenanceRecordsByVehicleIdAsync(int? vehicleId);
     Task<OperationResult<MaintenanceRecordDto>> CreateMaintenanceRecordAsync(MaintenanceRecordDto maintenanceRecordDto);
     Task<OperationResult> UpdateMaintenanceRecordAsync(MaintenanceRecordDto maintenanceRecordDto);
     Task<OperationResult> DeleteMaintenanceRecordAsync(int maintenanceRecordId);
@@ -22,7 +22,7 @@ public interface IMaintenanceService
     Task<OperationResult<RepairRecordDto>> CreateRepairRecordAsync(RepairRecordDto repairRecordDto);
     Task<OperationResult> UpdateRepairRecordAsync(RepairRecordDto repairRecordDto);
     Task<OperationResult> DeleteRepairRecordAsync(int repairRecordId);
-    Task<OperationResult<IEnumerable<RepairRecordDto>>> GetRepairRecordsByVehicleIdAsync(string vehicleId);
+    Task<OperationResult<IEnumerable<RepairRecordDto>>> GetRepairRecordsByVehicleIdAsync(int vehicleId);
 
     // Parts
     Task<OperationResult<IEnumerable<PartDetailDto>>> GetAllPartsAsync();

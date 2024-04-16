@@ -30,7 +30,7 @@ namespace TCMS.Common.DTOs.Shipment
         public decimal TotalCost { get; set; }
         public bool IsFullyPaid { get; set; }
 
-        public string VehicleId { get; set; }
+        public int VehicleId { get; set; }
 
         public int ManifestId { get; set; }
         public int PurchaseOrderId { get; set; }

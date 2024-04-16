@@ -12,13 +12,14 @@ namespace TCMS.Data.Generators
 {
     public static class IncidentAndTestGenerator
     {
-        public static List<IncidentReport> GenerateIncidents(List<Driver> drivers, int incidentCount, Faker faker)
+        public static List<IncidentReport> GenerateIncidents(List<Driver> drivers, List<Vehicle> vehicles, int incidentCount, Faker faker)
         {
             var incidentReports = new List<IncidentReport>();
 
             for (int i = 0; i < incidentCount; i++)
             {
                 var driver = faker.PickRandom(drivers);
+                var vehicle = faker.PickRandom(vehicles);
                 var incidentReport = new IncidentReport
                 {
                     IncidentDate = faker.Date.Past(1),
@@ -27,6 +28,8 @@ namespace TCMS.Data.Generators
                     Description = faker.Lorem.Sentence(),
                     EmployeeId = driver.EmployeeId,
                     Driver = driver,
+                    VehicleId = vehicle.VehicleId,
+                    Vehicle = vehicle
                 };
 
                 incidentReport.IsFatal = faker.Random.Bool(0.1f);

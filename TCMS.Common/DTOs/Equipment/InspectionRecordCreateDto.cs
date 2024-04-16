@@ -25,7 +25,7 @@ namespace TCMS.Common.DTOs.Equipment
         public decimal Cost { get; set; }
 
         [Required]
-        public string VehicleId { get; set; }
+        public int VehicleId { get; set; }
 
     }
 }

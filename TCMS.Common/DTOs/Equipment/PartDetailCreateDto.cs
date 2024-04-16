@@ -32,7 +32,7 @@ namespace TCMS.Common.DTOs.Equipment
         public bool IsFromStock { get; set; }
 
         // Optional if you allow creating a part without linking to a vehicle initially.
-        public string? VehicleId { get; set; }
+        public int? VehicleId { get; set; }
 
         // These can be null if the part is not being created in the context of a maintenance or repair record.
         public int? MaintenanceRecordId { get; set; }

@@ -28,7 +28,7 @@ namespace TCMS.API.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult<VehicleDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<OperationResult<VehicleDto>>> GetVehicleById(string id)
+        public async Task<ActionResult<OperationResult<VehicleDto>>> GetVehicleById(int id)
         {
             var result = await _vehicleService.GetVehicleByIdAsync(id);
             return result.IsSuccessful ? Ok(result) : BadRequest(result);
@@ -65,7 +65,7 @@ namespace TCMS.API.Controllers
         [HttpDelete("delete/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<OperationResult>> DeleteVehicle(string id)
+        public async Task<ActionResult<OperationResult>> DeleteVehicle(int id)
         {
             var result = await _vehicleService.DeleteVehicleAsync(id);
             return result.IsSuccessful ? Ok(result) : BadRequest(result);
@@ -75,7 +75,7 @@ namespace TCMS.API.Controllers
         [HttpGet("maintenance-history/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult<IEnumerable<MaintenanceRecordDto>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<OperationResult<IEnumerable<MaintenanceRecordDto>>>> GetMaintenanceHistory(string id)
+        public async Task<ActionResult<OperationResult<IEnumerable<MaintenanceRecordDto>>>> GetMaintenanceHistory(int id)
         {
             var result = await _vehicleService.GetMaintenanceRecordsByVehicleIdAsync(id);
             return result.IsSuccessful ? Ok(result) : BadRequest(result);
@@ -85,7 +85,7 @@ namespace TCMS.API.Controllers
         [HttpGet("inspection-history/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult<IEnumerable<MaintenanceRecordDto>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<OperationResult<IEnumerable<MaintenanceRecordDto>>>> GetInspectionHistory(string id)
+        public async Task<ActionResult<OperationResult<IEnumerable<MaintenanceRecordDto>>>> GetInspectionHistory(int id)
         {
             var result = await _vehicleService.GetInspectionRecordsByVehicleIdAsync(id);
             return result.IsSuccessful ? Ok(result) : BadRequest(result);
@@ -125,7 +125,7 @@ namespace TCMS.API.Controllers
         [HttpGet("repair-records/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult<IEnumerable<RepairRecordDto>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<OperationResult<IEnumerable<RepairRecordDto>>>> GetRepairRecords(string id)
+        public async Task<ActionResult<OperationResult<IEnumerable<RepairRecordDto>>>> GetRepairRecords(int id)
         {
             var result = await _vehicleService.GetRepairRecordsByVehicleIdAsync(id);
             return result.IsSuccessful ? Ok(result) : BadRequest(result);
@@ -175,7 +175,7 @@ namespace TCMS.API.Controllers
         [HttpGet("parts/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult<IEnumerable<PartDetailDto>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<OperationResult<IEnumerable<PartDetailDto>>>> GetParts(string id)
+        public async Task<ActionResult<OperationResult<IEnumerable<PartDetailDto>>>> GetParts(int id)
         {
             var result = await _vehicleService.GetPartsByVehicleIdAsync(id);
             return result.IsSuccessful ? Ok(result) : BadRequest(result);
@@ -200,7 +200,7 @@ namespace TCMS.API.Controllers
         [HttpDelete("remove-part/{vehicleId}/{partId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<OperationResult>> RemovePart(string vehicleId, int partId)
+        public async Task<ActionResult<OperationResult>> RemovePart(int vehicleId, int partId)
         {
             var result = await _vehicleService.RemovePartFromVehicleAsync(vehicleId, partId);
             return result.IsSuccessful ? Ok(result) : BadRequest(result);
@@ -220,7 +220,7 @@ namespace TCMS.API.Controllers
         [HttpGet("special-ordered-parts/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult<IEnumerable<PartDetailDto>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<OperationResult<IEnumerable<PartDetailDto>>>> GetSpecialOrderedPartsByVehicle(string id)
+        public async Task<ActionResult<OperationResult<IEnumerable<PartDetailDto>>>> GetSpecialOrderedPartsByVehicle(int id)
         {
             var result = await _vehicleService.GetSpecialOrderedPartsByVehicleIdAsync(id);
             return result.IsSuccessful ? Ok(result) : BadRequest(result);

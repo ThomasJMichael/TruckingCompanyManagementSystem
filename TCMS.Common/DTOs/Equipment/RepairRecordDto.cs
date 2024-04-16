@@ -12,7 +12,7 @@ namespace TCMS.Common.DTOs.Equipment
         public int RepairRecordId { get; set; }
 
         [Required]
-        public string VehicleId { get; set; }
+        public int VehicleId { get; set; }
 
         [Required]
         public DateTime RepairDate { get; set; }

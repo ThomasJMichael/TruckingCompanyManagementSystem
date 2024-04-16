@@ -262,10 +262,10 @@ namespace TCMS.GUI.ViewModels
                 OnPropertyChanged();
             }
         }
-        private string _vehicleId = "Enter Vehicle ID...";
-        public string VehicleId
+        private int _vehicleId;
+        public int VehicleId
         {
-            get => string.IsNullOrEmpty(_vehicleId) ? "Name" : _vehicleId;
+            get => _vehicleId;
             set
             {
                 _vehicleId = value;
@@ -386,7 +386,7 @@ namespace TCMS.GUI.ViewModels
             if (IsEditMode)
             {
                 Location = CurrentIncident.Location;
-                VehicleId = CurrentIncident.VehicleId;
+                VehicleId = CurrentIncident.VehicleId ?? 0;
                 IsFatal = CurrentIncident.IsFatal;
                 HasInjuries = CurrentIncident.HasInjuries;
                 HasTowedVehicle = CurrentIncident.HasTowedVehicle;

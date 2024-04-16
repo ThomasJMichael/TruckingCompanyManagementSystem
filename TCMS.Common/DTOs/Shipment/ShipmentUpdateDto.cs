@@ -26,7 +26,7 @@ namespace TCMS.Common.DTOs.Shipment
         public string Zip { get; set; }
 
         [Required]
-        public string VehicleId { get; set; }
+        public int VehicleId { get; set; }
 
         [Required]
         public int ManifestId { get; set; }

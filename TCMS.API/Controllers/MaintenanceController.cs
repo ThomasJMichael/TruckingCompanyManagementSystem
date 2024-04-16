@@ -150,7 +150,7 @@ namespace TCMS.API.Controllers
         [HttpGet("repairs/vehicle")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult<IEnumerable<RepairRecordDto>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<OperationResult<IEnumerable<RepairRecordDto>>>> GetRepairsByVehicle([FromQuery] string vehicleId)
+        public async Task<ActionResult<OperationResult<IEnumerable<RepairRecordDto>>>> GetRepairsByVehicle([FromQuery] int vehicleId)
         {
             var result = await _maintenanceService.GetRepairRecordsByVehicleIdAsync(vehicleId);
             return result.IsSuccessful ? Ok(result) : BadRequest(result);

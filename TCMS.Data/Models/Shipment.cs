@@ -22,7 +22,7 @@ namespace TCMS.Data.Models
         public string State { get; set; }
         public string Zip { get; set; }
         public virtual ICollection<Assignment> Assignments { get; set; }
-        public string VehicleId { get; set; }
+        public int VehicleId { get; set; }
         public virtual Vehicle Vehicle { get; set; }
         public decimal ShippingCost { get; set; }
         public bool IsShippingCostPaid { get; set; }

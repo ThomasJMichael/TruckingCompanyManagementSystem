@@ -9,7 +9,7 @@ namespace TCMS.Common.DTOs.Equipment
 {
     public class VehicleDto
     {
-        public string VehicleId { get; set; }
+        public int VehicleId { get; set; }
 
         [Required(ErrorMessage = "Brand is required.")]
         [StringLength(255, ErrorMessage = "Brand name must be less than 255 characters.")]

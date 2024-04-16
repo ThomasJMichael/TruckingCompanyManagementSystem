@@ -35,7 +35,7 @@ namespace TCMS.Common.DTOs.Incident
 
         [StringLength(50)]
         [Display(Name = "Vehicle ID")]
-        public string? VehicleId { get; set; }
+        public int? VehicleId { get; set; }
 
         [Required]
         [Display(Name = "Driver ID")]

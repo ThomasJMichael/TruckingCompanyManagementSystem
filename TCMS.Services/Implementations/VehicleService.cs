@@ -32,7 +32,7 @@ namespace TCMS.Services.Implementations
             }
         }
 
-        public async Task<OperationResult<VehicleDto>> GetVehicleByIdAsync(string vehicleId)
+        public async Task<OperationResult<VehicleDto>> GetVehicleByIdAsync(int vehicleId)
         {
             try
             {
@@ -85,7 +85,7 @@ namespace TCMS.Services.Implementations
             }
         }
 
-        public async Task<OperationResult> DeleteVehicleAsync(string vehicleId)
+        public async Task<OperationResult> DeleteVehicleAsync(int vehicleId)
         {
             try
             {
@@ -104,7 +104,7 @@ namespace TCMS.Services.Implementations
             }
         }
 
-        public async Task<OperationResult<IEnumerable<MaintenanceRecordDto>>> GetMaintenanceRecordsByVehicleIdAsync(string vehicleId)
+        public async Task<OperationResult<IEnumerable<MaintenanceRecordDto>>> GetMaintenanceRecordsByVehicleIdAsync(int vehicleId)
         {
             try
             {
@@ -131,7 +131,7 @@ namespace TCMS.Services.Implementations
             }
         }
 
-        public async Task<OperationResult<IEnumerable<MaintenanceRecordDto>>> GetInspectionRecordsByVehicleIdAsync(string vehicleId)
+        public async Task<OperationResult<IEnumerable<MaintenanceRecordDto>>> GetInspectionRecordsByVehicleIdAsync(int vehicleId)
         {
             try
             {
@@ -199,7 +199,7 @@ namespace TCMS.Services.Implementations
             }
         }
 
-        public async Task<OperationResult<IEnumerable<RepairRecordDto>>> GetRepairRecordsByVehicleIdAsync(string vehicleId)
+        public async Task<OperationResult<IEnumerable<RepairRecordDto>>> GetRepairRecordsByVehicleIdAsync(int vehicleId)
         {
             try
             {
@@ -285,7 +285,7 @@ namespace TCMS.Services.Implementations
             }
         }
 
-        public async Task<OperationResult<IEnumerable<PartDetailDto>>> GetPartsByVehicleIdAsync(string vehicleId)
+        public async Task<OperationResult<IEnumerable<PartDetailDto>>> GetPartsByVehicleIdAsync(int vehicleId)
         {
             try
             {
@@ -332,7 +332,7 @@ namespace TCMS.Services.Implementations
             }
         }
 
-        public async Task<OperationResult> RemovePartFromVehicleAsync(string vehicleId, int partId)
+        public async Task<OperationResult> RemovePartFromVehicleAsync(int vehicleId, int partId)
         {
             try
             {
@@ -377,7 +377,7 @@ namespace TCMS.Services.Implementations
             }
         }
 
-        public async Task<OperationResult<IEnumerable<PartDetailDto>>> GetSpecialOrderedPartsByVehicleIdAsync(string vehicleId)
+        public async Task<OperationResult<IEnumerable<PartDetailDto>>> GetSpecialOrderedPartsByVehicleIdAsync(int vehicleId)
         {
             try
             {

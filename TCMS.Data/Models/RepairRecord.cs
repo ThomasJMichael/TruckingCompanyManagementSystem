@@ -8,7 +8,7 @@
         public DateTime RepairDate { get; set; }
         
         //Foreign Keys
-        public string? VehicleId { get; set; }
+        public int? VehicleId { get; set; }
         public virtual Vehicle Vehicle { get; set; }
 
         public string Cause { get; set; }

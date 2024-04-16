@@ -27,6 +27,9 @@ namespace TCMS.Data.Initialization
             Console.WriteLine("Seeding default user...");
             await SeedDefaultUser(userManager);
 
+            Console.WriteLine("Seeding vehicle data...");
+            await SeedVehicleData(serviceProvider);
+
             Console.WriteLine("Seeding products and related data...");
             await SeedProductsAsync(serviceProvider);
 
@@ -151,7 +154,8 @@ namespace TCMS.Data.Initialization
                 if (!await context.IncidentReports.AnyAsync())
                 {
                     var drivers = await context.Drivers.ToListAsync();
-                    var reports = IncidentAndTestGenerator.GenerateIncidents(drivers, 200, faker);
+                    var vehicles = await context.Vehicles.ToListAsync();
+                    var reports = IncidentAndTestGenerator.GenerateIncidents(drivers, vehicles, 200, faker);
                     context.IncidentReports.AddRange(reports);
                     await context.SaveChangesAsync();
                 }
@@ -250,6 +254,18 @@ namespace TCMS.Data.Initialization
             }
 
             await context.SaveChangesAsync();
+        }
+
+        private static async Task SeedVehicleData(IServiceProvider serviceProvider)
+        {
+            var context = serviceProvider.GetRequiredService<TcmsContext>();
+
+            if (!context.Vehicles.Any())
+            {
+                var vehicles = VehicleGenerator.GenerateVehicles(50);
+                context.Vehicles.AddRange(vehicles);
+                await context.SaveChangesAsync();
+            }
         }
 
     }
