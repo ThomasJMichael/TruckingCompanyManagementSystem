@@ -177,12 +177,29 @@
                     <Separator/>
                     <TextBlock Text="ID:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
                     <TextBlock Text="{Binding SelectedIncident.IncidentReportId}" Style="{StaticResource DetailTextBlockStyle}"/>
-                    <TextBlock Text="Location:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding SelectedIncident.Location}" Style="{StaticResource DetailTextBlockStyle}"/>
-                    <TextBlock Text="MiddleName:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding SelectedIncident.Description}" Style="{StaticResource DetailTextBlockStyle}" TextWrapping="Wrap"/>
                     <TextBlock Text="Date:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
                     <TextBlock Text="{Binding SelectedIncident.IncidentDate}" Style="{StaticResource DetailTextBlockStyle}"/>
+                    <TextBlock Text="Location:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding SelectedIncident.Location}" Style="{StaticResource DetailTextBlockStyle}"/>
+                    <TextBlock Text="Incident Type:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding SelectedIncident.Type}" Style="{StaticResource DetailTextBlockStyle}"/>
+                    <TextBlock Text="MiddleName:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding SelectedIncident.Description}" Style="{StaticResource DetailTextBlockStyle}" TextWrapping="Wrap"/>
+ 
+                    <TextBlock Text="Vehicle Id:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding SelectedIncident.VehicleId}" Style="{StaticResource DetailTextBlockStyle}"/>
+                    <TextBlock Text="Employee Id:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding SelectedIncident.EmployeeId}" Style="{StaticResource DetailTextBlockStyle}"/>
+                    <TextBlock Text="Is Fatal:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding SelectedIncident.IsFatal}" Style="{StaticResource DetailTextBlockStyle}"/>
+                    <TextBlock Text="Has Injuries:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding SelectedIncident.HasInjuries}" Style="{StaticResource DetailTextBlockStyle}"/>
+                    <TextBlock Text="Towed Vehicle:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding SelectedIncident.HasTowedVehicle}" Style="{StaticResource DetailTextBlockStyle}"/>
+                    <TextBlock Text="Citation Issued:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding SelectedIncident.CitationIssued}" Style="{StaticResource DetailTextBlockStyle}"/>
+                    <TextBlock Text="Requires Drug and Alchohol Test:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding SelectedIncident.RequiresDrugAndAlcoholTest}" Style="{StaticResource DetailTextBlockStyle}"/>
                 </StackPanel>
             </Border>
         </Grid>
