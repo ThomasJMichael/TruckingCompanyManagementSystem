@@ -18,6 +18,7 @@ namespace TCMS.GUI.Utilities
         IncidentLogViewModel CreateIncidentLogViewModel();
         DrugTestViewModel CreateDrugTestViewModel();
         OrderViewModel CreateOrderViewModel();
+        EquipmentViewModel CreateEquipmentViewModel();
         AssignmentsViewModel CreateAssignmentsViewModel();
         ReportViewModel CreateReportViewModel();
     }

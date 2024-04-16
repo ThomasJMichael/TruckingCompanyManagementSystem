@@ -59,7 +59,7 @@ namespace TCMS.GUI.ViewModels
         private void Order(object obj) => CurrentView = new OrderViewModel();
         private void TimeClock(object obj) => CurrentView = _viewModelFactory.CreateTimeClockViewModel();   
         private void Shipment(object obj) => CurrentView = _viewModelFactory.CreateShipmentsViewModel();
-        private void Equipment(object obj) => CurrentView = _viewModelFactory.CreateAssignmentsViewModel();
+        private void Equipment(object obj) => CurrentView = _viewModelFactory.CreateEquipmentViewModel();
         private void Incident(object obj) => CurrentView = _viewModelFactory.CreateIncidentLogViewModel();
         private void DrugTest(object obj) => CurrentView = _viewModelFactory.CreateDrugTestViewModel();
         private void Report(object obj) => CurrentView = _viewModelFactory.CreateReportViewModel();

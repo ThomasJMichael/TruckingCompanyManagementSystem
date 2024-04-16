@@ -185,15 +185,12 @@
                     <utilities:Btn Style="{StaticResource BtnStyle}"
                                    Command="{Binding EquipmentCommand}"
                                    Visibility="{Binding EquipmentVisibility}">
-
                         <Grid>
-
                             <Image Source="/Assets/Images/img_setting.png"
                                    Style="{StaticResource Image_Style}" />
 
                             <TextBlock Text="Equipment"
                                        Style="{StaticResource Text_Style}" />
-
                         </Grid>
 
                     </utilities:Btn>

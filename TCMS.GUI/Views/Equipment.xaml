@@ -181,7 +181,7 @@
             </TabItem>
 
             <!-- Maintenance Records Tab -->
-            <TabItem Header="Maintenance Records">
+            <TabItem Header="Maintenance Records" Margin="-2,-4,-2,2">
                 <Border Grid.Column="1" Background="{StaticResource DetailBackgroundBrush}">
                     <StackPanel Background="#25252d">
                         <!-- Maintenance CRUD Buttons -->
