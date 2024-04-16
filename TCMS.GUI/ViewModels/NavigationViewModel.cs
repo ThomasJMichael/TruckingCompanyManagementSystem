@@ -42,31 +42,35 @@ namespace TCMS.GUI.ViewModels
         public ICommand HomeCommand { get; set; }
         public ICommand EmployeesCommand { get; set; }
         public ICommand ProductsCommand { get; set; }
-        //public ICommand OrdersCommand { get; set; }
+        public ICommand OrdersCommand { get; set; }
         public ICommand TimeClockCommand { get; set; }
         public ICommand ShipmentsCommand { get; set; }
-        public ICommand SettingsCommand { get; set; }
+        public ICommand EquipmentCommand { get; set; }
         public ICommand IncidentsCommand { get; set; }
 
+        public ICommand AssignmentCommand { get; set; } 
+
         private void Home(object obj) => CurrentView = _viewModelFactory.CreateHomeViewModel();
+        private void Assignment(object ob) => CurrentView = _viewModelFactory.CreateAssignmentsViewModel();
         private void employee(object obj) => CurrentView = _viewModelFactory.CreateEmployeeViewModel();
         private void Product(object obj) => CurrentView = _viewModelFactory.CreateProductsViewModel();
         //private void Order(object obj) => CurrentView = new OrderVM();
         private void TimeClock(object obj) => CurrentView = _viewModelFactory.CreateTimeClockViewModel();   
         private void Shipment(object obj) => CurrentView = _viewModelFactory.CreateShipmentsViewModel();
-        private void Setting(object obj) => CurrentView = _viewModelFactory.CreateSettingsViewModel();
+        private void Equipment(object obj) => CurrentView = _viewModelFactory.CreateSettingsViewModel();
         private void Incident(object obj) => CurrentView = _viewModelFactory.CreateIncidentLogViewModel();
 
         public NavigationViewModel(IViewModelFactory viewModelFactory)
         {
             _viewModelFactory = viewModelFactory;
             HomeCommand = new RelayCommand(Home);
+            AssignmentCommand = new RelayCommand(Assignment);
             EmployeesCommand = new RelayCommand(employee);
             ProductsCommand = new RelayCommand(Product);
             //OrdersCommand = new RelayCommand(Order);
             TimeClockCommand = new RelayCommand(TimeClock);
             ShipmentsCommand = new RelayCommand(Shipment);
-            SettingsCommand = new RelayCommand(Setting);
+            EquipmentCommand = new RelayCommand(Equipment);
             IncidentsCommand = new RelayCommand(Incident);
 
             UserRole = App.Current.Properties["UserRole"] as string;
@@ -81,6 +85,7 @@ namespace TCMS.GUI.ViewModels
         public Visibility TimeClockVisibility => IsVisibleForRole("TimeClock") ? Visibility.Visible : Visibility.Collapsed;
         public Visibility AssignmentsVisibility => IsVisibleForRole("Assignments") ? Visibility.Visible : Visibility.Collapsed;
         public Visibility IncidentsVisibility => IsVisibleForRole("Incidents") ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility EquipmentVisibility => IsVisibleForRole("Equipment") ? Visibility.Visible : Visibility.Collapsed;
 
         private bool IsVisibleForRole(string featureName)
         {
@@ -101,7 +106,9 @@ namespace TCMS.GUI.ViewModels
                 case "Assignments":
                     return UserRole is "Admin" or "Driver";
                 case "Incidents":
-                    return UserRole == "Admin";
+                    return UserRole is "Admin";
+                case "Equipment":
+                    return UserRole is "Admin" or "MaintenanceWorker";
                 default:
                     return false;
             }

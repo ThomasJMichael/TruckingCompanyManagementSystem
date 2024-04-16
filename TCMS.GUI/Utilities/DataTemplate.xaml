@@ -11,8 +11,8 @@
         <view:Employees/>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
-        <view:Settings/>
+    <DataTemplate DataType="{x:Type vm:EquipmentViewModel}">
+        <view:Equipment/>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:ShipmentsViewModel}">
@@ -29,6 +29,10 @@
 
     <DataTemplate DataType="{x:Type vm:TimeClockViewModel}">
         <view:TimeClock/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:AssignmentsViewModel}">
+        <view:Assignments/>
     </DataTemplate>
 
 </ResourceDictionary>

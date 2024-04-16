@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,16 +12,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TCMS.GUI.Models;
 
 namespace TCMS.GUI.Views
 {
     /// <summary>
-    /// Interaction logic for Settings.xaml
+    /// Interaction logic for Assignments.xaml
     /// </summary>
-    public partial class Settings : UserControl
+    public partial class Assignments : UserControl
     {
-        public Settings()
+        public Assignments()
         {
             InitializeComponent();
         }

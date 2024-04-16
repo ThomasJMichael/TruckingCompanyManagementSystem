@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using TCMS.Data.Models;
 using TCMS.GUI.ViewModels;
 
 namespace TCMS.GUI.Utilities
@@ -19,11 +20,14 @@ namespace TCMS.GUI.Utilities
 
         public HomeViewModel CreateHomeViewModel() => _serviceProvider.GetRequiredService<HomeViewModel>();
         public ShipmentsViewModel CreateShipmentsViewModel() => _serviceProvider.GetRequiredService<ShipmentsViewModel>();
-        public SettingsViewModel CreateSettingsViewModel() => _serviceProvider.GetRequiredService<SettingsViewModel>();
+        public EquipmentViewModel CreateSettingsViewModel() => _serviceProvider.GetRequiredService<EquipmentViewModel>();
         public EmployeeViewModel CreateEmployeeViewModel() => _serviceProvider.GetRequiredService<EmployeeViewModel>();
         public ProductsViewModel CreateProductsViewModel() => _serviceProvider.GetRequiredService<ProductsViewModel>();
         public TimeClockViewModel CreateTimeClockViewModel() => _serviceProvider.GetRequiredService<TimeClockViewModel>();
         public ProductFormViewModel CreateProductFormViewModel() => _serviceProvider.GetRequiredService<ProductFormViewModel>();
         public IncidentLogViewModel CreateIncidentLogViewModel() => _serviceProvider.GetRequiredService<IncidentLogViewModel>();
+
+        public AssignmentsViewModel CreateAssignmentsViewModel() =>
+            _serviceProvider.GetRequiredService<AssignmentsViewModel>();
     }
 }

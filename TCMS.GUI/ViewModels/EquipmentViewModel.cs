@@ -7,7 +7,7 @@ using TCMS.GUI.Models;
 
 namespace TCMS.GUI.ViewModels
 {
-    public class SettingsViewModel : Utilities.ViewModelBase
+    public class EquipmentViewModel : Utilities.ViewModelBase
     {
         private readonly PageModel _pageModel;
         public bool Settings
@@ -16,7 +16,7 @@ namespace TCMS.GUI.ViewModels
             set { _pageModel.LocationStatus = value; OnPropertyChanged(); }
         }
 
-        public SettingsViewModel()
+        public EquipmentViewModel()
         {
             _pageModel = new PageModel();
             Settings = true;

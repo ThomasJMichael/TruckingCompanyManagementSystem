@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Images\assignment.png" />
     <None Remove="Assets\Images\BaseBackground.png" />
     <None Remove="Assets\Images\customer_page.png" />
     <None Remove="Assets\Images\home_page.png" />
@@ -20,6 +21,7 @@
     <None Remove="Assets\Images\img_setting.png" />
     <None Remove="Assets\Images\img_shipment.png" />
     <None Remove="Assets\Images\img_transaction.png" />
+    <None Remove="Assets\Images\incident.png" />
     <None Remove="Assets\Images\order_page.png" />
     <None Remove="Assets\Images\product_page.png" />
     <None Remove="Assets\Images\search_logo.png" />
@@ -48,6 +50,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\Images\assignment.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Assets\Images\BaseBackground.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -79,6 +84,9 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Images\img_transaction.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\incident.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Images\order_page.png">

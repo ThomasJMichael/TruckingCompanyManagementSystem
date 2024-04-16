@@ -85,11 +85,12 @@ namespace TCMS.GUI
             services.AddSingleton<MainWindow>();
             services.AddSingleton<NavigationViewModel>();
             services.AddSingleton<HomeViewModel>();
+            services.AddSingleton<AssignmentsViewModel>();
             services.AddSingleton<ProductsViewModel>();
             services.AddSingleton<EmployeeViewModel>();
             services.AddSingleton<TimeClockViewModel>();
             services.AddSingleton<ShipmentsViewModel>();
-            services.AddSingleton<SettingsViewModel>();
+            services.AddSingleton<EquipmentViewModel>();
             services.AddSingleton<IncidentLogViewModel>();
 
 

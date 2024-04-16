@@ -36,7 +36,7 @@
                 <Border Background="#272B2F"
                         CornerRadius="20,0,0,20" />
 
-                <StackPanel Height="400"
+                <StackPanel Height="Auto"
                             Width="228">
 
                     <!--// Home //-->
@@ -57,6 +57,23 @@
 
                     </utilities:Btn>
 
+                    <!--// Assignments //-->
+
+                    <utilities:Btn Style="{StaticResource BtnStyle}"
+                              Command="{Binding AssignmentCommand}"
+                              Visibility="{Binding AssignmentsVisibility}">
+
+                        <Grid>
+
+                            <Image Source="/Assets/Images/assignment.png"
+                                   Style="{StaticResource Image_Style}" />
+
+                            <TextBlock Text="Assignments"
+                                       Style="{StaticResource Text_Style}" />
+
+                        </Grid>
+
+                    </utilities:Btn>
                     <!--// Employees //-->
 
                     <utilities:Btn Style="{StaticResource BtnStyle}"
@@ -119,7 +136,7 @@
 
                         <Grid>
 
-                            <Image Source="/Assets/Images/img_product.png"
+                            <Image Source="/Assets/Images/incident.png"
                                    Style="{StaticResource Image_Style}" />
 
                             <TextBlock Text="Incidents"
@@ -166,17 +183,18 @@
                     </utilities:Btn>
 
 
-                    <!--// Settings //-->
+                    <!--// Equipment //-->
 
                     <utilities:Btn Style="{StaticResource BtnStyle}"
-                              Command="{Binding SettingsCommand}">
+                              Command="{Binding EquipmentCommand}"
+                              Visibility="{Binding EquipmentVisibility}">
 
                         <Grid>
 
                             <Image Source="/Assets/Images/img_setting.png"
                                    Style="{StaticResource Image_Style}" />
 
-                            <TextBlock Text="Settings"
+                            <TextBlock Text="Equipment"
                                        Style="{StaticResource Text_Style}" />
 
                         </Grid>

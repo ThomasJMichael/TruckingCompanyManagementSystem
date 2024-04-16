@@ -1,0 +1,240 @@
+﻿<UserControl x:Class="TCMS.GUI.Views.Equipment"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TCMS.GUI.Views"
+             xmlns:viewModels="clr-namespace:TCMS.GUI.ViewModels"
+             xmlns:utilities="clr-namespace:TCMS.GUI.Utilities"
+             mc:Ignorable="d" 
+             d:DesignHeight="600"
+             d:DesignWidth="622"
+             Style="{StaticResource Page_Style}">
+
+    <UserControl.DataContext>
+        <viewModels:EquipmentViewModel />
+    </UserControl.DataContext>
+    <UserControl.Resources>
+        <utilities:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+        <SolidColorBrush x:Key="DetailBackgroundBrush" Color="#FF272B2F"/>
+        <!-- Define the TextBlock style for details -->
+        <Style x:Key="DetailTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontFamily" Value="pack://application:,,,/;component/Assets/Fonts/#Rubik Regular"/>
+            <!-- Add the path to your font file here, adjust the path if necessary -->
+            <Setter Property="FontSize" Value="14"/>
+            <!-- Set any other common properties you need for your TextBlocks -->
+        </Style>
+        <!-- Style for the GridView Column Header -->
+        <Style x:Key="GridViewColumnHeaderStyle" TargetType="GridViewColumnHeader">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <!-- Add additional Setters for other properties if needed -->
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Left side with Vehicle List and Operations -->
+        <Grid x:Name="TopBarGrid"
+      Margin="10"
+      Height="Auto"
+      HorizontalAlignment="Stretch"
+      VerticalAlignment="Top">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0"
+          Margin="0,0,0,10"  
+                HorizontalAlignment="Stretch">
+                <!-- Search Bar -->
+                <Border Background="Transparent"
+                CornerRadius="20"
+                BorderBrush="#666"
+                BorderThickness="1">
+                    <TextBox x:Name="SearchTextBox"
+                     Style="{StaticResource SearchTextBoxStyle}"
+                     BorderThickness="0"
+                     Background="Transparent"
+                     VerticalAlignment="Center"
+                     FontSize="16"
+                     FontWeight="Light"
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     Width="{Binding ElementName=TopBarGrid, Path=ActualWidth}"/>
+                    <!-- Interaction Triggers as before -->
+                </Border>
+            </Grid>
+
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch">
+                <!-- Grid to space out the buttons -->
+                <Grid Width="{Binding ActualWidth, ElementName=TopBarGrid}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Add Button -->
+                    <utilities:Btn Grid.Column="0" Style="{StaticResource DynamicWidthBtnStyle}" Command="{Binding AddEmployeeCommand}">
+                        <TextBlock Text="Add" Style="{StaticResource ViewsButtonText}" TextAlignment="Center"/>
+                    </utilities:Btn>
+
+                    <!-- Edit Button -->
+                    <utilities:Btn Grid.Column="1" Style="{StaticResource DynamicWidthBtnStyle}" Command="{Binding EditEmployeeCommand}">
+                        <TextBlock Text="Edit" Style="{StaticResource ViewsButtonText}" TextAlignment="Center"/>
+                    </utilities:Btn>
+
+                    <!-- Delete Button -->
+                    <utilities:Btn Grid.Column="2" Style="{StaticResource DynamicWidthBtnStyle}" Command="{Binding DeleteEmployeeCommand}">
+                        <TextBlock Text="Delete" Style="{StaticResource ViewsButtonText}" TextAlignment="Center"/>
+                    </utilities:Btn>
+                </Grid>
+            </StackPanel>
+        </Grid>
+
+        <ListView Grid.Column="0"
+                  x:Name="VehicleListView"
+                  ItemsSource="{Binding FilteredEmployees}"
+                  SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}"
+                  BorderBrush="{x:Null}" Background="#FF272B2F"
+                  ScrollViewer.VerticalScrollBarVisibility="Hidden" Margin="0,103,0,0">
+            <ListView.View>
+                <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
+                    <GridViewColumn Header="ID" DisplayMemberBinding="{Binding VehicleId}" Width="Auto"/>
+                    <GridViewColumn Header="Brand" DisplayMemberBinding="{Binding Brand}" Width="Auto"/>
+                    <GridViewColumn Header="Model" DisplayMemberBinding="{Binding Model}" Width="Auto"/>
+                    <GridViewColumn Header="Year" DisplayMemberBinding="{Binding Year}" Width="Auto"/>
+                    <GridViewColumn Header="Type" DisplayMemberBinding="{Binding Type}" Width="Auto"/>
+                    <!-- Add more columns as needed -->
+                </GridView>
+            </ListView.View>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Margin" Value="2"/>
+                    <Setter Property="Padding" Value="4"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#333"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#555"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.ItemContainerStyle>
+        </ListView>
+
+
+
+        <!-- Right side with TabControl for Vehicle and Maintenance Details -->
+        <TabControl Grid.Column="1" Margin="5,21,5,5">
+            <!-- Vehicle Details Tab -->
+            <TabItem Header="Vehicle Details">
+                <Border Grid.Column="1" Background="{StaticResource DetailBackgroundBrush}">
+                    <StackPanel Visibility="{Binding SelectedVehicle, Converter={StaticResource NullToVisibilityConverter}}">
+                        <TextBlock Text="Vehicle Details" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold" FontSize="18" />
+                        <Separator/>
+                        <TextBlock Text="Vehicle ID:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding SelectedVehicle.VehicleId}" Style="{StaticResource DetailTextBlockStyle}"/>
+                        <TextBlock Text="Brand:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding SelectedVehicle.Brand}" Style="{StaticResource DetailTextBlockStyle}"/>
+                        <TextBlock Text="Model:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding SelectedVehicle.Model}" Style="{StaticResource DetailTextBlockStyle}"/>
+                        <!-- Include other details such as Year, Type, etc. -->
+
+                        <!-- Parts associated with the selected vehicle -->
+                        <TextBlock Text="Parts List:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold" Margin="0,10,0,0"/>
+                        <ListView ItemsSource="{Binding SelectedVehicle.Parts}" Margin="5" Background="{StaticResource DetailBackgroundBrush}">
+                            <ListView.View>
+                                <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
+                                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding PartName}" Width="120"/>
+                                    <GridViewColumn Header="Id" DisplayMemberBinding="{Binding PartNumber}" Width="Auto"/>
+                                    <GridViewColumn Header="Quantity" DisplayMemberBinding="{Binding Quantity}" Width="Auto"/>
+                                    <GridViewColumn Header="Price" DisplayMemberBinding="{Binding Price, StringFormat=C}" Width="60"/>
+                                    <GridViewColumn Header="Supplier" DisplayMemberBinding="{Binding Supplier}" Width="120"/>
+                                    <!-- Add more columns as needed -->
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </StackPanel>
+                </Border>
+
+            </TabItem>
+
+            <!-- Maintenance Records Tab -->
+            <TabItem Header="Maintenance Records">
+                <Border Grid.Column="1" Background="{StaticResource DetailBackgroundBrush}">
+                    <StackPanel Background="#25252d">
+                        <!-- Maintenance CRUD Buttons -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                            <utilities:Btn Content="Add Record" Style="{StaticResource DynamicWidthBtnStyle}" 
+                                       Command="{Binding AddRecordCommand}" Margin="5" />
+                            <utilities:Btn Content="Edit Record" Style="{StaticResource DynamicWidthBtnStyle}" 
+                                       Command="{Binding EditRecordCommand}" Margin="5" />
+                            <utilities:Btn Content="Delete Record" Style="{StaticResource DynamicWidthBtnStyle}" 
+                                       Command="{Binding DeleteRecordCommand}" Margin="5" />
+                        </StackPanel>
+
+                        <!-- Maintenance Records List View -->
+                    <ListView Grid.Column="0"
+                              x:Name="ProductsListView"
+                              ItemsSource="{Binding FilteredEmployees}"
+                              SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}"
+                              BorderBrush="{x:Null}" Background="#FF272B2F"
+                              ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                        <ListView.View>
+                            <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
+                                <GridViewColumn Header="ID" DisplayMemberBinding="{Binding MaintenanceRecordId}" Width="Auto"/>
+                                <GridViewColumn Header="Type" DisplayMemberBinding="{Binding RecordType}" Width="Auto"/>
+                                <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" Width="240"/>
+                                <GridViewColumn Header="Date" DisplayMemberBinding="{Binding MaintenanceDate, StringFormat=\{0:d\}}" Width="Auto"/>
+                                <GridViewColumn Header="Cost" DisplayMemberBinding="{Binding Cost, StringFormat=C}" Width="Auto"/>
+                            </GridView>
+                        </ListView.View>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Margin" Value="2"/>
+                                <Setter Property="Padding" Value="4"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#333"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#555"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                </StackPanel>
+                </Border>
+            </TabItem>
+        </TabControl>
+
+
+    </Grid>
+</UserControl>
