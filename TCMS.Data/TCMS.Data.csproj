@@ -28,4 +28,8 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TCMS.Common\TCMS.Common.csproj" />
+  </ItemGroup>
+
 </Project>

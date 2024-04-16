@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using TCMS.Data.Data;
 using Bogus;
 using Microsoft.EntityFrameworkCore;
+using TCMS.Common.Enums;
 
 namespace TCMS.Data.Initialization
 {

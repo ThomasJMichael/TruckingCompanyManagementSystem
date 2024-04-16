@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TCMS.Common.enums;
+using TCMS.Common.Enums;
 using TCMS.Data.Models;
 
 namespace TCMS.Data.Generators

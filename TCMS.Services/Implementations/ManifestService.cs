@@ -8,6 +8,7 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using TCMS.Common.DTOs.Inventory;
 using TCMS.Common.DTOs.Shipment;
+using TCMS.Common.enums;
 using TCMS.Common.Operations;
 using TCMS.Data.Data;
 using TCMS.Data.Models;

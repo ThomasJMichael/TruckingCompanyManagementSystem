@@ -1,10 +1,8 @@
-﻿namespace TCMS.Data.Models
+﻿using TCMS.Common.enums;
+
+namespace TCMS.Data.Models
 {
-    public enum RecordType
-    {
-        Maintenance,
-        Inspection
-    }
+    
     public class MaintenanceRecord
     {
         public int MaintenanceRecordId { get; set; }

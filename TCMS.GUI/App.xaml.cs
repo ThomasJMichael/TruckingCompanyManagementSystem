@@ -3,7 +3,7 @@ using System.Configuration;
 using System.Data;
 using System.Windows;
 using AutoMapper;
-using TCMS.Common.Mappings;
+using TCMS.Data.Mappings;
 using TCMS.GUI.Services.Implementations;
 using TCMS.GUI.Services.Interfaces;
 using TCMS.GUI.Utilities;
@@ -50,7 +50,7 @@ namespace TCMS.GUI
             // Initialize the AutoMapper for DI
             var mapperConfig = new MapperConfiguration(cfg =>
             {
-                cfg.AddProfile(new TCMS.Common.Mappings.MappingConfigurations());
+                cfg.AddProfile(new MappingConfigurations());
                 cfg.AddProfile<GUIAutoMapperProfile>();
             });
             IMapper mapper = mapperConfig.CreateMapper();

@@ -13,7 +13,6 @@ namespace TCMS.Common.DTOs.User
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [ValidRole(ErrorMessage = "The role is not valid.")]
         public string Role { get; set; }
 
         [Required]
