@@ -19,10 +19,12 @@ using TCMS.Common.Operations;
 using TCMS.GUI.Models;
 using TCMS.GUI.Services.Interfaces;
 using TCMS.GUI.Utilities;
+using Xceed.Wpf.Toolkit.Primitives;
+using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 namespace TCMS.GUI.ViewModels
 {
-    public class IncidentLogFormViewModel : ViewModelBase, IDialogRequestClose
+    public class IncidentLogFormViewModel : ViewModelBase, IDialogRequestClose, INotifyPropertyChanged
     {
         private readonly IApiClient _apiClient;
         private readonly IMapper _mapper;
@@ -56,6 +58,21 @@ namespace TCMS.GUI.ViewModels
             }
         }
 
+        public ObservableCollection<string> Items { get; set; }
+        private string _selectedItem;
+
+        public string SelectedItem
+        {
+            get => _selectedItem;
+            set
+            {
+                if (_selectedItem != value)
+                {
+                    _selectedItem = value;
+                    OnPropertyChanged(nameof(SelectedItem));
+                }
+            }
+        }
 
         public Employee SelectedEmployee
         {
@@ -349,6 +366,8 @@ namespace TCMS.GUI.ViewModels
 
         public IncidentLogFormViewModel(IApiClient apiClient, IMapper mapper, IncidentReport incident = null)
         {
+            Items = new ObservableCollection<string> { "Accident", "SafetyViolation", "Other" };
+
             _apiClient = apiClient;
             _mapper = mapper;
             IsEditMode = false;
@@ -374,6 +393,7 @@ namespace TCMS.GUI.ViewModels
                 CitationIssued = CurrentIncident.CitationIssued;
                 Description = CurrentIncident.Description;
                 SelectedDate = CurrentIncident.IncidentDate;
+                SelectedItem = "Accident";
             }
             ConfirmCommand = new RelayCommand(Confirm);
             _employees = new ObservableCollection<Employee>();
@@ -381,7 +401,12 @@ namespace TCMS.GUI.ViewModels
             _ = LoadEmployees();
 
         }
+        public event PropertyChangedEventHandler PropertyChanged;
 
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
         private async void Confirm(object obj)
         {
             if (IsEditMode)
@@ -403,7 +428,7 @@ namespace TCMS.GUI.ViewModels
             {
                 var newIncidentReportDto = _mapper.Map<IncidentReportDto>(this);
 
-                var result = await _apiClient.PostAsync<OperationResult>("incident/all", newIncidentReportDto);
+                var result = await _apiClient.PostAsync<OperationResult>("incident/create", newIncidentReportDto);
                 if (!result.IsSuccessful)
                 {
                     Debug.WriteLine(result.Messages);
