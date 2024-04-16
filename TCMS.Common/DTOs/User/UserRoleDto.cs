@@ -15,7 +15,6 @@ namespace TCMS.Common.DTOs.User
         public string UserId { get; set; }
 
         [Required]
-        [ValidRole]
         public string? RoleName { get; set; }
     }
 }

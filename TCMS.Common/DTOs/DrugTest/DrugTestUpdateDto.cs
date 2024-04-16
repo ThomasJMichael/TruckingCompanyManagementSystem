@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using TCMS.Common.DataAnnotations;
-using TCMS.Data.Models;
+using TCMS.Common.enums;
 
 namespace TCMS.Common.DTOs.DrugTest
 {

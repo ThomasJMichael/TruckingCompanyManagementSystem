@@ -4,28 +4,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TCMS.Common.enums;
 
 namespace TCMS.Data.Models
 { 
-    public enum TestResult
-    {
-    Negative,
-    Positive,
-    Refused,
-    Adulterated,
-    Invalid,
-    PendingIncident
-    }
-    public enum TestType
-    {
-    PreEmployment,
-    PostAccident,
-    Random,
-    ReasonableSuspicion,
-    ReturnToDuty,
-    FollowUp
-    }
-
+   
     public class DrugAndAlcoholTest
     {
         public int DrugAndAlcoholTestId { get; set; }

@@ -1,4 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+
+namespace TCMS.Common.DTOs.Inventory;
+
 public class ProductDto
 {
     public int ProductId { get; set; }
@@ -14,4 +17,3 @@ public class ProductDto
     [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than zero.")]
     public decimal Price { get; set; }
 }
-

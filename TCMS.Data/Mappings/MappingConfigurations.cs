@@ -8,7 +8,7 @@ using TCMS.Common.DTOs.Shipment;
 using TCMS.Common.DTOs.User;
 using TCMS.Data.Models;
 
-namespace TCMS.Common.Mappings
+namespace TCMS.Data.Mappings
 {
     public class MappingConfigurations : AutoMapper.Profile
     {

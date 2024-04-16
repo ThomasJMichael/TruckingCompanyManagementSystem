@@ -7,6 +7,7 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
 using TCMS.Common.DTOs.Equipment;
+using TCMS.Common.enums;
 using TCMS.Common.Operations;
 using TCMS.Data.Data;
 using TCMS.Data.Models;

@@ -1,6 +1,4 @@
-﻿using TCMS.Data.Models;
-
-namespace TCMS.Common.DTOs.Employee
+﻿namespace TCMS.Common.DTOs.Employee
 {
     public class EmployeeDto
     {

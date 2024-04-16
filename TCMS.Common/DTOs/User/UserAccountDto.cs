@@ -1,5 +1,4 @@
-﻿using TCMS.Data.Models;
-
+﻿
 namespace TCMS.Common.DTOs.User
 {
     public class UserAccountDto

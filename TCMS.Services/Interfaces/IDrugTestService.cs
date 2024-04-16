@@ -1,4 +1,5 @@
 ﻿using TCMS.Common.DTOs.DrugTest;
+using TCMS.Common.enums;
 using TCMS.Data.Models;
 using TCMS.Common.Operations;
 

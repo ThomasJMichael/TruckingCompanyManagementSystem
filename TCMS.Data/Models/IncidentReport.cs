@@ -4,15 +4,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TCMS.Common.Enums;
 
 namespace TCMS.Data.Models
 {
-    public enum IncidentType
-    {
-        Accident,
-        SafetyViolation,
-        Other // Additional types can be added as needed
-    }
 
     public class IncidentReport
     {

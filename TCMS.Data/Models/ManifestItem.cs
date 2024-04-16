@@ -3,15 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TCMS.Common.enums;
 
 namespace TCMS.Data.Models
 {
-    public enum ItemStatus
-    {
-        Shipped,
-        OnBackOrder,
-        NoLongerAvailable
-    }
+    
     public class ManifestItem
     {
         public int ManifestItemId { get; set; }

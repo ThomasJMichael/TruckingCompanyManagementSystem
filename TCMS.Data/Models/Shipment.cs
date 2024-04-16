@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TCMS.Common.enums;
 
 namespace TCMS.Data.Models
 {
-    public enum ShipmentDirection
-    {
-        Inbound,
-        Outbound
-    }
+    
     public class Shipment
     {
         public int ShipmentId { get; set; }

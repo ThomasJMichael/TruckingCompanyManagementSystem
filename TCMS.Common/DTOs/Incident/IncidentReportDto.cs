@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using System;
 using System.ComponentModel.DataAnnotations;
-using TCMS.Data.Models;
+using TCMS.Common.Enums;
 
 namespace TCMS.Common.DTOs.Incident
 {

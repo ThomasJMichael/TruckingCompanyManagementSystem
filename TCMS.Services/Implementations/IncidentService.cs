@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using TCMS.Common.DTOs.Incident;
+using TCMS.Common.enums;
 using TCMS.Common.Operations;
 using TCMS.Data.Data;
 using TCMS.Data.Models;

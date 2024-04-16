@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TCMS.Common.DTOs.DrugTest;
+using TCMS.Common.enums;
 using TCMS.Common.Operations;
-using TCMS.Data.Models;
 using TCMS.Services.Interfaces;
 
 namespace TCMS.API.Controllers

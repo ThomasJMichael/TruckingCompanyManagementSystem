@@ -1,9 +1,8 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace TCMS.GUI.Converters
+namespace TCMS.GUI.Utilities
 {
     public class BoolToVisibilityConverter : IValueConverter
     {
