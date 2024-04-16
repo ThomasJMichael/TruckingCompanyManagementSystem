@@ -26,8 +26,12 @@ namespace TCMS.GUI.Utilities
         public ProductFormViewModel CreateProductFormViewModel() => _serviceProvider.GetRequiredService<ProductFormViewModel>();
         public IncidentLogViewModel CreateIncidentLogViewModel() => _serviceProvider.GetRequiredService<IncidentLogViewModel>();
 
+        public OrderViewModel CreateOrderViewModel() => _serviceProvider.GetRequiredService<OrderViewModel>();
+
         public AssignmentsViewModel CreateAssignmentsViewModel() =>
             _serviceProvider.GetRequiredService<AssignmentsViewModel>();
         public DrugTestViewModel CreateDrugTestViewModel() => _serviceProvider.GetRequiredService<DrugTestViewModel>();
+
+        public ReportViewModel CreateReportViewModel() => _serviceProvider.GetRequiredService<ReportViewModel>();
     }
 }

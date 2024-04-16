@@ -128,6 +128,23 @@
 
                     </utilities:Btn>
 
+                    <!--// Shipments //-->
+
+                    <utilities:Btn Style="{StaticResource BtnStyle}"
+                                   Command="{Binding ShipmentsCommand}"
+                                   Visibility="{Binding ShipmentsVisibility}">
+
+                        <Grid>
+
+                            <Image Source="/Assets/Images/img_shipment.png"
+                                   Style="{StaticResource Image_Style}" />
+
+                            <TextBlock Text="Shipments"
+                                       Style="{StaticResource Text_Style}" />
+
+                        </Grid>
+
+                    </utilities:Btn>
 
                     <!--// Incidents //-->
                     <utilities:Btn Style="{StaticResource BtnStyle}"
@@ -149,11 +166,11 @@
                     <!--// DrugAndAlchoholTests //-->
                     <utilities:Btn Style="{StaticResource BtnStyle}"
                               Command="{Binding DrugTestsCommand}"
-                              Visibility="{Binding IncidentsVisibility}">
+                              Visibility="{Binding DrugTestVisibility}">
 
                         <Grid>
 
-                            <Image Source="/Assets/Images/img_product.png"
+                            <Image Source="/Assets/Images/testing.png"
                                    Style="{StaticResource Image_Style}" />
 
                             <TextBlock Text="Drug Tests"
@@ -163,6 +180,23 @@
 
                     </utilities:Btn>
 
+                    <!--// Equipment //-->
+
+                    <utilities:Btn Style="{StaticResource BtnStyle}"
+                                   Command="{Binding EquipmentCommand}"
+                                   Visibility="{Binding EquipmentVisibility}">
+
+                        <Grid>
+
+                            <Image Source="/Assets/Images/img_setting.png"
+                                   Style="{StaticResource Image_Style}" />
+
+                            <TextBlock Text="Equipment"
+                                       Style="{StaticResource Text_Style}" />
+
+                        </Grid>
+
+                    </utilities:Btn>
                     <!--// TimeClock //-->
 
                     <utilities:Btn Style="{StaticResource BtnStyle}"
@@ -181,43 +215,28 @@
 
                     </utilities:Btn>
 
-                    <!--// Shipments //-->
+                    
+
+
+                    
+
+                    <!--// Reports //-->
 
                     <utilities:Btn Style="{StaticResource BtnStyle}"
-                              Command="{Binding ShipmentsCommand}"
-                              Visibility="{Binding ShipmentsVisibility}">
+                              Command="{Binding ReportCommand}"
+                              Visibility="{Binding ReportVisibility}">
 
                         <Grid>
 
-                            <Image Source="/Assets/Images/img_shipment.png"
+                            <Image Source="/Assets/Images/reports.png"
                                    Style="{StaticResource Image_Style}" />
 
-                            <TextBlock Text="Shipments"
+                            <TextBlock Text="Reports"
                                        Style="{StaticResource Text_Style}" />
 
                         </Grid>
 
                     </utilities:Btn>
-
-
-                    <!--// Equipment //-->
-
-                    <utilities:Btn Style="{StaticResource BtnStyle}"
-                              Command="{Binding EquipmentCommand}"
-                              Visibility="{Binding EquipmentVisibility}">
-
-                        <Grid>
-
-                            <Image Source="/Assets/Images/img_setting.png"
-                                   Style="{StaticResource Image_Style}" />
-
-                            <TextBlock Text="Equipment"
-                                       Style="{StaticResource Text_Style}" />
-
-                        </Grid>
-
-                    </utilities:Btn>
-
                 </StackPanel>
 
             </Grid>

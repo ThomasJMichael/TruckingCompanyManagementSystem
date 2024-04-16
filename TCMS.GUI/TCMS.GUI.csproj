@@ -24,11 +24,13 @@
     <None Remove="Assets\Images\incident.png" />
     <None Remove="Assets\Images\order_page.png" />
     <None Remove="Assets\Images\product_page.png" />
+    <None Remove="Assets\Images\reports.png" />
     <None Remove="Assets\Images\search_logo.png" />
     <None Remove="Assets\Images\setting_page.png" />
     <None Remove="Assets\Images\shipment_page.png" />
     <None Remove="Assets\Images\shutdown_def.png" />
     <None Remove="Assets\Images\shutdown_mo.png" />
+    <None Remove="Assets\Images\testing.png" />
     <None Remove="Assets\Images\transaction_page.png" />
   </ItemGroup>
 
@@ -95,6 +97,9 @@
     <Resource Include="Assets\Images\product_page.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Assets\Images\reports.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Assets\Images\search_logo.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -108,6 +113,9 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Images\shutdown_mo.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\testing.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Images\transaction_page.png">
