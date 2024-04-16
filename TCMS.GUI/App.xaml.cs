@@ -91,7 +91,7 @@ namespace TCMS.GUI
             services.AddSingleton<ShipmentsViewModel>();
             services.AddSingleton<SettingsViewModel>();
             services.AddSingleton<IncidentLogViewModel>();
-
+            services.AddSingleton<DrugTestViewModel>();
 
         }
 

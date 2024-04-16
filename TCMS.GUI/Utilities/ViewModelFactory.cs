@@ -25,5 +25,6 @@ namespace TCMS.GUI.Utilities
         public TimeClockViewModel CreateTimeClockViewModel() => _serviceProvider.GetRequiredService<TimeClockViewModel>();
         public ProductFormViewModel CreateProductFormViewModel() => _serviceProvider.GetRequiredService<ProductFormViewModel>();
         public IncidentLogViewModel CreateIncidentLogViewModel() => _serviceProvider.GetRequiredService<IncidentLogViewModel>();
+        public DrugTestViewModel CreateDrugTestViewModel() => _serviceProvider.GetRequiredService<DrugTestViewModel>();
     }
 }

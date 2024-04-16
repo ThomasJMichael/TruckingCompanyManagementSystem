@@ -47,6 +47,7 @@ namespace TCMS.GUI.ViewModels
         public ICommand ShipmentsCommand { get; set; }
         public ICommand SettingsCommand { get; set; }
         public ICommand IncidentsCommand { get; set; }
+        public ICommand DrugTestsCommand { get; set; }
 
         private void Home(object obj) => CurrentView = _viewModelFactory.CreateHomeViewModel();
         private void employee(object obj) => CurrentView = _viewModelFactory.CreateEmployeeViewModel();
@@ -56,6 +57,7 @@ namespace TCMS.GUI.ViewModels
         private void Shipment(object obj) => CurrentView = _viewModelFactory.CreateShipmentsViewModel();
         private void Setting(object obj) => CurrentView = _viewModelFactory.CreateSettingsViewModel();
         private void Incident(object obj) => CurrentView = _viewModelFactory.CreateIncidentLogViewModel();
+        private void DrugTest(object obj) => CurrentView = _viewModelFactory.CreateDrugTestViewModel();
 
         public NavigationViewModel(IViewModelFactory viewModelFactory)
         {
@@ -68,7 +70,7 @@ namespace TCMS.GUI.ViewModels
             ShipmentsCommand = new RelayCommand(Shipment);
             SettingsCommand = new RelayCommand(Setting);
             IncidentsCommand = new RelayCommand(Incident);
-
+            DrugTestsCommand = new RelayCommand(DrugTest);
             UserRole = App.Current.Properties["UserRole"] as string;
 
             // Startup Page

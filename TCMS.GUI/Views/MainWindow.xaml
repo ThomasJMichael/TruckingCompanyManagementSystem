@@ -16,9 +16,9 @@
         WindowStyle="None"
         Background="Transparent">
 
-        <Grid>
-    <!--// Window Border //-->
-    <Border Background="#212529"
+    <Grid>
+        <!--// Window Border //-->
+        <Border Background="#212529"
             CornerRadius="20"/>
 
         <Grid MouseDown="Grid_Mousedown">
@@ -36,8 +36,8 @@
                 <Border Background="#272B2F"
                         CornerRadius="20,0,0,20" />
 
-                <StackPanel Height="400"
-                            Width="228">
+                <StackPanel
+                            Width="228" Margin="0,50,0,50">
 
                     <!--// Home //-->
 
@@ -123,6 +123,23 @@
                                    Style="{StaticResource Image_Style}" />
 
                             <TextBlock Text="Incidents"
+                                       Style="{StaticResource Text_Style}" />
+
+                        </Grid>
+
+                    </utilities:Btn>
+
+                    <!--// DrugAndAlchoholTests //-->
+                    <utilities:Btn Style="{StaticResource BtnStyle}"
+                              Command="{Binding DrugTestsCommand}"
+                              Visibility="{Binding IncidentsVisibility}">
+
+                        <Grid>
+
+                            <Image Source="/Assets/Images/img_product.png"
+                                   Style="{StaticResource Image_Style}" />
+
+                            <TextBlock Text="Drug Tests"
                                        Style="{StaticResource Text_Style}" />
 
                         </Grid>

@@ -30,5 +30,8 @@
     <DataTemplate DataType="{x:Type vm:TimeClockViewModel}">
         <view:TimeClock/>
     </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:DrugTestViewModel}">
+        <view:DrugTests/>
+    </DataTemplate>
 
 </ResourceDictionary>
