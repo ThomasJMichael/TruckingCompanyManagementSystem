@@ -187,6 +187,17 @@
                     <TextBlock Text="{Binding SelectedEmployee.CellPhoneNumber}" Style="{StaticResource DetailTextBlockStyle}"/>
                     <TextBlock Text="Home Phone Number:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
                     <TextBlock Text="{Binding SelectedEmployee.HomePhoneNumber}" Style="{StaticResource DetailTextBlockStyle}"/>
+                    <TextBlock Text="Years with company:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding SelectedEmployee.YearsWithCompany}" Style="{StaticResource DetailTextBlockStyle}"/>
+                    <TextBlock Text="CDL Number:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"
+                                Visibility="{Binding SelectedEmployee.CDLNumber, Converter={StaticResource NullToVisibilityConverter}}"/>
+                    <TextBlock Text="{Binding SelectedEmployee.CDLNumber}" Style="{StaticResource DetailTextBlockStyle}"
+                                Visibility="{Binding SelectedEmployee.CDLNumber, Converter={StaticResource NullToVisibilityConverter}}"/>
+                    <TextBlock Text="CDL Expiration:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"
+                                Visibility="{Binding SelectedEmployee.CDLExperationDate, Converter={StaticResource NullToVisibilityConverter}}"/>
+                    <TextBlock Text="{Binding SelectedEmployee.CDLExperationDate}" Style="{StaticResource DetailTextBlockStyle}"
+                                Visibility="{Binding SelectedEmployee.CDLExperationDate, Converter={StaticResource NullToVisibilityConverter}}"/>
+
                 </StackPanel>
             </Border>
 

@@ -20,7 +20,10 @@ namespace TCMS.Data.Mappings
             CreateMap<DrugTestUpdateDto, DrugAndAlcoholTest>().ReverseMap();
 
             // Employee mappings
-            CreateMap<Employee, EmployeeDto>().ReverseMap();
+            CreateMap<Employee, EmployeeDto>();
+            CreateMap<Driver, EmployeeDto>()
+                .IncludeBase<Employee, EmployeeDto>();
+
             CreateMap<Driver, DriverDto>().ReverseMap();
             CreateMap<UpdatePayRateDto, Employee>().ReverseMap();
 

@@ -24,8 +24,9 @@ namespace TCMS.GUI.Models
         public decimal PayRate { get; set; }
         public DateTime StartDate { get; set; }
         public int YearsWithCompany => (DateTime.Now - StartDate).Days / 365;
-
         public string? UserRole { get; set; }
+        public string? CDLNumber { get; set; }
+        public DateTime? CDLExperationDate { get; set; }
 
     }
 }

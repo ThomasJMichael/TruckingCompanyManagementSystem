@@ -17,5 +17,7 @@
         public int YearsWithCompany => (DateTime.Now - StartDate).Days / 365;
         public string? UserAccountId { get; set; }
         public string? UserRole { get; set; }
+        public string? CDLNumber { get; set; }
+        public DateTime? CDLExperationDate { get; set; }
     }
 }
