@@ -14,7 +14,6 @@ public interface IPurchaseOrderService
     Task<OperationResult> DeletePurchaseOrderAsync(int id);
 
     Task<OperationResult<IEnumerable<PurchaseOrderDto>>> GeneratePurchaseOrderReportAsync(DateTime startDate, DateTime endDate);
-    Task<OperationResult> LinkManifestToPurchaseOrder(int manifestId, int purchaseOrderId);
     Task<OperationResult> UpdateItemStatus(UpdateItemStatusDto updatedItemStatus);
     Task<OperationResult<decimal>> CalculateTotalCost(int purchaseOrderId);
 }

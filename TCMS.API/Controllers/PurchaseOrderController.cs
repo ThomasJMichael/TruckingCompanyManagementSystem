@@ -78,17 +78,6 @@ namespace TCMS.API.Controllers
             return result.IsSuccessful ? Ok(result) : BadRequest(result);
         }
 
-        // Link manifest to purchase order
-        [HttpPut("link-manifest")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<OperationResult>> LinkManifestToPurchaseOrder(int manifestId,
-            int purchaseOrderId)
-        {
-            var result = await _purchaseOrderService.LinkManifestToPurchaseOrder(manifestId, purchaseOrderId);
-            return result.IsSuccessful ? Ok(result) : BadRequest(result);
-        }
-
         // Update item status
         [HttpPut("update-item-status")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult))]

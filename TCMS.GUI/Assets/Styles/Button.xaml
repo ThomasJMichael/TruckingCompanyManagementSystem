@@ -147,6 +147,51 @@
         </Setter>
     </Style>
 
+    <Style x:Key="ThemedTabItem" TargetType="{x:Type TabItem}">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Padding" Value="10,5"/>
+        <Setter Property="Margin" Value="2"/>
+        <Setter Property="BorderBrush" Value="#FF464E54"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabItem}">
+                    <Border Name="Border"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Background="#FF31363B" Margin="2">
+                        <ContentPresenter x:Name="ContentSite"
+                                      VerticalAlignment="Center"
+                                      HorizontalAlignment="Center"
+                                      ContentSource="Header"
+                                      Margin="12,2,12,2"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#64686b"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#64686b"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="#FF3A3F44"/>
+                <!-- This will not work because the Background is now part of the ControlTemplate -->
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#FF394146"/>
+                <!-- This will not work either for the same reason -->
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+
     <Style x:Key="RoundCornerButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="#444" />
         <Setter Property="BorderBrush" Value="#444" />
@@ -184,7 +229,24 @@
         </Setter>
     </Style>
 
-
+    <Style x:Key="ThemedButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="#FF31363B"/>
+        <!-- Slightly lighter than the panel's color -->
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderBrush" Value="#FF464E54"/>
+        <Setter Property="Padding" Value="10,5"/>
+        <Setter Property="Margin" Value="4"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <!-- Additional setters for hover effects and other properties can be added here -->
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#FF394146"/>
+                <!-- Slightly lighter for hover effect -->
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 
 
 

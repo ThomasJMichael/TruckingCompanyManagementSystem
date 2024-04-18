@@ -108,27 +108,6 @@ namespace TCMS.Services.Implementations
             throw new NotImplementedException();
         }
 
-        public async Task<OperationResult> LinkManifestToPurchaseOrder(int manifestId, int purchaseOrderId)
-        {
-            try
-            {
-                var manifest = await context.Manifests.FindAsync(manifestId);
-                if (manifest == null) return OperationResult.Failure(new List<string> { "Manifest not found." });
-
-                var purchaseOrder = await context.PurchaseOrders.FindAsync(purchaseOrderId);
-                if (purchaseOrder == null)
-                    return OperationResult.Failure(new List<string> { "Purchase order not found." });
-
-                purchaseOrder.Manifests.Add(manifest);
-                await context.SaveChangesAsync();
-
-                return OperationResult.Success();
-            }
-            catch (Exception e)
-            {
-                return OperationResult.Failure(new List<string> { e.Message });
-            }
-        }
 
         public async Task<OperationResult> UpdateItemStatus(UpdateItemStatusDto updatedItemStatus)
         {
@@ -138,8 +117,7 @@ namespace TCMS.Services.Implementations
                 if (purchaseOrder == null)
                     return OperationResult.Failure(new List<string> { "Purchase order not found." });
 
-                var manifest =
-                    purchaseOrder.Manifests.FirstOrDefault(m => m.ManifestId == updatedItemStatus.ManifestId);
+                var manifest = await context.Manifests.FirstOrDefaultAsync(m => m.PurchaseOrderId == updatedItemStatus.PurchaseOrderId);
                 if (manifest == null)
                     return OperationResult.Failure(new List<string> { "Manifest not found." });
 
@@ -163,16 +141,14 @@ namespace TCMS.Services.Implementations
             try
             {
                 var purchaseOrder = await context.PurchaseOrders
-                    .Include(po => po.Manifests) // Ensure manifests are loaded
+                    .Include(po => po.Manifest) // Ensure manifests are loaded
                     .FirstOrDefaultAsync(po => po.PurchaseOrderId == purchaseOrderId);
 
                 if (purchaseOrder == null)
                     return OperationResult<decimal>.Failure(new List<string> { "Purchase order not found." });
 
-                if (!purchaseOrder.Manifests.Any())
-                    return OperationResult<decimal>.Failure(new List<string> {"There are no manifests."});
 
-                var totalCost = purchaseOrder.Manifests.Sum(m => m.TotalPrice());
+                var totalCost = purchaseOrder.Manifest.TotalPrice();
 
                 if (totalCost == 0)
                     return OperationResult<decimal>.Failure(new List<string> { "Total cost is zero." });
