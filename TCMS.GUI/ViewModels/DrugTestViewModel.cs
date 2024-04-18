@@ -164,16 +164,16 @@ namespace TCMS.GUI.ViewModels
         {
             try
             {
-                var result = await _apiClient.GetAsync<OperationResult<IEnumerable<DrugTest>>>("incident/all");
+                var result = await _apiClient.GetAsync<OperationResult<IEnumerable<DrugTest>>>("drug-test/all");
                 if (result.IsSuccessful && result.Data != null)
                 {
                     var drugtests = _mapper.Map<IEnumerable<DrugTest>>(result.Data);
                     App.Current.Dispatcher.Invoke(() =>
                     {
                         _DrugTests.Clear();
-                        foreach (var incident in drugtests)
+                        foreach (var drugtest in drugtests)
                         {
-                            _DrugTests.Add(incident);
+                            _DrugTests.Add(drugtest);
                         }
                         FilterDrugTests();
                     });
@@ -231,10 +231,10 @@ namespace TCMS.GUI.ViewModels
 
         private void AddDrugTest(object obj)
         {
-            var newIncidentLogForm = new IncidentLogFormViewModel(_apiClient, _mapper);
-            newIncidentLogForm.IncidentUpdated += OnDrugTestUpdated;
-            _dialogService.ShowDialog(newIncidentLogForm);
-            newIncidentLogForm.IncidentUpdated -= OnDrugTestUpdated;
+            var newDrugTestForm = new DrugTestFormViewModel(_apiClient, _mapper);
+            newDrugTestForm.DrugTestUpdated += OnDrugTestUpdated;
+            _dialogService.ShowDialog(newDrugTestForm);
+            newDrugTestForm.DrugTestUpdated -= OnDrugTestUpdated;
         }
 
         private void OnDrugTestUpdated(object sender, EventArgs e)
@@ -252,11 +252,11 @@ namespace TCMS.GUI.ViewModels
         {
             if (SelectedDrugTest != null)
             {
-               // var editIncidentLogForm = new IncidentLogFormViewModel(_apiClient, _mapper, SelectedDrugTest);
-               // editIncidentLogForm.IncidentUpdated += OnDrugTestUpdated;
-               // _dialogService.ShowDialog(editIncidentLogForm);
-               // editIncidentLogForm.Cleanup();
-               // editIncidentLogForm.IncidentUpdated -= OnDrugTestUpdated;
+                //var editDrugTestLogForm = new DrugTestFormViewModel(_apiClient, _mapper, SelectedDrugTest);
+                //editDrugTestLogForm.DrugTestUpdated += OnDrugTestUpdated;
+                //_dialogService.ShowDialog(editDrugTestLogForm);
+                //editDrugTestLogForm.Cleanup();
+                //editDrugTestLogForm.DrugTestUpdated -= OnDrugTestUpdated;
             }
         }
 

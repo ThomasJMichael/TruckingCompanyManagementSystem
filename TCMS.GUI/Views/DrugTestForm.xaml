@@ -1,0 +1,113 @@
+﻿<Window x:Class="TCMS.GUI.Views.DrugTestForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TCMS.GUI.Views" xmlns:viewmodels="clr-namespace:TCMS.GUI.ViewModels" 
+        d:DataContext="{d:DesignInstance Type=viewmodels:DrugTestFormViewModel}"
+        mc:Ignorable="d"
+        Title="Create Drug Test" Height="600" Width="722">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="200"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Row="0" >
+
+        </Grid>
+        <!-- Name TextBox -->
+        <Label  Content="Choose incident date" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="392,20,0,0" Grid.Row="6" Grid.RowSpan="2"/>
+        <DatePicker x:Name ="datePicker" HorizontalAlignment="Center" Grid.Row="6" VerticalAlignment="bottom" SelectedDate="{Binding SelectedDate, Mode=TwoWay}"/>
+
+        <!-- Description TextBox -->
+        <Label Grid.Row="2" Content="Enter a description" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,-26,0,0"/>
+        <TextBox Grid.Row="2"
+                 Grid.Column="1"
+                 Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                 Style="{StaticResource PlaceholderTextBoxStyle}"
+                 TextWrapping="Wrap"
+                 AcceptsReturn="True"
+                 VerticalScrollBarVisibility="Auto"
+                 HorizontalScrollBarVisibility="Disabled"
+                 MinLines="5"
+                 MaxLines="10"/>
+
+
+        <!-- Confirm Button -->
+        <Button Content="Confirm"
+                Grid.Row="6"
+                Command="{Binding ConfirmCommand}"
+                HorizontalAlignment="Right"
+                Margin="0,20,0,0"/>
+        <Grid Grid.Row="4" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+
+        </Grid>
+        <Grid Grid.Row="5" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="127"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="126"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="126"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Grid.Row="2" Content="Enter the vehicle id" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-26,0,0"/>
+            <TextBox Grid.Column="0"
+                     Grid.Row="0"
+                     Text="{Binding VehicleId, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource PlaceholderTextBoxStyle}"/>
+            <Label Grid.Column="2" Grid.Row="2" Content="Enter the employee" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-26,0,0"/>
+            <Label Grid.Column="4" Grid.Row="2" Content="Enter the location" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-26,0,0"/>
+            <ComboBox Grid.Row="5" Grid.Column="2"
+                      ItemsSource="{Binding FilteredEmployees}"
+                      SelectedItem="{Binding SelectedEmployee}"
+                      DisplayMemberPath="FullName"
+                      IsEditable="True"
+                      IsReadOnly="False"
+                      TextSearch.TextPath="FullName"
+                      StaysOpenOnEdit="True"/>
+
+
+            <TextBox Grid.Column="4"
+                     Grid.Row="0"
+                     Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource PlaceholderTextBoxStyle}"/>
+            <Label Grid.Column="6" Grid.Row="2" Content="Select the Incident Type" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-26,0,0"/>
+            <ComboBox ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}"  Grid.Column="6"  Grid.Row="5" Width="200" VerticalAlignment="Center" HorizontalAlignment="Center">
+
+                <!-- Add more items as needed -->
+
+            </ComboBox>
+
+
+        </Grid>
+        <CheckBox
+                  Content="Is Fatal?" 
+                  HorizontalAlignment="Left" 
+                  VerticalAlignment="Bottom"
+                  
+                  IsChecked ="{Binding IsFatal, Mode=TwoWay}" Margin="0,25,0,0" Grid.Row="6"/>
+
+
+    </Grid>
+
+</Window>

@@ -137,16 +137,16 @@
             </Grid.ColumnDefinitions>
 
             <ListView Grid.Column="0"
-                      x:Name="IncidentsListView"
+                      x:Name="DrugTestsListView"
                       ItemsSource="{Binding FilteredDrugTests}"
                       SelectedItem="{Binding SelectedDrugTest, Mode=TwoWay}"
                       BorderBrush="{x:Null}" Background="#FF272B2F"
                       ScrollViewer.VerticalScrollBarVisibility="Hidden">
                 <ListView.View>
                     <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
-                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding IncidentReportId}" Width="33"/>
-                        <GridViewColumn Header="Date" DisplayMemberBinding="{Binding IncidentDate}" Width="130"/>
-                        <GridViewColumn Header="Location" DisplayMemberBinding="{Binding Location}" Width="150"/>
+                        <GridViewColumn Header="Test Id" DisplayMemberBinding="{Binding DrugAndAlchoholTestId}" Width="33"/>
+                        <GridViewColumn Header="Date" DisplayMemberBinding="{Binding TestDate}" Width="130"/>
+                        <GridViewColumn Header="Type" DisplayMemberBinding="{Binding TestType}" Width="150"/>
                         <!-- Add more columns as needed -->
                     </GridView>
                 </ListView.View>
@@ -172,34 +172,29 @@
             </ListView>
 
             <Border Grid.Column="1" Background="{StaticResource DetailBackgroundBrush}">
-                <StackPanel Visibility="{Binding SelectedIncident, Converter={StaticResource NullToVisibilityConverter}}">
+                <StackPanel Visibility="{Binding SelectedDrugTest, Converter={StaticResource NullToVisibilityConverter}}">
                     <TextBlock Text="Incident Details" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold" FontSize="18" />
                     <Separator/>
-                    <TextBlock Text="Drug Test ID:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding SelectedIncident.IncidentReportId}" Style="{StaticResource DetailTextBlockStyle}"/>
-                    <TextBlock Text="Date:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding SelectedIncident.IncidentDate}" Style="{StaticResource DetailTextBlockStyle}"/>
-                    <TextBlock Text="Location:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding SelectedIncident.Location}" Style="{StaticResource DetailTextBlockStyle}"/>
-                    <TextBlock Text="Incident Type:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding SelectedIncident.Type}" Style="{StaticResource DetailTextBlockStyle}"/>
-                    <TextBlock Text="Description:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding SelectedIncident.Description}" Style="{StaticResource DetailTextBlockStyle}" TextWrapping="Wrap"/>
-
-                    <TextBlock Text="Vehicle Id:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding SelectedIncident.VehicleId}" Style="{StaticResource DetailTextBlockStyle}"/>
-                    <TextBlock Text="Employee Id:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding SelectedIncident.EmployeeId}" Style="{StaticResource DetailTextBlockStyle}"/>
-                    <TextBlock Text="Is Fatal:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding SelectedIncident.IsFatal}" Style="{StaticResource DetailTextBlockStyle}"/>
-                    <TextBlock Text="Has Injuries:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding SelectedIncident.HasInjuries}" Style="{StaticResource DetailTextBlockStyle}"/>
-                    <TextBlock Text="Towed Vehicle:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding SelectedIncident.HasTowedVehicle}" Style="{StaticResource DetailTextBlockStyle}"/>
-                    <TextBlock Text="Citation Issued:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding SelectedIncident.CitationIssued}" Style="{StaticResource DetailTextBlockStyle}"/>
-                    <TextBlock Text="Requires Drug and Alchohol Test:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding SelectedIncident.RequiresDrugAndAlcoholTest}" Style="{StaticResource DetailTextBlockStyle}"/>
+                    <TextBlock Text="Drug Test and Alchohol Test ID:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding SelectedDrugTest.DrugAndAlcoholTestId}" Style="{StaticResource DetailTextBlockStyle}"/>
+                    <TextBlock Text="EmployeeId" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding SelectedDrugTest.EmployeeId}" Style="{StaticResource DetailTextBlockStyle}"/>
+                    <TextBlock Text="Test Date" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding SelectedDrugTest.TestDate}" Style="{StaticResource DetailTextBlockStyle}"/>
+                    <TextBlock Text="Test Type:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding SelectedDrugTest.TestType}" Style="{StaticResource DetailTextBlockStyle}"/>
+                    <TextBlock Text="Test Result:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding SelectedDrugTest.TestResult}" Style="{StaticResource DetailTextBlockStyle}"/>
+                    <TextBlock Text="Test Details:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding SelectedDrugTest.TestDetails}" Style="{StaticResource DetailTextBlockStyle}" TextWrapping="Wrap"/>
+                    <TextBlock Text="Incident Report Id:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding SelectedDrugTest.IncidentReportId}" Style="{StaticResource DetailTextBlockStyle}"/>
+                    <TextBlock Text="Incident Report:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding SelectedDrugTest.IncidentReport}" Style="{StaticResource DetailTextBlockStyle}"/>
+                    <TextBlock Text="Follow Up Test Date:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding SelectedDrugTest.FollowUpTestDate}" Style="{StaticResource DetailTextBlockStyle}"/>
+                    <TextBlock Text="Is Follow Up Complete:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding SelectedDrugTest.IsFollowUpComplete}" Style="{StaticResource DetailTextBlockStyle}"/>
                 </StackPanel>
             </Border>
         </Grid>
