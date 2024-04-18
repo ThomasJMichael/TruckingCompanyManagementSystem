@@ -189,8 +189,6 @@
                     <TextBlock Text="{Binding SelectedDrugTest.TestDetails}" Style="{StaticResource DetailTextBlockStyle}" TextWrapping="Wrap"/>
                     <TextBlock Text="Incident Report Id:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
                     <TextBlock Text="{Binding SelectedDrugTest.IncidentReportId}" Style="{StaticResource DetailTextBlockStyle}"/>
-                    <TextBlock Text="Incident Report:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding SelectedDrugTest.IncidentReport}" Style="{StaticResource DetailTextBlockStyle}"/>
                     <TextBlock Text="Follow Up Test Date:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
                     <TextBlock Text="{Binding SelectedDrugTest.FollowUpTestDate}" Style="{StaticResource DetailTextBlockStyle}"/>
                     <TextBlock Text="Is Follow Up Complete:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>

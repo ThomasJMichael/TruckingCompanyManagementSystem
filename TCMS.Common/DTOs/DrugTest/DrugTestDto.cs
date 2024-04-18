@@ -10,7 +10,7 @@ namespace TCMS.Common.DTOs.DrugTest
         public int DrugAndAlcoholTestId { get; set; }
 
         [Required]
-        public int EmployeeId { get; set; }
+        public string EmployeeId { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
