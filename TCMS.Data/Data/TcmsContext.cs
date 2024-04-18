@@ -110,10 +110,11 @@ public class TcmsContext : IdentityDbContext<UserAccount>
 
         // PurchaseOrder
         modelBuilder.Entity<PurchaseOrder>()
-            .HasMany(p => p.Manifests)
+            .HasOne(p => p.Manifest)
             .WithOne(m => m.PurchaseOrder)
-            .HasForeignKey(m => m.PurchaseOrderId)
+            .HasForeignKey<Manifest>(m => m.PurchaseOrderId)
             .OnDelete(DeleteBehavior.Restrict);
+
         // RepairRecord
         modelBuilder.Entity<RepairRecord>()
             .HasOne(r => r.Vehicle)
@@ -151,9 +152,20 @@ public class TcmsContext : IdentityDbContext<UserAccount>
 
         // Shipment
         modelBuilder.Entity<Shipment>()
+            .HasOne(s => s.Manifest)
+            .WithOne(m => m.Shipment)
+            .HasForeignKey<Manifest>(m => m.ShipmentId);
+
+        modelBuilder.Entity<Shipment>()
             .HasMany(s => s.Assignments)
             .WithOne(a => a.Shipment)
             .HasForeignKey(a => a.ShipmentId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Shipment>()
+            .HasOne(s => s.PurchaseOrder)
+            .WithMany(m => m.Shipments)
+            .HasForeignKey(s => s.ManifestId)
             .OnDelete(DeleteBehavior.Restrict);
 
         // Shipment and Vehicle
