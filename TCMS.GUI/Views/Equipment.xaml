@@ -146,7 +146,8 @@
 
 
         <!-- Right side with TabControl for Vehicle and Maintenance Details -->
-        <TabControl Grid.Column="1" Margin="5,21,5,5">
+        <TabControl Grid.Column="1" Margin="5,21,5,5"
+                    ItemContainerStyle="{StaticResource ThemedTabItem}">
             <!-- Vehicle Details Tab -->
             <TabItem Header="Vehicle Details">
                 <Border Grid.Column="1" Background="{StaticResource DetailBackgroundBrush}">
@@ -183,14 +184,14 @@
             <!-- Maintenance Records Tab -->
             <TabItem Header="Maintenance Records" Margin="-2,-4,-2,2">
                 <Border Grid.Column="1" Background="{StaticResource DetailBackgroundBrush}">
-                    <StackPanel Background="#25252d">
+                    <StackPanel Background="#FF272B2F">
                         <!-- Maintenance CRUD Buttons -->
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-                            <utilities:Btn Content="Add Record" Style="{StaticResource DynamicWidthBtnStyle}" 
+                            <Button Content="Add Record" Style="{StaticResource ThemedButtonStyle}" 
                                        Command="{Binding AddRecordCommand}" Margin="5" />
-                            <utilities:Btn Content="Edit Record" Style="{StaticResource DynamicWidthBtnStyle}" 
+                            <Button Content="Edit Record" Style="{StaticResource ThemedButtonStyle}" 
                                        Command="{Binding EditRecordCommand}" Margin="5" />
-                            <utilities:Btn Content="Delete Record" Style="{StaticResource DynamicWidthBtnStyle}" 
+                            <Button Content="Delete Record" Style="{StaticResource ThemedButtonStyle}" 
                                        Command="{Binding DeleteRecordCommand}" Margin="5" />
                         </StackPanel>
 
