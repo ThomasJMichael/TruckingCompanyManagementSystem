@@ -15,7 +15,16 @@ namespace TCMS.Data.Mappings
         public MappingConfigurations()
         {
             // DrugTest mappings
-            CreateMap<DrugAndAlcoholTest, DrugTestDto>().ReverseMap();
+            CreateMap<DrugAndAlcoholTest, DrugTestDto>().ReverseMap()
+                .ForMember(dest => dest.DrugAndAlcoholTestId, opt => opt.MapFrom(src => src.DrugAndAlcoholTestId))
+                .ForMember(dest => dest.EmployeeId, opt => opt.MapFrom(src => src.EmployeeId))
+                .ForMember(dest => dest.TestDate, opt => opt.MapFrom(src => src.TestDate))
+                .ForMember(dest => dest.TestType, opt => opt.MapFrom(src => src.TestType))
+                .ForMember(dest => dest.TestResult, opt => opt.MapFrom(src => src.TestResult))
+                .ForMember(dest => dest.TestDetails, opt => opt.MapFrom(src => src.TestDetails))
+                .ForMember(dest => dest.IncidentReportId, opt => opt.MapFrom(src => src.IncidentReportId))
+                .ForMember(dest => dest.FollowUpTestDate, opt => opt.MapFrom(src => src.FollowUpTestDate))
+                .ForMember(dest => dest.IsFollowUpComplete, opt => opt.MapFrom(src => src.IsFollowUpComplete));
             CreateMap<DrugTestCreateDto, DrugAndAlcoholTest>().ReverseMap();
             CreateMap<DrugTestUpdateDto, DrugAndAlcoholTest>().ReverseMap();
 

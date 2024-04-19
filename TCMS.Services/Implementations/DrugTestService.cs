@@ -32,7 +32,6 @@ namespace TCMS.Services.Implementations
             try
             {
                 var tests = await context.DrugAndAlcoholTests
-                    .Include(t => t.Driver)
                     .ToListAsync();
 
                 var testDtos = mapper.Map<IEnumerable<DrugTestDto>>(tests);

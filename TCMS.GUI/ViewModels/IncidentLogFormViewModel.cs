@@ -21,7 +21,8 @@ using TCMS.GUI.Services.Interfaces;
 using TCMS.GUI.Utilities;
 using Xceed.Wpf.Toolkit.Primitives;
 using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
+using TCMS.Common.enums;
+using Microsoft.AspNetCore.Mvc.Rendering;
 namespace TCMS.GUI.ViewModels
 {
     public class IncidentLogFormViewModel : ViewModelBase, IDialogRequestClose, INotifyPropertyChanged
@@ -57,11 +58,16 @@ namespace TCMS.GUI.ViewModels
                 }
             }
         }
+        public class FruitViewModel
+        {
+            public IncidentType SelectedTypes { get; set; }
+            public IEnumerable<SelectListItem> IncidentTypes { get; set; }
+        }
 
-        public ObservableCollection<string> Items { get; set; }
-        private string _selectedItem;
+        public ObservableCollection<IncidentType> Items { get; set; }
+        private IncidentType _selectedItem;
 
-        public string SelectedItem
+        public IncidentType SelectedItem
         {
             get => _selectedItem;
             set
@@ -366,7 +372,7 @@ namespace TCMS.GUI.ViewModels
 
         public IncidentLogFormViewModel(IApiClient apiClient, IMapper mapper, IncidentReport incident = null)
         {
-            Items = new ObservableCollection<string> { "Accident", "SafetyViolation", "Other" };
+            Items = new ObservableCollection<IncidentType>();
 
             _apiClient = apiClient;
             _mapper = mapper;
@@ -393,7 +399,7 @@ namespace TCMS.GUI.ViewModels
                 CitationIssued = CurrentIncident.CitationIssued;
                 Description = CurrentIncident.Description;
                 SelectedDate = CurrentIncident.IncidentDate;
-                SelectedItem = "Accident";
+                SelectedItem = CurrentIncident.Type;
             }
             ConfirmCommand = new RelayCommand(Confirm);
             _employees = new ObservableCollection<Employee>();
