@@ -10,6 +10,5 @@ namespace TCMS.Common.enums
     {
         Shipped,
         OnBackOrder,
-        NoLongerAvailable
     }
 }
