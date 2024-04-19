@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:TCMS.GUI.Views"
              xmlns:utilities="clr-namespace:TCMS.GUI.Utilities" 
              xmlns:viewmodels="clr-namespace:TCMS.GUI.ViewModels" 
-             d:DataContext="{d:DesignInstance Type=viewmodels:ProductsViewModel}"
+             d:DataContext="{d:DesignInstance Type=viewmodels:TimeClockViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="622"
              Style="{StaticResource Page_Style}">
@@ -46,6 +46,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+
         <Grid x:Name="SearchBarGrid" 
               Margin="10" 
               Background="Transparent" 
@@ -58,44 +59,6 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <Border Grid.Column="0" 
-                    Background="Transparent" 
-                    CornerRadius="20" 
-                    BorderBrush="#666" 
-                    BorderThickness="1">
-                <TextBox x:Name="SearchTextBox" 
-                         Style="{StaticResource SearchTextBoxStyle}" 
-                         BorderThickness="0" 
-                         Background="Transparent"
-                         VerticalAlignment="Center"
-                         FontSize="16"
-                         FontWeight="Light"
-                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="GotFocus">
-                        <i:InvokeCommandAction Command="{Binding SearchBoxGotFocusCommand}" />
-                    </i:EventTrigger>
-                    <i:EventTrigger EventName="LostFocus">
-                        <i:InvokeCommandAction Command="{Binding SearchBoxLostFocusCommand}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </Border>
-
-            <Button Grid.Column="1"
-                    Style="{StaticResource RoundCornerButtonStyle}"
-                    Width="40"
-                    Background="#FF272B2F"
-                    BorderThickness="0"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Center"
-                    Padding="10"
-                    Command="{Binding SearchCommand}">
-                <Button.Content>
-                    <Image Source="pack://application:,,,/Assets/Images/search_logo.png" 
-                           Width="20" 
-                           Height="20" OpacityMask="#FF272B2F"/>
-                </Button.Content>
-            </Button>
         </Grid>
 
         <Grid Grid.Row="1" >
@@ -132,6 +95,40 @@
                 <TextBlock Text="Timesheet View" Style="{StaticResource ViewsButtonText}"/>
             </utilities:Btn>
         </Grid>
+        
+        <ListView Grid.Row="4" 
+                ItemsSource="{Binding TimeRecords}"
+                Background="{StaticResource DetailBackgroundBrush}"
+                BorderBrush="{x:Null}"
+                Foreground="White"
+                ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                    <Setter Property="Padding" Value="10"/>
+                    <Setter Property="Margin" Value="5"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#333"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#555"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListView.View>
+                <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
+                    <GridViewColumn Header="Clock In" DisplayMemberBinding="{Binding ClockInTime}" Width="200"/>
+                    <GridViewColumn Header="Clock Out" DisplayMemberBinding="{Binding ClockOutTime}" Width="200"/>
+                    <GridViewColumn Header="Total Hours" DisplayMemberBinding="{Binding TotalHours}" Width="200"/>
+                    <!-- Additional columns can be added here -->
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        
 
         <!-- Your existing Grid with other controls goes here -->
 
