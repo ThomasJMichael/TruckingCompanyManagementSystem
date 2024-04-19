@@ -19,9 +19,7 @@
         <Style x:Key="DetailTextBlockStyle" TargetType="TextBlock">
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontFamily" Value="pack://application:,,,/;component/Assets/Fonts/#Rubik Regular"/>
-            <!-- Add the path to your font file here, adjust the path if necessary -->
             <Setter Property="FontSize" Value="14"/>
-            <!-- Set any other common properties you need for your TextBlocks -->
         </Style>
         <!-- Style for the GridView Column Header -->
         <Style x:Key="GridViewColumnHeaderStyle" TargetType="GridViewColumnHeader">
@@ -34,7 +32,6 @@
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="FontSize" Value="14" />
             <Setter Property="BorderBrush" Value="Transparent" />
-            <!-- Add additional Setters for other properties if needed -->
         </Style>
     </UserControl.Resources>
     <Grid>
@@ -43,6 +40,9 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <!-- New row for the Timesheet View button -->
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -100,13 +100,36 @@
 
         <Grid Grid.Row="1" >
             <Grid.ColumnDefinitions>
-                <!-- Each column gets an equal share of the available space -->
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
 
             <utilities:Btn Style="{StaticResource DynamicWidthBtnStyle}" 
                             Command="{Binding ClockInOutCommand}">
-                <TextBlock Text="Clock In/Out" Style="{StaticResource ViewsButtonText}"/>
+                <TextBlock Text="Clock In" Style="{StaticResource ViewsButtonText}"/>
+            </utilities:Btn>
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <utilities:Btn Style="{StaticResource DynamicWidthBtnStyle}" 
+                    Command="{Binding ClockOutCommand}">
+                <TextBlock Text="Clock Out" Style="{StaticResource ViewsButtonText}"/>
+            </utilities:Btn>
+        </Grid>
+
+        <!-- New Grid for Timesheet View Button -->
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <utilities:Btn Style="{StaticResource DynamicWidthBtnStyle}" 
+                    Command="{Binding ViewTimesheetCommand}">
+                <!-- Ensure you have a ViewTimesheetCommand in your ViewModel -->
+                <TextBlock Text="Timesheet View" Style="{StaticResource ViewsButtonText}"/>
             </utilities:Btn>
         </Grid>
 
