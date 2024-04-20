@@ -9,6 +9,8 @@ using TCMS.Data.Data;
 using Bogus;
 using Microsoft.EntityFrameworkCore;
 using TCMS.Common.Enums;
+using Bogus.DataSets;
+using TCMS.Common.enums;
 
 namespace TCMS.Data.Initialization
 {
@@ -17,7 +19,7 @@ namespace TCMS.Data.Initialization
         public static async Task Initialize(IServiceProvider serviceProvider, UserManager<UserAccount> userManager)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            // await ResetDatabase(serviceProvider);
+            await ResetDatabase(serviceProvider);
             Console.WriteLine("Seeding roles...");
             await SeedRolesAsync(roleManager);
 
@@ -47,6 +49,12 @@ namespace TCMS.Data.Initialization
 
             Console.WriteLine("Seeding vehicle related data...");
             await SeedVehicleRelatedData(serviceProvider);
+
+            Console.WriteLine("Seeding shipping data...");
+            await SeedShippingData(serviceProvider);
+
+            Console.Write("Seed driver user...");
+            await SeedDriverUserAccount(userManager, serviceProvider.GetRequiredService<TcmsContext>());
 
         }
 
@@ -78,7 +86,7 @@ namespace TCMS.Data.Initialization
             {
                 var adminUser = new UserAccount { UserName = adminUserName, Email = "admin@admin.com" };
                 await userManager.CreateAsync(adminUser, "Admin1!");
-                await userManager.AddToRoleAsync(adminUser, Role.Admin); 
+                await userManager.AddToRoleAsync(adminUser, Role.Admin);
             }
         }
 
@@ -94,9 +102,54 @@ namespace TCMS.Data.Initialization
             }
         }
 
+        private static async Task SeedDriverUserAccount(UserManager<UserAccount> userManager, TcmsContext context)
+        {
+            // Create default driver user details
+            const string defaultDriverUserName = "driver";
+            const string driverEmail = "driver@tcms.com";
+            const string driverPassword = "Admin1!";
+
+            // Check if the driver user already exists
+            var driverUser = await userManager.FindByNameAsync(defaultDriverUserName);
+            if (driverUser == null)
+            {
+                // Create and add new driver user
+                driverUser = new UserAccount { UserName = defaultDriverUserName, Email = driverEmail };
+                var result = await userManager.CreateAsync(driverUser, driverPassword);
+
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(driverUser, Role.Driver);
+
+                    // Assign the user account to an existing driver who has a shipment
+                    // Make sure there is at least one shipment with a driver assigned
+                    var shipmentWithDriver = context.Shipments
+                        .Include(s => s.Driver)
+                        .FirstOrDefault(s => s.Driver != null);
+
+                    if (shipmentWithDriver != null)
+                    {
+                        // Get the driver entity from the shipment
+                        var driver = shipmentWithDriver.Driver;
+
+                        // Link the user account with the driver entity
+                        driver.UserAccountId = driverUser.Id;
+                        context.Drivers.Update(driver);
+                        await context.SaveChangesAsync();
+                    }
+                }
+                else
+                {
+                    throw new Exception("Failed to create driver user account");
+                }
+            }
+        }
+
+
         private static async Task SeedProductsAsync(IServiceProvider serviceProvider)
         {
-            var context = serviceProvider.GetRequiredService<TcmsContext>(); // Adjust the context type and namespace as needed
+            var context =
+                serviceProvider.GetRequiredService<TcmsContext>(); // Adjust the context type and namespace as needed
 
             if (!context.Products.Any())
             {
@@ -133,7 +186,7 @@ namespace TCMS.Data.Initialization
             // Seed regular Employees next
             // This count now includes both Employees and Drivers due to TPH inheritance
             var totalEmployeeCount = await context.Employees.CountAsync();
-            if (totalEmployeeCount < 150) 
+            if (totalEmployeeCount < 150)
             {
                 // Generate additional regular Employees, excluding the Drivers already counted
                 var newEmployees = WorkforceGenerator.GenerateRegularEmployees(150 - totalEmployeeCount);
@@ -214,6 +267,7 @@ namespace TCMS.Data.Initialization
                 await transaction.RollbackAsync();
             }
         }
+
         private static async Task SeedEmployeesWithAccountsAsync(IServiceProvider serviceProvider)
         {
             var userManager = serviceProvider.GetRequiredService<UserManager<UserAccount>>();
@@ -251,7 +305,8 @@ namespace TCMS.Data.Initialization
                     }
                     else
                     {
-                        Console.WriteLine($"Failed to create user account for {username}: {string.Join(", ", createUserResult.Errors.Select(e => e.Description))}");
+                        Console.WriteLine(
+                            $"Failed to create user account for {username}: {string.Join(", ", createUserResult.Errors.Select(e => e.Description))}");
                     }
                 }
             }
@@ -286,7 +341,10 @@ namespace TCMS.Data.Initialization
                 // Check if the vehicle already has maintenance records, if not, generate them
                 if (!vehicle.MaintenanceRecords.Any())
                 {
-                    var maintenanceRecords = MaintenanceGenerator.GenerateMaintenanceRecordsForVehicle(vehicle, 5); // Generate 5 maintenance records per vehicle
+                    var maintenanceRecords =
+                        MaintenanceGenerator
+                            .GenerateMaintenanceRecordsForVehicle(vehicle,
+                                5); // Generate 5 maintenance records per vehicle
                     context.MaintenanceRecords.AddRange(maintenanceRecords);
                 }
 
@@ -294,20 +352,125 @@ namespace TCMS.Data.Initialization
                 if (!vehicle.Parts.Any())
                 {
                     // Since MaintenanceRecords are now associated with Parts, ensure that Parts are generated after MaintenanceRecords
-                    var partsForVehicle = MaintenanceGenerator.GeneratePartDetails(20); // Generate 20 parts for each vehicle
+                    var partsForVehicle =
+                        MaintenanceGenerator.GeneratePartDetails(20); // Generate 20 parts for each vehicle
                     foreach (var part in partsForVehicle)
                     {
                         part.VehicleId = vehicle.VehicleId; // Associate part with the vehicle
                         // Optionally associate parts with a randomly selected maintenance record
-                        part.MaintenanceRecordId = vehicle.MaintenanceRecords.Any() ?
-                            new Faker().PickRandom(vehicle.MaintenanceRecords).MaintenanceRecordId :
-                            (int?)null;
+                        part.MaintenanceRecordId = vehicle.MaintenanceRecords.Any()
+                            ? new Faker().PickRandom(vehicle.MaintenanceRecords).MaintenanceRecordId
+                            : (int?)null;
                     }
+
                     context.PartDetails.AddRange(partsForVehicle);
                 }
             }
 
             // Save all changes to the database.
+            await context.SaveChangesAsync();
+        }
+
+        public static async Task SeedShippingData(IServiceProvider serviceProvider)
+        {
+            var context = serviceProvider.GetRequiredService<TcmsContext>();
+
+            await using var transaction = await context.Database.BeginTransactionAsync();
+            try
+            {
+                Console.WriteLine("Seeding manifest data...");
+                var manifests = await SeedManifestsAsync(context);
+
+                Console.WriteLine("Seeding purchase orders...");
+                var purchaseOrders = await SeedPurchaseOrdersAsync(context);
+
+                Console.WriteLine("Seeding shipment data...");
+                await SeedShipmentsAsync(context);
+
+                await transaction.CommitAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error during shipping data seeding: {e.Message}");
+                await transaction.RollbackAsync();
+            }
+        }
+
+        private static async Task<List<Manifest>> SeedManifestsAsync(TcmsContext context)
+        {
+            var manifests = ManifestGenerator.GenerateManifests(50);
+
+            await context.Manifests.AddRangeAsync(manifests);
+            await context.SaveChangesAsync();
+
+            var products = context.Products.ToList();
+            foreach (var manifest in manifests)
+            {
+                var manifestItems = ManifestItemGenerator.GenerateManifestItemsForManifest(manifest.ManifestId, 10, products); // Generate 10 ManifestItems per Manifest
+                manifest.ManifestItems = manifestItems;
+            }
+
+            // Save ManifestItems to the database
+            foreach (var manifest in manifests)
+            {
+                await context.ManifestItems.AddRangeAsync(manifest.ManifestItems);
+            }
+            await context.SaveChangesAsync();
+
+            return manifests;
+        }
+
+
+        private static async Task<List<PurchaseOrder>> SeedPurchaseOrdersAsync(TcmsContext context)
+        {
+            // Link PurchaseOrders with existing Manifests
+            var manifests = await context.Manifests.ToListAsync();
+            var purchaseOrders = PurchaseOrderGenerator.GeneratePurchaseOrders(50, manifests);
+            await context.PurchaseOrders.AddRangeAsync(purchaseOrders);
+            await context.SaveChangesAsync();
+            return purchaseOrders;
+        }
+
+        private static async Task SeedShipmentsAsync(TcmsContext context)
+        {
+            // Fetch all PurchaseOrders without manifests
+            var purchaseOrders = await context.PurchaseOrders.ToListAsync();
+
+            // Fetch all Manifests and reassociate them manually
+            var manifestIds = purchaseOrders.Select(po => po.ManifestId).ToList();
+            var manifests = await context.Manifests
+                .Where(m => manifestIds.Contains(m.ManifestId))
+                .Include(m => m.ManifestItems)
+                .ToListAsync();
+
+            // Create a dictionary to quickly find manifests by ID
+            var manifestDictionary = manifests.ToDictionary(m => m.ManifestId);
+
+
+            // Associate manifests with purchase orders manually
+            foreach (var po in purchaseOrders)
+            {
+                if (manifestDictionary.TryGetValue(po.ManifestId, out var manifest))
+                {
+                    po.Manifest = manifest;
+                }
+            }
+
+            var drivers = context.Drivers.ToList();
+            var vehicles = context.Vehicles.ToList();
+
+            // Generate Shipments with references to PurchaseOrders
+            var shipments = ShipmentGenerator.GenerateShipments(purchaseOrders, drivers, vehicles);
+
+            // Save new manifests created for Shipments
+            foreach (var shipment in shipments)
+            {
+                context.Manifests.Add(shipment.Manifest);
+            }
+            await context.SaveChangesAsync();
+
+            // Now we can save the Shipments, as each Manifest has an ID
+            await context.Shipments.AddRangeAsync(shipments);
             await context.SaveChangesAsync();
         }
     }

@@ -10,7 +10,7 @@ namespace TCMS.Data.Models
     public class Manifest
     {
         public int ManifestId { get; set; }
-        public virtual ICollection<ManifestItem> ManifestItems { get; set; }
+        public virtual ICollection<ManifestItem>? ManifestItems { get; set; }
 
         public int? ShipmentId { get; set; }
         public virtual Shipment? Shipment { get; set; }

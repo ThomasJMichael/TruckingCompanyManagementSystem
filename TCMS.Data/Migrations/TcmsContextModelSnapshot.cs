@@ -151,26 +151,12 @@ namespace TCMS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Details")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("EmployeeId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("EndTime")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("ShipmentId")
                         .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
 
                     b.HasKey("AssignmentId");
 
@@ -395,12 +381,19 @@ namespace TCMS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("PurchaseOrderId")
+                    b.Property<int?>("PurchaseOrderId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ShipmentId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("ManifestId");
 
-                    b.HasIndex("PurchaseOrderId");
+                    b.HasIndex("PurchaseOrderId")
+                        .IsUnique();
+
+                    b.HasIndex("ShipmentId")
+                        .IsUnique();
 
                     b.ToTable("Manifests");
                 });
@@ -409,48 +402,6 @@ namespace TCMS.Data.Migrations
                 {
                     b.Property<int>("ManifestItemId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("DateAdded")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("DateCancelled")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("DateInvoiced")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("DatePaid")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("DatePaidFor")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("DatePaidInFull")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("DatePaidInFullAndReceived")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("DatePaidInFullAndShipped")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("DateReceived")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("DateRefunded")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("DateRemoved")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("DateReturned")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("DateShipped")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsPaid")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("ManifestId")
@@ -602,10 +553,41 @@ namespace TCMS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Company")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("OrderNumber")
+                    b.Property<int>("Direction")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ManifestId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("ShippingCost")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("ShippingPaid")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("TotalCost")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Zip")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -678,10 +660,14 @@ namespace TCMS.Data.Migrations
                     b.Property<string>("DriverEmployeeId")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("EmployeeId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime?>("EstimatedArrivalTime")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsShippingCostPaid")
+                    b.Property<bool>("IsPaid")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("ManifestId")
@@ -689,12 +675,6 @@ namespace TCMS.Data.Migrations
 
                     b.Property<int>("PurchaseOrderId")
                         .HasColumnType("INTEGER");
-
-                    b.Property<decimal>("ShippingCost")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("ShippingCostPaymentDate")
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("State")
                         .IsRequired()
@@ -715,8 +695,6 @@ namespace TCMS.Data.Migrations
                     b.HasIndex("DriverEmployeeId");
 
                     b.HasIndex("ManifestId");
-
-                    b.HasIndex("PurchaseOrderId");
 
                     b.HasIndex("VehicleId");
 
@@ -995,12 +973,17 @@ namespace TCMS.Data.Migrations
             modelBuilder.Entity("TCMS.Data.Models.Manifest", b =>
                 {
                     b.HasOne("TCMS.Data.Models.PurchaseOrder", "PurchaseOrder")
-                        .WithMany("Manifests")
-                        .HasForeignKey("PurchaseOrderId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .WithOne("Manifest")
+                        .HasForeignKey("TCMS.Data.Models.Manifest", "PurchaseOrderId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("TCMS.Data.Models.Shipment", "Shipment")
+                        .WithOne("Manifest")
+                        .HasForeignKey("TCMS.Data.Models.Manifest", "ShipmentId");
 
                     b.Navigation("PurchaseOrder");
+
+                    b.Navigation("Shipment");
                 });
 
             modelBuilder.Entity("TCMS.Data.Models.ManifestItem", b =>
@@ -1069,20 +1052,14 @@ namespace TCMS.Data.Migrations
 
             modelBuilder.Entity("TCMS.Data.Models.Shipment", b =>
                 {
-                    b.HasOne("TCMS.Data.Models.Driver", null)
+                    b.HasOne("TCMS.Data.Models.Driver", "Driver")
                         .WithMany("Shipments")
                         .HasForeignKey("DriverEmployeeId");
 
-                    b.HasOne("TCMS.Data.Models.Manifest", "Manifest")
-                        .WithMany()
-                        .HasForeignKey("ManifestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("TCMS.Data.Models.PurchaseOrder", "PurchaseOrder")
-                        .WithMany()
-                        .HasForeignKey("PurchaseOrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithMany("Shipments")
+                        .HasForeignKey("ManifestId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("TCMS.Data.Models.Vehicle", "Vehicle")
@@ -1091,7 +1068,7 @@ namespace TCMS.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Manifest");
+                    b.Navigation("Driver");
 
                     b.Navigation("PurchaseOrder");
 
@@ -1138,12 +1115,18 @@ namespace TCMS.Data.Migrations
 
             modelBuilder.Entity("TCMS.Data.Models.PurchaseOrder", b =>
                 {
-                    b.Navigation("Manifests");
+                    b.Navigation("Manifest")
+                        .IsRequired();
+
+                    b.Navigation("Shipments");
                 });
 
             modelBuilder.Entity("TCMS.Data.Models.Shipment", b =>
                 {
                     b.Navigation("Assignments");
+
+                    b.Navigation("Manifest")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TCMS.Data.Models.UserAccount", b =>

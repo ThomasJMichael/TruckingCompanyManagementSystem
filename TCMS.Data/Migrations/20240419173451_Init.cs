@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TCMS.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -72,8 +72,17 @@ namespace TCMS.Data.Migrations
                 {
                     PurchaseOrderId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    Company = table.Column<string>(type: "TEXT", nullable: false),
+                    Address = table.Column<string>(type: "TEXT", nullable: false),
+                    City = table.Column<string>(type: "TEXT", nullable: false),
+                    State = table.Column<string>(type: "TEXT", nullable: false),
+                    Zip = table.Column<string>(type: "TEXT", nullable: false),
+                    Direction = table.Column<int>(type: "INTEGER", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    OrderNumber = table.Column<string>(type: "TEXT", nullable: false)
+                    ManifestId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ShippingCost = table.Column<decimal>(type: "TEXT", nullable: false),
+                    ShippingPaid = table.Column<bool>(type: "INTEGER", nullable: false),
+                    TotalCost = table.Column<decimal>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -84,7 +93,8 @@ namespace TCMS.Data.Migrations
                 name: "Vehicles",
                 columns: table => new
                 {
-                    VehicleId = table.Column<string>(type: "TEXT", nullable: false),
+                    VehicleId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     Brand = table.Column<string>(type: "TEXT", nullable: false),
                     Model = table.Column<string>(type: "TEXT", nullable: false),
                     Year = table.Column<int>(type: "INTEGER", nullable: false),
@@ -213,7 +223,7 @@ namespace TCMS.Data.Migrations
                     City = table.Column<string>(type: "TEXT", nullable: false),
                     State = table.Column<string>(type: "TEXT", nullable: false),
                     Zip = table.Column<string>(type: "TEXT", nullable: false),
-                    HomePhoneNumber = table.Column<string>(type: "TEXT", nullable: false),
+                    HomePhoneNumber = table.Column<string>(type: "TEXT", nullable: true),
                     CellPhoneNumber = table.Column<string>(type: "TEXT", nullable: false),
                     PayRate = table.Column<decimal>(type: "TEXT", nullable: false),
                     StartDate = table.Column<DateTime>(type: "TEXT", nullable: false),
@@ -254,25 +264,6 @@ namespace TCMS.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Manifests",
-                columns: table => new
-                {
-                    ManifestId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    PurchaseOrderId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Manifests", x => x.ManifestId);
-                    table.ForeignKey(
-                        name: "FK_Manifests_PurchaseOrders_PurchaseOrderId",
-                        column: x => x.PurchaseOrderId,
-                        principalTable: "PurchaseOrders",
-                        principalColumn: "PurchaseOrderId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "MaintenanceRecords",
                 columns: table => new
                 {
@@ -282,7 +273,7 @@ namespace TCMS.Data.Migrations
                     Description = table.Column<string>(type: "TEXT", nullable: false),
                     MaintenanceDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Cost = table.Column<decimal>(type: "TEXT", nullable: false),
-                    VehicleId = table.Column<string>(type: "TEXT", nullable: true)
+                    VehicleId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -304,7 +295,7 @@ namespace TCMS.Data.Migrations
                     Description = table.Column<string>(type: "TEXT", nullable: false),
                     Cost = table.Column<decimal>(type: "TEXT", nullable: false),
                     RepairDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    VehicleId = table.Column<string>(type: "TEXT", nullable: true),
+                    VehicleId = table.Column<int>(type: "INTEGER", nullable: true),
                     Cause = table.Column<string>(type: "TEXT", nullable: false),
                     Solution = table.Column<string>(type: "TEXT", nullable: false)
                 },
@@ -329,8 +320,8 @@ namespace TCMS.Data.Migrations
                     Location = table.Column<string>(type: "TEXT", nullable: false),
                     Type = table.Column<int>(type: "INTEGER", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
-                    VehicleId = table.Column<string>(type: "TEXT", nullable: true),
-                    DriverId = table.Column<string>(type: "TEXT", nullable: false),
+                    VehicleId = table.Column<int>(type: "INTEGER", nullable: true),
+                    EmployeeId = table.Column<string>(type: "TEXT", nullable: false),
                     IsFatal = table.Column<bool>(type: "INTEGER", nullable: false),
                     HasInjuries = table.Column<bool>(type: "INTEGER", nullable: false),
                     HasTowedVehicle = table.Column<bool>(type: "INTEGER", nullable: false),
@@ -341,8 +332,8 @@ namespace TCMS.Data.Migrations
                 {
                     table.PrimaryKey("PK_IncidentReports", x => x.IncidentReportId);
                     table.ForeignKey(
-                        name: "FK_IncidentReports_Employees_DriverId",
-                        column: x => x.DriverId,
+                        name: "FK_IncidentReports_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "EmployeeId",
                         onDelete: ReferentialAction.Restrict);
@@ -385,6 +376,51 @@ namespace TCMS.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Shipments",
+                columns: table => new
+                {
+                    ShipmentId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Direction = table.Column<int>(type: "INTEGER", nullable: false),
+                    hasArrived = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Company = table.Column<string>(type: "TEXT", nullable: false),
+                    Address = table.Column<string>(type: "TEXT", nullable: false),
+                    City = table.Column<string>(type: "TEXT", nullable: false),
+                    State = table.Column<string>(type: "TEXT", nullable: false),
+                    Zip = table.Column<string>(type: "TEXT", nullable: false),
+                    EmployeeId = table.Column<string>(type: "TEXT", nullable: false),
+                    DriverEmployeeId = table.Column<string>(type: "TEXT", nullable: true),
+                    VehicleId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ManifestId = table.Column<int>(type: "INTEGER", nullable: false),
+                    PurchaseOrderId = table.Column<int>(type: "INTEGER", nullable: false),
+                    DepDateTime = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    EstimatedArrivalTime = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    ActualArrivalTime = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    IsPaid = table.Column<bool>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Shipments", x => x.ShipmentId);
+                    table.ForeignKey(
+                        name: "FK_Shipments_Employees_DriverEmployeeId",
+                        column: x => x.DriverEmployeeId,
+                        principalTable: "Employees",
+                        principalColumn: "EmployeeId");
+                    table.ForeignKey(
+                        name: "FK_Shipments_PurchaseOrders_ManifestId",
+                        column: x => x.ManifestId,
+                        principalTable: "PurchaseOrders",
+                        principalColumn: "PurchaseOrderId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Shipments_Vehicles_VehicleId",
+                        column: x => x.VehicleId,
+                        principalTable: "Vehicles",
+                        principalColumn: "VehicleId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TimeSheets",
                 columns: table => new
                 {
@@ -407,100 +443,6 @@ namespace TCMS.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ManifestItems",
-                columns: table => new
-                {
-                    ManifestItemId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    ManifestId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ProductId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Quantity = table.Column<int>(type: "INTEGER", nullable: false),
-                    Status = table.Column<int>(type: "INTEGER", nullable: false),
-                    DateAdded = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    DateRemoved = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    DateReceived = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    DateShipped = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    DateReturned = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    DateCancelled = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    DateRefunded = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    IsPaid = table.Column<bool>(type: "INTEGER", nullable: false),
-                    DatePaid = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    DateInvoiced = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    DatePaidFor = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    DatePaidInFull = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    DatePaidInFullAndReceived = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    DatePaidInFullAndShipped = table.Column<DateTime>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ManifestItems", x => x.ManifestItemId);
-                    table.ForeignKey(
-                        name: "FK_ManifestItems_Manifests_ManifestId",
-                        column: x => x.ManifestId,
-                        principalTable: "Manifests",
-                        principalColumn: "ManifestId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ManifestItems_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "ProductId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Shipments",
-                columns: table => new
-                {
-                    ShipmentId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Direction = table.Column<int>(type: "INTEGER", nullable: false),
-                    hasArrived = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Company = table.Column<string>(type: "TEXT", nullable: false),
-                    Address = table.Column<string>(type: "TEXT", nullable: false),
-                    City = table.Column<string>(type: "TEXT", nullable: false),
-                    State = table.Column<string>(type: "TEXT", nullable: false),
-                    Zip = table.Column<string>(type: "TEXT", nullable: false),
-                    VehicleId = table.Column<string>(type: "TEXT", nullable: false),
-                    ShippingCost = table.Column<decimal>(type: "TEXT", nullable: false),
-                    IsShippingCostPaid = table.Column<bool>(type: "INTEGER", nullable: false),
-                    ShippingCostPaymentDate = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    ManifestId = table.Column<int>(type: "INTEGER", nullable: false),
-                    PurchaseOrderId = table.Column<int>(type: "INTEGER", nullable: false),
-                    DepDateTime = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    EstimatedArrivalTime = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    ActualArrivalTime = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    DriverEmployeeId = table.Column<string>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Shipments", x => x.ShipmentId);
-                    table.ForeignKey(
-                        name: "FK_Shipments_Employees_DriverEmployeeId",
-                        column: x => x.DriverEmployeeId,
-                        principalTable: "Employees",
-                        principalColumn: "EmployeeId");
-                    table.ForeignKey(
-                        name: "FK_Shipments_Manifests_ManifestId",
-                        column: x => x.ManifestId,
-                        principalTable: "Manifests",
-                        principalColumn: "ManifestId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Shipments_PurchaseOrders_PurchaseOrderId",
-                        column: x => x.PurchaseOrderId,
-                        principalTable: "PurchaseOrders",
-                        principalColumn: "PurchaseOrderId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Shipments_Vehicles_VehicleId",
-                        column: x => x.VehicleId,
-                        principalTable: "Vehicles",
-                        principalColumn: "VehicleId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "PartDetails",
                 columns: table => new
                 {
@@ -512,7 +454,7 @@ namespace TCMS.Data.Migrations
                     Price = table.Column<decimal>(type: "TEXT", nullable: false),
                     Supplier = table.Column<string>(type: "TEXT", nullable: false),
                     isFromStock = table.Column<bool>(type: "INTEGER", nullable: false),
-                    VehicleId = table.Column<string>(type: "TEXT", nullable: false),
+                    VehicleId = table.Column<int>(type: "INTEGER", nullable: false),
                     MaintenanceRecordId = table.Column<int>(type: "INTEGER", nullable: true),
                     RepairRecordId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
@@ -544,7 +486,7 @@ namespace TCMS.Data.Migrations
                 {
                     DrugAndAlcoholTestId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    DriverId = table.Column<string>(type: "TEXT", nullable: false),
+                    EmployeeId = table.Column<string>(type: "TEXT", nullable: false),
                     TestDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     TestType = table.Column<int>(type: "INTEGER", nullable: false),
                     TestResult = table.Column<int>(type: "INTEGER", nullable: false),
@@ -557,8 +499,8 @@ namespace TCMS.Data.Migrations
                 {
                     table.PrimaryKey("PK_DrugAndAlcoholTests", x => x.DrugAndAlcoholTestId);
                     table.ForeignKey(
-                        name: "FK_DrugAndAlcoholTests_Employees_DriverId",
-                        column: x => x.DriverId,
+                        name: "FK_DrugAndAlcoholTests_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "EmployeeId",
                         onDelete: ReferentialAction.Restrict);
@@ -576,19 +518,15 @@ namespace TCMS.Data.Migrations
                 {
                     AssignmentId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    StartTime = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    EndTime = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    Status = table.Column<string>(type: "TEXT", nullable: false),
-                    Details = table.Column<string>(type: "TEXT", nullable: false),
-                    DriverId = table.Column<string>(type: "TEXT", nullable: false),
+                    EmployeeId = table.Column<string>(type: "TEXT", nullable: false),
                     ShipmentId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Assignments", x => x.AssignmentId);
                     table.ForeignKey(
-                        name: "FK_Assignments_Employees_DriverId",
-                        column: x => x.DriverId,
+                        name: "FK_Assignments_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "EmployeeId",
                         onDelete: ReferentialAction.Restrict);
@@ -597,6 +535,59 @@ namespace TCMS.Data.Migrations
                         column: x => x.ShipmentId,
                         principalTable: "Shipments",
                         principalColumn: "ShipmentId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Manifests",
+                columns: table => new
+                {
+                    ManifestId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ShipmentId = table.Column<int>(type: "INTEGER", nullable: true),
+                    PurchaseOrderId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Manifests", x => x.ManifestId);
+                    table.ForeignKey(
+                        name: "FK_Manifests_PurchaseOrders_PurchaseOrderId",
+                        column: x => x.PurchaseOrderId,
+                        principalTable: "PurchaseOrders",
+                        principalColumn: "PurchaseOrderId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Manifests_Shipments_ShipmentId",
+                        column: x => x.ShipmentId,
+                        principalTable: "Shipments",
+                        principalColumn: "ShipmentId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ManifestItems",
+                columns: table => new
+                {
+                    ManifestItemId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ManifestId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ProductId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Quantity = table.Column<int>(type: "INTEGER", nullable: false),
+                    Status = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ManifestItems", x => x.ManifestItemId);
+                    table.ForeignKey(
+                        name: "FK_ManifestItems_Manifests_ManifestId",
+                        column: x => x.ManifestId,
+                        principalTable: "Manifests",
+                        principalColumn: "ManifestId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ManifestItems_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "ProductId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -638,9 +629,9 @@ namespace TCMS.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Assignments_DriverId",
+                name: "IX_Assignments_EmployeeId",
                 table: "Assignments",
-                column: "DriverId");
+                column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Assignments_ShipmentId",
@@ -648,9 +639,9 @@ namespace TCMS.Data.Migrations
                 column: "ShipmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DrugAndAlcoholTests_DriverId",
+                name: "IX_DrugAndAlcoholTests_EmployeeId",
                 table: "DrugAndAlcoholTests",
-                column: "DriverId");
+                column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DrugAndAlcoholTests_IncidentReportId",
@@ -665,9 +656,9 @@ namespace TCMS.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_IncidentReports_DriverId",
+                name: "IX_IncidentReports_EmployeeId",
                 table: "IncidentReports",
-                column: "DriverId");
+                column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_IncidentReports_VehicleId",
@@ -698,7 +689,14 @@ namespace TCMS.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Manifests_PurchaseOrderId",
                 table: "Manifests",
-                column: "PurchaseOrderId");
+                column: "PurchaseOrderId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Manifests_ShipmentId",
+                table: "Manifests",
+                column: "ShipmentId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_PartDetails_MaintenanceRecordId",
@@ -734,11 +732,6 @@ namespace TCMS.Data.Migrations
                 name: "IX_Shipments_ManifestId",
                 table: "Shipments",
                 column: "ManifestId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Shipments_PurchaseOrderId",
-                table: "Shipments",
-                column: "PurchaseOrderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Shipments_VehicleId",
@@ -794,10 +787,10 @@ namespace TCMS.Data.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Shipments");
+                name: "IncidentReports");
 
             migrationBuilder.DropTable(
-                name: "IncidentReports");
+                name: "Manifests");
 
             migrationBuilder.DropTable(
                 name: "Products");
@@ -809,16 +802,16 @@ namespace TCMS.Data.Migrations
                 name: "RepairRecords");
 
             migrationBuilder.DropTable(
-                name: "Manifests");
+                name: "Shipments");
 
             migrationBuilder.DropTable(
                 name: "Employees");
 
             migrationBuilder.DropTable(
-                name: "Vehicles");
+                name: "PurchaseOrders");
 
             migrationBuilder.DropTable(
-                name: "PurchaseOrders");
+                name: "Vehicles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
