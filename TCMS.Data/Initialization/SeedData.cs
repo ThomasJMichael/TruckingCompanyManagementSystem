@@ -53,6 +53,9 @@ namespace TCMS.Data.Initialization
             Console.WriteLine("Seeding shipping data...");
             await SeedShippingData(serviceProvider);
 
+            Console.Write("Seed driver user...");
+            await SeedDriverUserAccount(userManager, serviceProvider.GetRequiredService<TcmsContext>());
+
         }
 
         private static async Task ResetDatabase(IServiceProvider serviceProvider)
@@ -98,6 +101,50 @@ namespace TCMS.Data.Initialization
                 await userManager.AddToRoleAsync(adminUser, Role.Default);
             }
         }
+
+        private static async Task SeedDriverUserAccount(UserManager<UserAccount> userManager, TcmsContext context)
+        {
+            // Create default driver user details
+            const string defaultDriverUserName = "driver";
+            const string driverEmail = "driver@tcms.com";
+            const string driverPassword = "Admin1!";
+
+            // Check if the driver user already exists
+            var driverUser = await userManager.FindByNameAsync(defaultDriverUserName);
+            if (driverUser == null)
+            {
+                // Create and add new driver user
+                driverUser = new UserAccount { UserName = defaultDriverUserName, Email = driverEmail };
+                var result = await userManager.CreateAsync(driverUser, driverPassword);
+
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(driverUser, Role.Driver);
+
+                    // Assign the user account to an existing driver who has a shipment
+                    // Make sure there is at least one shipment with a driver assigned
+                    var shipmentWithDriver = context.Shipments
+                        .Include(s => s.Driver)
+                        .FirstOrDefault(s => s.Driver != null);
+
+                    if (shipmentWithDriver != null)
+                    {
+                        // Get the driver entity from the shipment
+                        var driver = shipmentWithDriver.Driver;
+
+                        // Link the user account with the driver entity
+                        driver.UserAccountId = driverUser.Id;
+                        context.Drivers.Update(driver);
+                        await context.SaveChangesAsync();
+                    }
+                }
+                else
+                {
+                    throw new Exception("Failed to create driver user account");
+                }
+            }
+        }
+
 
         private static async Task SeedProductsAsync(IServiceProvider serviceProvider)
         {
