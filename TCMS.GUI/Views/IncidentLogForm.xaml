@@ -92,7 +92,7 @@
                      Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}"
                      Style="{StaticResource PlaceholderTextBoxStyle}"/>
             <Label Grid.Column="6" Grid.Row="2" Content="Select the Incident Type" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-26,0,0"/>
-            <ComboBox ItemsSource="{Binding IncidentTypes}" SelectedItem="{Binding SelectedItem}"  Grid.Column="6"  Grid.Row="5" Width="200" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <ComboBox ItemsSource="{Binding Incidents}" SelectedItem="{Binding SelectedItem}"  Grid.Column="6"  Grid.Row="5" Width="200" VerticalAlignment="Center" HorizontalAlignment="Center">
                       
                 <!-- Add more items as needed -->
                 

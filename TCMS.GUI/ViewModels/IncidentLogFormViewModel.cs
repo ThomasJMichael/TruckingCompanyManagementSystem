@@ -58,13 +58,7 @@ namespace TCMS.GUI.ViewModels
                 }
             }
         }
-        public class FruitViewModel
-        {
-            public IncidentType SelectedTypes { get; set; }
-            public IEnumerable<SelectListItem> IncidentTypes { get; set; }
-        }
-
-        public ObservableCollection<IncidentType> Items { get; set; }
+        public Array Incidents => Enum.GetValues(typeof(IncidentType));
         private IncidentType _selectedItem;
 
         public IncidentType SelectedItem
@@ -372,7 +366,7 @@ namespace TCMS.GUI.ViewModels
 
         public IncidentLogFormViewModel(IApiClient apiClient, IMapper mapper, IncidentReport incident = null)
         {
-            Items = new ObservableCollection<IncidentType>();
+
 
             _apiClient = apiClient;
             _mapper = mapper;
