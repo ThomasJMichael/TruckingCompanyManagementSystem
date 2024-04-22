@@ -375,6 +375,11 @@ namespace TCMS.Data.Initialization
         {
             var context = serviceProvider.GetRequiredService<TcmsContext>();
 
+            if (context.PurchaseOrders.ToList().Count > 10)
+            {
+                return;
+            }
+
             await using var transaction = await context.Database.BeginTransactionAsync();
             try
             {
