@@ -252,11 +252,11 @@ namespace TCMS.GUI.ViewModels
         {
             if (SelectedDrugTest != null)
             {
-                //var editDrugTestLogForm = new DrugTestFormViewModel(_apiClient, _mapper, SelectedDrugTest);
-                //editDrugTestLogForm.DrugTestUpdated += OnDrugTestUpdated;
-                //_dialogService.ShowDialog(editDrugTestLogForm);
-                //editDrugTestLogForm.Cleanup();
-                //editDrugTestLogForm.DrugTestUpdated -= OnDrugTestUpdated;
+                var editDrugTestLogForm = new DrugTestFormViewModel(_apiClient, _mapper, SelectedDrugTest);
+                editDrugTestLogForm.DrugTestUpdated += OnDrugTestUpdated;
+                _dialogService.ShowDialog(editDrugTestLogForm);
+                editDrugTestLogForm.Cleanup();
+                editDrugTestLogForm.DrugTestUpdated -= OnDrugTestUpdated;
             }
         }
 

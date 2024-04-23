@@ -14,9 +14,9 @@ namespace TCMS.GUI.Models
     public class DrugTest
     {
         public int DrugAndAlcoholTestId { get; set; }
-        //[ForeignKey("Driver")]
+
         public string EmployeeId { get; set; }
-        //public virtual Driver? Driver { get; set; } //Virtual for lazy loading
+
         public DateTime TestDate { get; set; }
         public TestType TestType { get; set; }
         public TestResult TestResult { get; set; }
@@ -24,7 +24,7 @@ namespace TCMS.GUI.Models
 
         // Potential reference to an incident if the test is post-accident
         public int? IncidentReportId { get; set; }
-        //public virtual IncidentReport? IncidentReport { get; set; } //Virtual for lazy loading
+
 
         // Foll-up details, if applicable
         public DateTime? FollowUpTestDate { get; set; } //Next scheduled test date

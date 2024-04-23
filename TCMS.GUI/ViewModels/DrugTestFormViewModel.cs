@@ -16,6 +16,7 @@ using TCMS.GUI.Utilities;
 using System.ComponentModel;
 using TCMS.GUI.Models;
 using TCMS.GUI.Views;
+using TCMS.Common.enums;
 
 
 namespace TCMS.GUI.ViewModels
@@ -50,22 +51,6 @@ namespace TCMS.GUI.ViewModels
                     _filterString = value;
                     OnPropertyChanged();
                     FilterEmployees(value);
-                }
-            }
-        }
-
-        public ObservableCollection<string> Items { get; set; }
-        private string _selectedItem;
-
-        public string SelectedItem
-        {
-            get => _selectedItem;
-            set
-            {
-                if (_selectedItem != value)
-                {
-                    _selectedItem = value;
-                    OnPropertyChanged(nameof(SelectedItem));
                 }
             }
         }
@@ -142,17 +127,17 @@ namespace TCMS.GUI.ViewModels
         }
         public Action CloseAction { get; set; }
 
-        private bool _isFatal;
+        private bool _isFollowUpComplete;
 
-        public bool IsFatal
+        public bool IsFollowUpComplete
         {
-            get => _isFatal;
+            get => _isFollowUpComplete;
             set
             {
-                if (_isFatal != value)
+                if (_isFollowUpComplete != value)
                 {
-                    _isFatal = value;
-                    OnPropertyChanged(nameof(IsFatal));
+                    _isFollowUpComplete = value;
+                    OnPropertyChanged(nameof(IsFollowUpComplete));
                 }
             }
         }
@@ -186,108 +171,85 @@ namespace TCMS.GUI.ViewModels
             }
         }
 
-        private string _incidentReportId = "Enter Vehicle ID...";
-        public string IncidentReportId
+        private string _drugAndAlcoholTestId;
+        public string DrugAndAlcoholTestId
         {
-            get => string.IsNullOrEmpty(_incidentReportId) ? "Name" : _incidentReportId;
+            get => _drugAndAlcoholTestId;
+            set
+            {
+                _drugAndAlcoholTestId = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(NamePlaceholderVisible));
+            }
+        }
+
+        private int? _incidentReportId;
+        public int? IncidentReportId
+        {
+            get => _incidentReportId;
             set
             {
                 _incidentReportId = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(NamePlaceholderVisible));
+                OnPropertyChanged(nameof(IncidentReportId));
             }
         }
-        private DateTime? _selectedDate;
-        public DateTime? SelectedDate
+        private DateTime _testDate;
+        public DateTime TestDate
         {
-            get => _selectedDate;
+            get => _testDate;
             set
             {
-                _selectedDate = value;
+                _testDate = value;
                 OnPropertyChanged();
             }
         }
-        private int _vehicleId;
-        public int VehicleId
+        private TestType _testType;
+        public TestType TestType
         {
-            get => _vehicleId;
+            get => _testType;
             set
             {
-                _vehicleId = value;
+                _testType = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(NamePlaceholderVisible));
+                OnPropertyChanged(nameof(TestType));
             }
         }
 
-        private string _employeeId = "Enter Employee ID...";
-        public string EmployeeId
+        private TestResult _testResult;
+        public TestResult TestResult
         {
-            get => string.IsNullOrEmpty(_employeeId) ? "Name" : _employeeId;
+            get => _testResult;
             set
             {
-                _employeeId = value;
+                _testResult = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(NamePlaceholderVisible));
+                OnPropertyChanged(nameof(TestResult));
             }
         }
 
-        private string _location = "Enter Location...";
-        public string Location
+        private string _testDetails = "Enter Incident description...";
+        public string TestDetails
         {
-            get => string.IsNullOrEmpty(_location) ? "Name" : _location;
+            get => string.IsNullOrEmpty(_testDetails) ? "MiddleName" : _testDetails;
             set
             {
-                _location = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(NamePlaceholderVisible));
-            }
-        }
-
-
-        private string _description = "Enter Incident description...";
-        public string Description
-        {
-            get => string.IsNullOrEmpty(_description) ? "MiddleName" : _description;
-            set
-            {
-                _description = value;
+                _testDetails = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(DescriptionPlaceholderVisible));
             }
         }
-        private string _incidentType1 = "Accident";
-        public string IncidentType1
+        private DateTime? _followUpTestDate;
+        public DateTime? FollowUpTestDate
         {
-            get => string.IsNullOrEmpty(_incidentType1) ? "IncidentType" : _incidentType1;
+            get => _followUpTestDate;
             set
             {
-                _incidentType1 = value;
+                _followUpTestDate = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(DescriptionPlaceholderVisible));
             }
         }
-        private string _incidentType2 = "SafetyViolation";
-        public string IncidentType2
-        {
-            get => string.IsNullOrEmpty(_incidentType2) ? "IncidentType" : _incidentType2;
-            set
-            {
-                _incidentType2 = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(DescriptionPlaceholderVisible));
-            }
-        }
-        private string _incidentType3 = "Other";
-        public string IncidentType3
-        {
-            get => string.IsNullOrEmpty(_incidentType3) ? "IncidentType" : _incidentType3;
-            set
-            {
-                _incidentType3 = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(DescriptionPlaceholderVisible));
-            }
-        }
+
 
         private string _windowTitle = "Add Product";
 
@@ -303,15 +265,14 @@ namespace TCMS.GUI.ViewModels
             }
         }
 
-        public Visibility NamePlaceholderVisible => string.IsNullOrEmpty(_incidentReportId) ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility DescriptionPlaceholderVisible => string.IsNullOrEmpty(_description) ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility PricePlaceholderVisible => string.IsNullOrEmpty(_location) ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility NamePlaceholderVisible => string.IsNullOrEmpty(_drugAndAlcoholTestId) ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility DescriptionPlaceholderVisible => string.IsNullOrEmpty(_testDetails) ? Visibility.Visible : Visibility.Collapsed;
+        //public Visibility PricePlaceholderVisible => DateTime.IsNullOrEmpty(_followUpTestDate) ? Visibility.Visible : Visibility.Collapsed;
 
         public ICommand ConfirmCommand { get; }
 
         public DrugTestFormViewModel(IApiClient apiClient, IMapper mapper, DrugTest drugtest = null)
         {
-            Items = new ObservableCollection<string> { "Accident", "SafetyViolation", "Other" };
 
             _apiClient = apiClient;
             _mapper = mapper;
@@ -330,6 +291,13 @@ namespace TCMS.GUI.ViewModels
 
             if (IsEditMode)
             {
+                TestDate = CurrentDrugTest.TestDate;
+                TestType = CurrentDrugTest.TestType;
+                TestResult = CurrentDrugTest.TestResult;
+                TestDetails = CurrentDrugTest.TestDetails;
+                IncidentReportId = CurrentDrugTest.IncidentReportId;
+                FollowUpTestDate = CurrentDrugTest.FollowUpTestDate;
+                IsFollowUpComplete = CurrentDrugTest.IsFollowUpComplete;
             }
             ConfirmCommand = new RelayCommand(Confirm);
             _employees = new ObservableCollection<Employee>();

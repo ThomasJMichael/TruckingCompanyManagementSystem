@@ -82,6 +82,8 @@ namespace TCMS.GUI.ViewModels
             }
         }
 
+
+
         private void FilterIncidents()
         {
             Console.WriteLine("FilterProducts called");
