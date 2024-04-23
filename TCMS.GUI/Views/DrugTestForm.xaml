@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TCMS.GUI.Views" xmlns:viewmodels="clr-namespace:TCMS.GUI.ViewModels" 
         d:DataContext="{d:DesignInstance Type=viewmodels:DrugTestFormViewModel}"
         mc:Ignorable="d"
-        Title="Create Drug Test" Height="600" Width="722">
+        Title="Create Drug Test" Height="599" Width="742">
 
     <Grid Margin="20">
         <Grid.RowDefinitions>
@@ -15,26 +15,26 @@
             <RowDefinition Height="200"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="20"/>
-            <RowDefinition Height="20"/>
+            <RowDefinition Height="22"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Row="0" >
 
         </Grid>
         <!-- Name TextBox -->
-        <Label  Content="Choose incident date" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="392,20,0,0" Grid.Row="6" Grid.RowSpan="2"/>
-        <DatePicker x:Name ="datePicker" HorizontalAlignment="Center" Grid.Row="6" VerticalAlignment="bottom" SelectedDate="{Binding SelectedDate, Mode=TwoWay}"/>
+        <Label  Content="Choose Follow Up Test Date" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="392,20,0,0" Grid.Row="6" Grid.RowSpan="2"/>
+        <DatePicker x:Name ="datePicker" HorizontalAlignment="Center" Grid.Row="6" VerticalAlignment="bottom" SelectedDate="{Binding FollowUpTestDate, Mode=TwoWay}"/>
 
         <!-- Description TextBox -->
-        <Label Grid.Row="2" Content="Enter a description" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,-26,0,0"/>
+        <Label Grid.Row="2" Content="Enter Test Details" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,-26,0,0"/>
         <TextBox Grid.Row="2"
                  Grid.Column="1"
-                 Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                 Text="{Binding TestDetails, UpdateSourceTrigger=PropertyChanged}"
                  Style="{StaticResource PlaceholderTextBoxStyle}"
                  TextWrapping="Wrap"
                  AcceptsReturn="True"
@@ -62,51 +62,67 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="127"/>
                 <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="77"/>
+                <ColumnDefinition Width="49"/>
+                <ColumnDefinition Width="10"/>
                 <ColumnDefinition Width="126"/>
                 <ColumnDefinition Width="10"/>
                 <ColumnDefinition Width="126"/>
                 <ColumnDefinition Width="10"/>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="10"/>
-                <ColumnDefinition Width="Auto"/>
+
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Grid.Row="2" Content="Enter the vehicle id" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-26,0,0"/>
-            <TextBox Grid.Column="0"
-                     Grid.Row="0"
-                     Text="{Binding VehicleId, UpdateSourceTrigger=PropertyChanged}"
-                     Style="{StaticResource PlaceholderTextBoxStyle}"/>
-            <Label Grid.Column="2" Grid.Row="2" Content="Enter the employee" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-26,0,0"/>
-            <Label Grid.Column="4" Grid.Row="2" Content="Enter the location" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-26,0,0"/>
-            <ComboBox Grid.Row="5" Grid.Column="2"
+            <Label Content="Enter the Date" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-26,0,0"/>
+            <DatePicker x:Name ="datePicker1" HorizontalAlignment="Center" Grid.Row="4" VerticalAlignment="bottom" SelectedDate="{Binding TestDate, Mode=TwoWay}"/>
+            <Label Grid.Column="2" Content="Enter the Employee" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-26,0,0" Grid.ColumnSpan="2"/>
+            <Label Grid.Column="5" Content="Enter the Test Type" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-26,0,0"/>
+            <ComboBox Grid.Column="2"
                       ItemsSource="{Binding FilteredEmployees}"
                       SelectedItem="{Binding SelectedEmployee}"
                       DisplayMemberPath="FullName"
                       IsEditable="True"
                       IsReadOnly="False"
                       TextSearch.TextPath="FullName"
-                      StaysOpenOnEdit="True"/>
+                      StaysOpenOnEdit="True" Grid.ColumnSpan="2"/>
 
 
-            <TextBox Grid.Column="4"
+            <TextBox Grid.Column="5"
                      Grid.Row="0"
-                     Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}"
+                     Text="{Binding TestType, UpdateSourceTrigger=PropertyChanged}"
                      Style="{StaticResource PlaceholderTextBoxStyle}"/>
-            <Label Grid.Column="6" Grid.Row="2" Content="Select the Incident Type" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-26,0,0"/>
-            <ComboBox ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}"  Grid.Column="6"  Grid.Row="5" Width="200" VerticalAlignment="Center" HorizontalAlignment="Center">
-
-                <!-- Add more items as needed -->
-
-            </ComboBox>
-
+            <Label Grid.Column="7" Content="Enter the Results" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-26,0,0"/>
+            <TextBox Grid.Column="7"
+                     Grid.Row="5"
+                     Text="{Binding TestResult, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource PlaceholderTextBoxStyle}"/>
+            <Label Grid.Column="9" Content="Incident Report Id" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="11,-26,0,0" Width="126"/>
+            <TextBox Grid.Column="9"
+                     Grid.Row="5"
+                     Text="{Binding IncidentReportId, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource PlaceholderTextBoxStyle}"/>
 
         </Grid>
         <CheckBox
-                  Content="Is Fatal?" 
+                  Content="Is Follow Up Complete?" 
                   HorizontalAlignment="Left" 
                   VerticalAlignment="Bottom"
                   
                   IsChecked ="{Binding IsFatal, Mode=TwoWay}" Margin="0,25,0,0" Grid.Row="6"/>
 
+        <Grid Grid.Row="7" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="20"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="127"/>
+                <ColumnDefinition Width="10"/>
+
+            </Grid.ColumnDefinitions>
+
+
+
+        </Grid>
 
     </Grid>
 

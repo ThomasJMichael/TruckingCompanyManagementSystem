@@ -144,7 +144,7 @@
                       ScrollViewer.VerticalScrollBarVisibility="Hidden">
                 <ListView.View>
                     <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
-                        <GridViewColumn Header="Test Id" DisplayMemberBinding="{Binding DrugAndAlchoholTestId}" Width="33"/>
+                        <GridViewColumn Header="Test Id" DisplayMemberBinding="{Binding DrugAndAlcoholTestId}" Width="33"/>
                         <GridViewColumn Header="Date" DisplayMemberBinding="{Binding TestDate}" Width="130"/>
                         <GridViewColumn Header="Type" DisplayMemberBinding="{Binding TestType}" Width="150"/>
                         <!-- Add more columns as needed -->
