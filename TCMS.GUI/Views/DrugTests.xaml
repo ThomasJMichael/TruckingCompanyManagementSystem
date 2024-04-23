@@ -43,7 +43,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="440"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Grid x:Name="SearchBarGrid" 
@@ -114,6 +115,8 @@
                 <TextBlock Text="Add" Style="{StaticResource ViewsButtonText}"/>
             </utilities:Btn>
 
+
+
             <utilities:Btn Grid.Column="1" Style="{StaticResource DynamicWidthBtnStyle}" 
                            Command="{Binding EditDrugTestCommand}">
                 <TextBlock Text="Edit" Style="{StaticResource ViewsButtonText}"/>
@@ -129,6 +132,10 @@
                 <TextBlock Text="Refresh" Style="{StaticResource ViewsButtonText}"/>
             </utilities:Btn>
         </Grid>
+        <utilities:Btn Grid.Row="4" Style="{StaticResource DynamicWidthBtnStyle}" 
+                           Command="{Binding AssignDrugTestsCommand}">
+            <TextBlock Text="Assign Random Drug Tests" Style="{StaticResource ViewsButtonText}"/>
+        </utilities:Btn>
 
         <Grid Grid.Row="2" Margin="10">
             <Grid.ColumnDefinitions>

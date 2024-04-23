@@ -4,13 +4,16 @@ using System.Net.Mime;
 using System.Windows.Input;
 using AutoMapper;
 using TCMS.Common.DTOs.DrugTest;
+using TCMS.Common.DTOs.Employee;
 using TCMS.Common.Operations;
 using TCMS.Data.Models;
 using TCMS.GUI.Models;
+using TCMS.GUI.Services.Implementations;
 using TCMS.GUI.Services.Interfaces;
 using TCMS.GUI.Utilities;
 using TCMS.GUI.Views;
 using Xceed.Wpf.Toolkit;
+using Employee = TCMS.GUI.Models.Employee;
 using DrugTest = TCMS.GUI.Models.DrugTest;
 
 namespace TCMS.GUI.ViewModels
@@ -21,11 +24,22 @@ namespace TCMS.GUI.ViewModels
         private readonly IApiClient _apiClient;
         private readonly IMapper _mapper;
         private readonly IDialogService _dialogService;
-
+        private readonly IEmployeeUserService _employeeUserService;
         private Lazy<Task> _LazyDrugTestLoader;
 
+        private ObservableCollection<Employee> _employees;
         private ObservableCollection<DrugTest> _DrugTests;
         private ObservableCollection<DrugTest> _filteredDrugTests;
+
+        public ObservableCollection<Employee> Employees
+        {
+            get => _employees;
+            private set
+            {
+                _employees = value;
+                OnPropertyChanged();
+            }
+        }
 
         public ObservableCollection<DrugTest> FilteredDrugTests
         {
@@ -133,12 +147,16 @@ namespace TCMS.GUI.ViewModels
         public ICommand SearchCommand { get; }
         public ICommand SearchBoxGotFocusCommand { get; }
         public ICommand SearchBoxLostFocusCommand { get; }
+        public ICommand AssignDrugTestsCommand { get; private set; }
 
-        public DrugTestViewModel(IApiClient apiClient, IMapper mapper, IDialogService dialogService)
+        public DrugTestViewModel(IApiClient apiClient, IMapper mapper, IDialogService dialogService, IEmployeeUserService employeeUserService)
         {
             _apiClient = apiClient;
             _mapper = mapper;
             _dialogService = dialogService;
+            _employeeUserService = employeeUserService;
+            Random rng = new Random();
+
             // Initialize commands
             AddDrugTestCommand = new RelayCommand(AddDrugTest);
             EditDrugTestCommand = new RelayCommand(EditDrugTest, CanExecuteEditOrDelete);
@@ -147,12 +165,40 @@ namespace TCMS.GUI.ViewModels
             SearchCommand = new RelayCommand((obj) => FilterDrugTests());
             SearchBoxGotFocusCommand = new RelayCommand(SearchBoxGotFocus);
             SearchBoxLostFocusCommand = new RelayCommand(SearchBoxLostFocus);
-
+            AssignDrugTestsCommand = new RelayCommand(AssignDrugTests);
             _DrugTests = new ObservableCollection<DrugTest>();
             _filteredDrugTests = new ObservableCollection<DrugTest>();
 
             InitializeLazyLoader();
 
+
+        }
+        private async void AssignDrugTests(object obj)
+        {
+            LoadEmployeesAsync();
+        }
+
+        private async Task LoadEmployeesAsync()
+        {
+            try
+            {
+                var results = await _employeeUserService.GetEmployeesWithUserAccountsAsync();
+                if (results != null)
+                {
+                    _employees = new ObservableCollection<Employee>(results);
+                    var _filter = _employees.Where(emp => emp.UserRole == "Driver").ToList();
+                    Employees = new ObservableCollection<Employee>(_filter);
+ 
+                }
+                else
+                {
+                    Debug.WriteLine("Failed to load employees or no employees returned.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"An error occurred while loading products: {ex.Message}");
+            }
         }
 
         private void InitializeLazyLoader()
