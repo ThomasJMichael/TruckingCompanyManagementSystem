@@ -166,7 +166,7 @@
                     <!--// DrugAndAlchoholTests //-->
                     <utilities:Btn Style="{StaticResource BtnStyle}"
                               Command="{Binding DrugTestsCommand}"
-                              Visibility="{Binding DrugTestVisibility}">
+                              Visibility="{Binding DrugTestsVisibility}">
 
                         <Grid>
 

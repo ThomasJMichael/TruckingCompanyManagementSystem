@@ -179,9 +179,9 @@
                     <TextBlock Text="{Binding SelectedProduct.ProductId}" Style="{StaticResource DetailTextBlockStyle}"/>
                     <TextBlock Text="Name:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
                     <TextBlock Text="{Binding SelectedProduct.Name}" Style="{StaticResource DetailTextBlockStyle}"/>
-                    <TextBlock Text="MiddleName:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="Description:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
                     <TextBlock Text="{Binding SelectedProduct.Description}" Style="{StaticResource DetailTextBlockStyle}" TextWrapping="Wrap"/>
-                    <TextBlock Text="LastName:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="Price:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
                     <TextBlock Text="{Binding SelectedProduct.Price, StringFormat=C}" Style="{StaticResource DetailTextBlockStyle}"/>
                     <TextBlock Text="Quantity On Hand:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
                     <TextBlock Text="{Binding SelectedProduct.QuantityOnHand}" Style="{StaticResource DetailTextBlockStyle}"/>

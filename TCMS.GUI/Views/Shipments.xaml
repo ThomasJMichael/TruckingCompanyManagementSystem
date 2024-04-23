@@ -174,7 +174,7 @@
                     </Grid.RowDefinitions>
                     <!-- Buttons for Shipments -->
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="5">
-                        <Button Content="{Binding SelectedShipment.ButtonContent}"
+                        <Button Content="Dispatch/Recieve"
                                 Style="{StaticResource ThemedButtonStyle}"
                                 Command="{Binding DispatchReceiveCommand}"/>
                         <!-- Edit Button -->
