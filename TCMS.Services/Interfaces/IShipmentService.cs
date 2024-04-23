@@ -8,6 +8,8 @@ public interface IShipmentService
 {
     Task<OperationResult<ShipmentCreateDto>> CreateIncomingShipment(IncomingShipmentDto incomingShipmentDto);
     Task<OperationResult<ShipmentCreateDto>> CreateOutgoingShipment(OutgoingShipmentDto outgoingShipmentDto);
+    Task<OperationResult> DispatchShipment(int id);
+    Task<OperationResult> ReceiveShipment(int id);
     Task<OperationResult<IEnumerable<ShipmentDetailDto>>> GetAllShipmentsAsync();
     Task<OperationResult<IEnumerable<ShipmentDetailDto>>> GetAllIncomingShipmentsAsync();
     Task<OperationResult<IEnumerable<ShipmentDetailDto>>> GetAllOutgoingShipmentsAsync();

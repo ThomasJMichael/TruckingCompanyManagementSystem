@@ -14,7 +14,7 @@ using TCMS.Services.Interfaces;
 
 namespace TCMS.Services.Implementations
 {
-    public class ShipmentService(TcmsContext context, IMapper mapper) : IShipmentService
+    public class ShipmentService(TcmsContext context, IMapper mapper, IPurchaseOrderService poService, IInventoryService inventoryService) : IShipmentService
     {
         
         public async Task<OperationResult<ShipmentCreateDto>> CreateIncomingShipment(IncomingShipmentDto incomingShipmentDto)
@@ -52,6 +52,134 @@ namespace TCMS.Services.Implementations
             {
                 return OperationResult<ShipmentCreateDto>.Failure(new List<string> { e.Message });
             }
+        }
+
+        public async Task<OperationResult> DispatchShipment(int id)
+        {
+            await using var transaction = await context.Database.BeginTransactionAsync();
+            try
+            {
+                var shipment = await context.Shipments
+                    .Include(s => s.Manifest)
+                    .ThenInclude(m => m.ManifestItems)
+                    .SingleOrDefaultAsync(s => s.ShipmentId == id);
+
+                if (shipment == null)
+                {
+                    return OperationResult.Failure(new List<string> { "Shipment not found." });
+                }
+
+                var purchaseOrder = await context.PurchaseOrders
+                    .Include(po => po.Manifest)
+                    .ThenInclude(m => m.ManifestItems)
+                    .SingleOrDefaultAsync(po => po.PurchaseOrderId == shipment.PurchaseOrderId);
+
+                if (purchaseOrder == null)
+                {
+                    return OperationResult.Failure(new List<string> { "Purchase order not found." });
+                }
+
+                foreach (var item in shipment.Manifest.ManifestItems)
+                {
+                    var inventoryItem = await context.Inventories.FindAsync(item.ProductId);
+                    if (inventoryItem == null)
+                    {
+                        return OperationResult.Failure(new List<string> { "Inventory item not found." });
+                    }
+
+                    var poItem = purchaseOrder.Manifest.ManifestItems
+                        .FirstOrDefault(i => i.ProductId == item.ProductId);
+
+                    if (poItem == null)
+                    {
+                        return OperationResult.Failure(new List<string> { "Purchase order item not found." });
+                    }
+
+                    if (inventoryItem.QuantityOnHand < item.Quantity)
+                    {
+                        poItem.Status = ItemStatus.OnBackOrder;
+                    }
+                    else
+                    {
+                        poItem.Status = ItemStatus.Shipped;
+                        inventoryItem.QuantityOnHand -= item.Quantity;
+                    }
+                }
+
+                shipment.DepDateTime = DateTime.Now;
+
+                await context.SaveChangesAsync();
+                await transaction.CommitAsync();
+                return OperationResult.Success();
+            }
+            catch (Exception e)
+            {
+                await transaction.RollbackAsync();
+                return OperationResult.Failure(new List<string> { e.Message });
+            }
+        }
+
+
+        public async Task<OperationResult> ReceiveShipment(int id)
+        {
+            await using var transaction = await context.Database.BeginTransactionAsync();
+            try
+            {
+                var shipment = await context.Shipments
+                    .Include(s => s.Manifest)
+                    .ThenInclude(m => m.ManifestItems)
+                    .SingleOrDefaultAsync(s => s.ShipmentId == id);
+
+                if (shipment == null)
+                {
+                    return OperationResult.Failure(new List<string> { "Shipment not found." });
+                }
+
+                var purchaseOrder = await context.PurchaseOrders
+                    .Include(po => po.Manifest)
+                    .ThenInclude(m => m.ManifestItems)
+                    .SingleOrDefaultAsync(po => po.PurchaseOrderId == shipment.PurchaseOrderId);
+
+                if (purchaseOrder == null)
+                {
+                    return OperationResult.Failure(new List<string> { "Purchase order not found." });
+                }
+
+                foreach (var item in shipment.Manifest.ManifestItems)
+                {
+                    var inventoryItem = await context.Inventories.FindAsync(item.ProductId);
+                    if (inventoryItem == null)
+                    {
+                        return OperationResult.Failure(new List<string> { "Inventory item not found." });
+                    }
+
+                    var poItem = purchaseOrder.Manifest.ManifestItems
+                        .FirstOrDefault(i => i.ProductId == item.ProductId);
+
+                    if (poItem == null)
+                    {
+                        return OperationResult.Failure(new List<string> { "Purchase order item not found." });
+                    }
+
+                    if (poItem.Status == ItemStatus.OnBackOrder)
+                    {
+                        poItem.Status = ItemStatus.Shipped;
+                    }
+                    inventoryItem.QuantityOnHand += item.Quantity;
+                }
+
+                shipment.ActualArrivalTime = DateTime.Now;
+                shipment.hasArrived = true;
+
+                await context.SaveChangesAsync();
+                await transaction.CommitAsync();
+                return OperationResult.Success();
+            }
+            catch (Exception e)
+            {
+                await transaction.RollbackAsync();
+                return OperationResult.Failure(new List<string> { e.Message });
+            }   
         }
 
         public async Task<OperationResult<IEnumerable<ShipmentDetailDto>>> GetAllShipmentsAsync()

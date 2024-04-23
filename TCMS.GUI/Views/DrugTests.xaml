@@ -173,9 +173,9 @@
 
             <Border Grid.Column="1" Background="{StaticResource DetailBackgroundBrush}">
                 <StackPanel Visibility="{Binding SelectedDrugTest, Converter={StaticResource NullToVisibilityConverter}}">
-                    <TextBlock Text="Incident Details" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold" FontSize="18" />
+                    <TextBlock Text="Drug and Alcohol Test" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold" FontSize="18" />
                     <Separator/>
-                    <TextBlock Text="Drug Test and Alchohol Test ID:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                    <TextBlock Text="Test ID:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
                     <TextBlock Text="{Binding SelectedDrugTest.DrugAndAlcoholTestId}" Style="{StaticResource DetailTextBlockStyle}"/>
                     <TextBlock Text="EmployeeId" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
                     <TextBlock Text="{Binding SelectedDrugTest.EmployeeId}" Style="{StaticResource DetailTextBlockStyle}"/>

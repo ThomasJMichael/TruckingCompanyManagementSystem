@@ -46,6 +46,26 @@ namespace TCMS.API.Controllers
             return result.IsSuccessful ? Ok(result) : BadRequest(result);
         }
 
+        // Dispatch shipment
+        [HttpPut("dispatch/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<OperationResult>> DispatchShipment(int id)
+        {
+            var result = await _shipmentService.DispatchShipment(id);
+            return result.IsSuccessful ? Ok(result) : BadRequest(result);
+        }
+
+        // Receive shipment
+        [HttpPut("receive/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<OperationResult>> ReceiveShipment(int id)
+        {
+            var result = await _shipmentService.ReceiveShipment(id);
+            return result.IsSuccessful ? Ok(result) : BadRequest(result);
+        }
+
         // Get all shipments
         [HttpGet("all")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult<IEnumerable<ShipmentDetailDto>>))]
