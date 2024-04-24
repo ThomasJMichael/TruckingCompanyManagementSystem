@@ -15,6 +15,7 @@ using TCMS.GUI.Views;
 using Xceed.Wpf.Toolkit;
 using Employee = TCMS.GUI.Models.Employee;
 using DrugTest = TCMS.GUI.Models.DrugTest;
+using TCMS.Common.enums;
 
 namespace TCMS.GUI.ViewModels
 {
@@ -173,9 +174,57 @@ namespace TCMS.GUI.ViewModels
 
 
         }
+        //private async void AssignDrugTests(object obj)
+        //{
+        //    LoadEmployeesAsync();
+        //}
+
         private async void AssignDrugTests(object obj)
         {
-            LoadEmployeesAsync();
+            await LoadEmployeesAsync(); // Ensure employees are loaded
+
+            if (Employees == null || Employees.Count == 0)
+            {
+                Debug.WriteLine("No employees available for assignment.");
+                return;
+            }
+
+            // Ensure drug tests are loaded
+            await EnsureDrugTestsLoadedAsync();
+
+            // Find the largest DrugTestId and IncidentReportId and increment by 1
+            int largestDrugTestId = _DrugTests.Any()
+                ? _DrugTests.Max(dt => dt.DrugAndAlcoholTestId)
+                : 1; // Default start if there are no existing drug tests
+
+            int? largestIncidentReportId = _DrugTests.Any()
+                ? _DrugTests.Max(dt => dt.IncidentReportId)
+                : 10000; // Default start if no existing incident report IDs
+
+            // Shuffle employees and select 5 random ones
+            Random rng = new Random();
+            var randomEmployees = Employees.OrderBy(x => rng.Next()).Take(5).ToList();
+
+            foreach (var employee in randomEmployees)
+            {
+                largestDrugTestId++; // Increment the DrugTestId
+                largestIncidentReportId++; // Increment the IncidentReportId
+
+                // Create a new drug test for the employee with incremented IDs
+                var newDrugTest = new DrugTest
+                {
+                    DrugAndAlcoholTestId = largestDrugTestId,
+                    EmployeeId = employee.EmployeeId,
+                    IncidentReportId = largestIncidentReportId,
+                    TestDate = DateTime.Now,
+                    //Result = "Pending" // Default status
+                };
+
+                _DrugTests.Add(newDrugTest); // Add the new drug test to the collection
+            }
+
+            // Refresh the filtered collection to update the UI
+            FilterDrugTests();
         }
 
         private async Task LoadEmployeesAsync()
