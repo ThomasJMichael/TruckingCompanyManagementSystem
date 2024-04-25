@@ -128,31 +128,34 @@
                                 <StackPanel Margin="0" Background="#FF272B2F">
                                     <TextBlock Text="Purchase Order General Information" FontWeight="Bold" FontSize="18" Foreground="White" Margin="0,0,0,10" />
 
-                                    <Label Content="Shipment Direction:" FontWeight="SemiBold" Foreground="DodgerBlue" Margin="5"/>
+                                    <Label Content="Shipment Direction:" Foreground="DodgerBlue" FontWeight="Bold" FontSize="16"  Margin="5"/>
                                     <TextBlock Text="{Binding SelectedPurchaseOrder.ShipmentDirection}" Foreground="White" Margin="5" />
 
-                                    <Label Content="Company:" FontWeight="SemiBold" Foreground="DodgerBlue" Margin="5"/>
+                                    <Label Content="Company:"  Foreground="DodgerBlue" FontWeight="Bold" FontSize="16"  Margin="5"/>
                                     <TextBlock Text="{Binding SelectedPurchaseOrder.Company}" Foreground="White" Margin="5" />
 
-                                    <Label Content="Address:" FontWeight="SemiBold" Foreground="DodgerBlue" Margin="5"/>
+                                    <Label Content="Address:"  Foreground="DodgerBlue" FontWeight="Bold" FontSize="16"  Margin="5"/>
                                     <TextBlock Text="{Binding SelectedPurchaseOrder.Address}" Foreground="White" Margin="5" />
 
-                                    <Label Content="City:" FontWeight="SemiBold" Foreground="DodgerBlue" Margin="5"/>
+                                    <Label Content="City:"  Foreground="DodgerBlue" FontWeight="Bold" FontSize="16"  Margin="5"/>
                                     <TextBlock Text="{Binding SelectedPurchaseOrder.City}" Foreground="White" Margin="5" />
 
-                                    <Label Content="State:" FontWeight="SemiBold" Foreground="DodgerBlue" Margin="5"/>
+                                    <Label Content="State:"  Foreground="DodgerBlue" FontWeight="Bold" FontSize="16"  Margin="5"/>
                                     <TextBlock Text="{Binding SelectedPurchaseOrder.State}" Foreground="White" Margin="5" />
 
-                                    <Label Content="ZIP Code:" FontWeight="SemiBold" Foreground="DodgerBlue" Margin="5"/>
+                                    <Label Content="ZIP Code:"  Foreground="DodgerBlue" FontWeight="Bold" FontSize="16"  Margin="5"/>
                                     <TextBlock Text="{Binding SelectedPurchaseOrder.Zip}" Foreground="White" Margin="5" />
 
-                                    <Label Content="Total Cost of Items:" FontWeight="SemiBold" Foreground="DodgerBlue" Margin="5"/>
+                                    <Label Content="Total Cost of Items:"  Foreground="DodgerBlue" FontWeight="Bold" FontSize="16"  Margin="5"/>
                                     <TextBlock Text="{Binding SelectedPurchaseOrder.TotalItemCost, StringFormat='{}{0:C}'}" Foreground="White" Margin="5" />
 
-                                    <Label Content="Total Shipment Cost:" FontWeight="SemiBold" Foreground="DodgerBlue" Margin="5"/>
+                                    <Label Content="Total Shipment Cost:"  Foreground="DodgerBlue" FontWeight="Bold" FontSize="16"  Margin="5"/>
                                     <TextBlock Text="{Binding SelectedPurchaseOrder.TotalCost, StringFormat='{}{0:C}'}" Foreground="White" Margin="5" />
 
-                                    <Label Content="Order Date:" FontWeight="SemiBold" Foreground="DodgerBlue" Margin="5"/>
+                                    <Label Content="Purchase Order Paid For:"  Foreground="DodgerBlue" FontWeight="Bold" FontSize="16"  Margin="5"/>
+                                    <TextBlock Text="{Binding SelectedPurchaseOrder.ShippingPaid, StringFormat='{}{0:C}'}" Foreground="White" Margin="5" />
+
+                                    <Label Content="Order Date:"  Foreground="DodgerBlue" FontWeight="Bold" FontSize="16"  Margin="5"/>
                                     <TextBlock Text="{Binding SelectedPurchaseOrder.DateCreated, StringFormat='{}{0:MM/dd/yyyy}'}" Foreground="White" Margin="5" />
 
                                     <!-- Additional details can be added here -->
@@ -277,22 +280,22 @@
                                     <TextBlock Text="Shipping Information" FontWeight="Bold" FontSize="16" Foreground="White" />
 
                                     <!-- Common Details -->
-                                    <Label Content="Purchase Order ID:" FontWeight="SemiBold" Foreground="DeepSkyBlue" Margin="5"/>
+                                    <Label Content="Purchase Order ID:" FontWeight="Bold" FontSize="16" Foreground="DeepSkyBlue" Margin="5"/>
                                     <TextBlock Text="{Binding SelectedShipment.PurchaseOrderId}" Margin="5" />
 
-                                    <Label Content="Vehicle ID:" FontWeight="SemiBold" Foreground="DeepSkyBlue" Margin="5"/>
+                                    <Label Content="Vehicle ID:" FontWeight="Bold" FontSize="16" Foreground="DeepSkyBlue" Margin="5"/>
                                     <TextBlock Text="{Binding SelectedShipment.VehicleId}" Margin="5" />
 
-                                    <Label Content="Departure Date/Time:" FontWeight="SemiBold" Foreground="DeepSkyBlue" Margin="5"/>
+                                    <Label Content="Departure Date/Time:" FontWeight="Bold" FontSize="16" Foreground="DeepSkyBlue" Margin="5"/>
                                     <TextBlock Text="{Binding SelectedShipment.DepartureDateTime, StringFormat='{}{0:MM/dd/yyyy HH:mm}'}" Margin="5" />
 
-                                    <Label Content="Estimated Arrival Date/Time:" FontWeight="SemiBold" Foreground="DeepSkyBlue" Margin="5"/>
+                                    <Label Content="Estimated Arrival Date/Time:" FontWeight="Bold" FontSize="16" Foreground="DeepSkyBlue" Margin="5"/>
                                     <TextBlock Text="{Binding SelectedShipment.EstimatedArrivalDateTime, StringFormat='{}{0:MM/dd/yyyy HH:mm}'}" Margin="5" />
 
-                                    <Label Content="Arrival Confirmation:" FontWeight="SemiBold" Foreground="DeepSkyBlue" Margin="5"/>
+                                    <Label Content="Arrival Confirmation:" FontWeight="Bold" FontSize="16" Foreground="DeepSkyBlue" Margin="5"/>
                                     <TextBlock Text="{Binding SelectedShipment.IsArrived, Converter={StaticResource BooleanToYesNoConverter}}" Margin="5" />
 
-                                    <Label Content="Driver:" FontWeight="SemiBold" Foreground="DeepSkyBlue" Margin="5"/>
+                                    <Label Content="Driver:" FontWeight="Bold" FontSize="16" Foreground="DeepSkyBlue" Margin="5"/>
                                     <TextBlock Text="{Binding SelectedShipment.EmployeeId}" Margin="5" />
 
                                     <!-- Dynamic Details Based on Direction -->

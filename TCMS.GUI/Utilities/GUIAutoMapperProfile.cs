@@ -4,10 +4,12 @@ using TCMS.Common.DTOs.Employee;
 using TCMS.Common.DTOs.Financial;
 using TCMS.Common.DTOs.Incident;
 using TCMS.Common.DTOs.Inventory;
+using TCMS.Common.DTOs.Report;
 using TCMS.Common.DTOs.Shipment;
 using TCMS.Common.DTOs.User;
 using TCMS.GUI.Models;
 using TCMS.GUI.ViewModels;
+using MaintenanceReportDto = TCMS.Common.DTOs.Report.MaintenanceReportDto;
 
 namespace TCMS.GUI.Utilities
 {
@@ -125,6 +127,8 @@ namespace TCMS.GUI.Utilities
             CreateMap<ManifestItemDto, ManifestItem>()
                 .ForMember(dest => dest.ItemStatus, opt => opt.MapFrom(src => src.ItemStatus));
 
+            CreateMap<PayrollReportDto, PayrollReport>().ReverseMap();
+            CreateMap<MaintenanceReportDto, MaintenanceReport>().ReverseMap();
 
         }
     };

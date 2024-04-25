@@ -191,7 +191,7 @@ namespace TCMS.GUI.ViewModels
             {
                 _selectedTabIndex = value;
                 OnPropertyChanged();
-                UpdateSearchText(value);
+                    //UpdateSearchText(value);
             }
         }
 
@@ -311,13 +311,20 @@ namespace TCMS.GUI.ViewModels
                 });
 
                 PurchaseOrderItemsResult = new ObservableCollection<PurchaseOrderItem>(items);
+                FilterShipmentsForSelectedPurchaseOrder();
             }
             else
             {
                 PurchaseOrderItemsResult = new ObservableCollection<PurchaseOrderItem>();
             }
         }
+        private void FilterShipmentsForSelectedPurchaseOrder()
+        {
+            var selectedPurchaseOrderId = SelectedPurchaseOrder.PurchaseOrderId;
+            var filtered = _shipments.Where(s => s.PurchaseOrderId == selectedPurchaseOrderId).ToList();
 
+            FilteredShipments = new ObservableCollection<Shipment>(filtered);
+        }
         private void LoadShipmentItems()
         {
             if (SelectedShipment?.Manifest?.Items != null)

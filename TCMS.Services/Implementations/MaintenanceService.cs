@@ -12,6 +12,12 @@ namespace TCMS.Services.Implementations
     {
         private readonly TcmsContext _context;
         private readonly IMapper _mapper;
+
+        public MaintenanceService(TcmsContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
         public async Task<OperationResult<IEnumerable<MaintenanceRecordDto>>> GetAllMaintenanceRecordsAsync()
         {
             try
