@@ -104,6 +104,16 @@ namespace TCMS.GUI.Utilities
             // Mapping for ShipmentDetailDto to Shipment
             CreateMap<ShipmentDetailDto, Shipment>();
 
+            CreateMap<ShipmentDetailDto, Shipment>()
+                .ForMember(dest => dest.IsArrived, opt => opt.MapFrom(src => src.hasArrived))
+                .ForMember(dest => dest.ManifestId, opt => opt.MapFrom(src => src.Manifest.ManifestId));
+
+            CreateMap<ShipmentManifestDto, Manifest>()
+                .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.ManifestItems));
+
+            CreateMap<ManifestItemDto, ManifestItem>()
+                .ForMember(dest => dest.ItemStatus, opt => opt.MapFrom(src => src.ItemStatus));
+
 
         }
     };

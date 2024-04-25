@@ -133,7 +133,10 @@ namespace TCMS.Services.Implementations
                 if (purchaseOrder == null)
                     return OperationResult.Failure(new List<string> { "Purchase order not found." });
 
-                var manifest = await context.Manifests.FirstOrDefaultAsync(m => m.PurchaseOrderId == updatedItemStatus.PurchaseOrderId);
+                var manifest = await context.Manifests
+                    .Include(m => m.ManifestItems)
+                    .FirstOrDefaultAsync(m => m.ManifestId == purchaseOrder.ManifestId);
+
                 if (manifest == null)
                     return OperationResult.Failure(new List<string> { "Manifest not found." });
 
