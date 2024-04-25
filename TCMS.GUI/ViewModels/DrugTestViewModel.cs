@@ -217,6 +217,9 @@ namespace TCMS.GUI.ViewModels
                     EmployeeId = employee.EmployeeId,
                     IncidentReportId = largestIncidentReportId,
                     TestDate = DateTime.Now,
+                    TestDetails = employee.FullName + " has been selected for a random drug test",
+                    FollowUpTestDate = null,
+                    TestType = TestType.Random,
                     //Result = "Pending" // Default status
                 };
 

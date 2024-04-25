@@ -17,6 +17,7 @@ using System.ComponentModel;
 using TCMS.GUI.Models;
 using TCMS.GUI.Views;
 using TCMS.Common.enums;
+using TCMS.Common.DTOs.DrugTest;
 
 
 namespace TCMS.GUI.ViewModels
@@ -171,15 +172,15 @@ namespace TCMS.GUI.ViewModels
             }
         }
 
-        private string _drugAndAlcoholTestId;
-        public string DrugAndAlcoholTestId
+        private int _drugAndAlcoholTestId;
+        public int DrugAndAlcoholTestId
         {
             get => _drugAndAlcoholTestId;
             set
             {
                 _drugAndAlcoholTestId = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(NamePlaceholderVisible));
+                OnPropertyChanged(nameof(DrugAndAlcoholTestId));
             }
         }
 
@@ -204,6 +205,7 @@ namespace TCMS.GUI.ViewModels
                 OnPropertyChanged();
             }
         }
+        public Array TestTypes => Enum.GetValues(typeof(TestType));
         private TestType _testType;
         public TestType TestType
         {
@@ -215,7 +217,7 @@ namespace TCMS.GUI.ViewModels
                 OnPropertyChanged(nameof(TestType));
             }
         }
-
+        public Array TestResults => Enum.GetValues(typeof(TestResult));
         private TestResult _testResult;
         public TestResult TestResult
         {
@@ -236,7 +238,7 @@ namespace TCMS.GUI.ViewModels
             {
                 _testDetails = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(DescriptionPlaceholderVisible));
+                OnPropertyChanged(nameof(TestDetails));
             }
         }
         private DateTime? _followUpTestDate;
@@ -265,8 +267,8 @@ namespace TCMS.GUI.ViewModels
             }
         }
 
-        public Visibility NamePlaceholderVisible => string.IsNullOrEmpty(_drugAndAlcoholTestId) ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility DescriptionPlaceholderVisible => string.IsNullOrEmpty(_testDetails) ? Visibility.Visible : Visibility.Collapsed;
+        //public Visibility NamePlaceholderVisible => string.IsNullOrEmpty(_drugAndAlcoholTestId) ? Visibility.Visible : Visibility.Collapsed;
+        //public Visibility DescriptionPlaceholderVisible => string.IsNullOrEmpty(_testDetails) ? Visibility.Visible : Visibility.Collapsed;
         //public Visibility PricePlaceholderVisible => DateTime.IsNullOrEmpty(_followUpTestDate) ? Visibility.Visible : Visibility.Collapsed;
 
         public ICommand ConfirmCommand { get; }
@@ -315,24 +317,24 @@ namespace TCMS.GUI.ViewModels
         {
             if (IsEditMode)
             {
-                await UpdateIncidentAsync();
+                await UpdateDrugTestAsync();
             }
             else
             {
-                await AddIncidentAsync();
+                await AddDrugTestAsync();
             }
 
             // Close the window or navigate back as appropriate
             CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
         }
 
-        private async Task AddIncidentAsync()
+        private async Task AddDrugTestAsync()
         {
             try
             {
-                var newIncidentReportDto = _mapper.Map<IncidentReportDto>(this);
+                var newDrugTestDto = _mapper.Map<DrugTestCreateDto>(this);
 
-                var result = await _apiClient.PostAsync<OperationResult>("incident/create", newIncidentReportDto);
+                var result = await _apiClient.PostAsync<OperationResult>("drug-test/create", newDrugTestDto);
                 if (!result.IsSuccessful)
                 {
                     Debug.WriteLine(result.Messages);
@@ -348,7 +350,7 @@ namespace TCMS.GUI.ViewModels
             }
         }
 
-        private async Task UpdateIncidentAsync()
+        private async Task UpdateDrugTestAsync()
         {
             try
             {

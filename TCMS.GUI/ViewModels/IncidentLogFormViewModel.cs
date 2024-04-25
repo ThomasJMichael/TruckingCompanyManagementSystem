@@ -241,10 +241,10 @@ namespace TCMS.GUI.ViewModels
             }
         }
 
-        private string _incidentReportId = "Enter Vehicle ID...";
-        public string IncidentReportId
+        private int _incidentReportId;
+        public int IncidentReportId
         {
-            get => string.IsNullOrEmpty(_incidentReportId) ? "Name" : _incidentReportId;
+            get => _incidentReportId;
             set
             {
                 _incidentReportId = value;
@@ -325,7 +325,7 @@ namespace TCMS.GUI.ViewModels
             }
         }
 
-        public Visibility NamePlaceholderVisible => string.IsNullOrEmpty(_incidentReportId) ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility NamePlaceholderVisible => string.IsNullOrEmpty(_employeeId) ? Visibility.Visible : Visibility.Collapsed;
         public Visibility DescriptionPlaceholderVisible => string.IsNullOrEmpty(_description) ? Visibility.Visible : Visibility.Collapsed;
         public Visibility PricePlaceholderVisible => string.IsNullOrEmpty(_location) ? Visibility.Visible : Visibility.Collapsed;
 

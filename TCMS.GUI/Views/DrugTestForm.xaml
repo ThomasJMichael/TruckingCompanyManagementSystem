@@ -85,16 +85,17 @@
                       TextSearch.TextPath="FullName"
                       StaysOpenOnEdit="True" Grid.ColumnSpan="2"/>
 
+            <ComboBox ItemsSource="{Binding TestTypes}" SelectedItem="{Binding TestType}"  Grid.Column="5"  Grid.Row="5" Width="126" VerticalAlignment="Center" HorizontalAlignment="Center">
 
-            <TextBox Grid.Column="5"
-                     Grid.Row="0"
-                     Text="{Binding TestType, UpdateSourceTrigger=PropertyChanged}"
-                     Style="{StaticResource PlaceholderTextBoxStyle}"/>
+                <!-- Add more items as needed -->
+
+            </ComboBox>
             <Label Grid.Column="7" Content="Enter the Results" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-26,0,0"/>
-            <TextBox Grid.Column="7"
-                     Grid.Row="5"
-                     Text="{Binding TestResult, UpdateSourceTrigger=PropertyChanged}"
-                     Style="{StaticResource PlaceholderTextBoxStyle}"/>
+            <ComboBox ItemsSource="{Binding TestResults}" SelectedItem="{Binding TestResult}"  Grid.Column="7"  Grid.Row="5" Width="126" VerticalAlignment="Center" HorizontalAlignment="Center">
+
+                <!-- Add more items as needed -->
+
+            </ComboBox>
             <Label Grid.Column="9" Content="Incident Report Id" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="11,-26,0,0" Width="126"/>
             <TextBox Grid.Column="9"
                      Grid.Row="5"
