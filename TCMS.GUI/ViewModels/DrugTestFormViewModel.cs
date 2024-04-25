@@ -56,6 +56,18 @@ namespace TCMS.GUI.ViewModels
             }
         }
 
+        private string _employeeId;
+        public string EmployeeId
+        {
+            get => string.IsNullOrEmpty(_employeeId) ? "Name" : _employeeId;
+            set
+            {
+                _employeeId = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(EmployeeId));
+            }
+        }
+
         public Employee SelectedEmployee
         {
             get => _selectedEmployee;

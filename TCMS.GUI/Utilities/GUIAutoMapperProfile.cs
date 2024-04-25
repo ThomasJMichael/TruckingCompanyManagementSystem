@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using TCMS.Common.DTOs.DrugTest;
 using TCMS.Common.DTOs.Employee;
 using TCMS.Common.DTOs.Financial;
 using TCMS.Common.DTOs.Incident;
@@ -36,6 +37,16 @@ namespace TCMS.GUI.Utilities
                 .ForMember(dest => dest.IncidentReportId, opt => opt.MapFrom(src => src.IncidentReportId))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
                 .ForMember(dest => dest.IncidentDate, opt => opt.MapFrom(src => src.SelectedDate));
+            CreateMap<DrugTestFormViewModel, DrugTestCreateDto>()
+                .ForMember(dest => dest.EmployeeId, opt => opt.MapFrom(src => src.EmployeeId))
+                .ForMember(dest => dest.TestType, opt => opt.MapFrom(src => src.TestType))
+                .ForMember(dest => dest.TestResult, opt => opt.MapFrom(src => src.TestResult))
+                .ForMember(dest => dest.TestDate, opt => opt.MapFrom(src => src.TestDate))
+                .ForMember(dest => dest.TestDetails, opt => opt.MapFrom(src => src.TestDetails))
+                .ForMember(dest => dest.IncidentReportId, opt => opt.MapFrom(src => src.IncidentReportId))
+                .ForMember(dest => dest.FollowUpTestDate, opt => opt.MapFrom(src => src.FollowUpTestDate));
+
+
 
             // Employee Mapping
             CreateMap<EmployeeDto, Employee>()
