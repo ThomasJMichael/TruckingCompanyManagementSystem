@@ -249,7 +249,7 @@ namespace TCMS.GUI.ViewModels
             {
                 _incidentReportId = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(NamePlaceholderVisible));
+                OnPropertyChanged(nameof(IncidentReportId));
             }
         }
         private DateTime? _selectedDate;
@@ -270,7 +270,7 @@ namespace TCMS.GUI.ViewModels
             {
                 _vehicleId = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(NamePlaceholderVisible));
+                OnPropertyChanged(nameof(VehicleId));
             }
         }
 
@@ -282,7 +282,7 @@ namespace TCMS.GUI.ViewModels
             {
                 _employeeId = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(NamePlaceholderVisible));
+                OnPropertyChanged(nameof(EmployeeId));
             }
         }
 
@@ -294,7 +294,7 @@ namespace TCMS.GUI.ViewModels
             {
                 _location = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(NamePlaceholderVisible));
+                OnPropertyChanged(nameof(Location));
             }
         }
 
@@ -307,7 +307,7 @@ namespace TCMS.GUI.ViewModels
             {
                 _description = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(DescriptionPlaceholderVisible));
+                OnPropertyChanged(nameof(Description));
             }
         }
 
