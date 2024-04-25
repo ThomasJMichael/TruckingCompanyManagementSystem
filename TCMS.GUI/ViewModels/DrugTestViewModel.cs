@@ -4,14 +4,18 @@ using System.Net.Mime;
 using System.Windows.Input;
 using AutoMapper;
 using TCMS.Common.DTOs.DrugTest;
+using TCMS.Common.DTOs.Employee;
 using TCMS.Common.Operations;
 using TCMS.Data.Models;
 using TCMS.GUI.Models;
+using TCMS.GUI.Services.Implementations;
 using TCMS.GUI.Services.Interfaces;
 using TCMS.GUI.Utilities;
 using TCMS.GUI.Views;
 using Xceed.Wpf.Toolkit;
+using Employee = TCMS.GUI.Models.Employee;
 using DrugTest = TCMS.GUI.Models.DrugTest;
+using TCMS.Common.enums;
 
 namespace TCMS.GUI.ViewModels
 {
@@ -21,11 +25,22 @@ namespace TCMS.GUI.ViewModels
         private readonly IApiClient _apiClient;
         private readonly IMapper _mapper;
         private readonly IDialogService _dialogService;
-
+        private readonly IEmployeeUserService _employeeUserService;
         private Lazy<Task> _LazyDrugTestLoader;
 
+        private ObservableCollection<Employee> _employees;
         private ObservableCollection<DrugTest> _DrugTests;
         private ObservableCollection<DrugTest> _filteredDrugTests;
+
+        public ObservableCollection<Employee> Employees
+        {
+            get => _employees;
+            private set
+            {
+                _employees = value;
+                OnPropertyChanged();
+            }
+        }
 
         public ObservableCollection<DrugTest> FilteredDrugTests
         {
@@ -133,12 +148,16 @@ namespace TCMS.GUI.ViewModels
         public ICommand SearchCommand { get; }
         public ICommand SearchBoxGotFocusCommand { get; }
         public ICommand SearchBoxLostFocusCommand { get; }
+        public ICommand AssignDrugTestsCommand { get; private set; }
 
-        public DrugTestViewModel(IApiClient apiClient, IMapper mapper, IDialogService dialogService)
+        public DrugTestViewModel(IApiClient apiClient, IMapper mapper, IDialogService dialogService, IEmployeeUserService employeeUserService)
         {
             _apiClient = apiClient;
             _mapper = mapper;
             _dialogService = dialogService;
+            _employeeUserService = employeeUserService;
+            Random rng = new Random();
+
             // Initialize commands
             AddDrugTestCommand = new RelayCommand(AddDrugTest);
             EditDrugTestCommand = new RelayCommand(EditDrugTest, CanExecuteEditOrDelete);
@@ -147,12 +166,88 @@ namespace TCMS.GUI.ViewModels
             SearchCommand = new RelayCommand((obj) => FilterDrugTests());
             SearchBoxGotFocusCommand = new RelayCommand(SearchBoxGotFocus);
             SearchBoxLostFocusCommand = new RelayCommand(SearchBoxLostFocus);
-
+            AssignDrugTestsCommand = new RelayCommand(AssignDrugTests);
             _DrugTests = new ObservableCollection<DrugTest>();
             _filteredDrugTests = new ObservableCollection<DrugTest>();
 
             InitializeLazyLoader();
 
+
+        }
+        //private async void AssignDrugTests(object obj)
+        //{
+        //    LoadEmployeesAsync();
+        //}
+
+        private async void AssignDrugTests(object obj)
+        {
+            await LoadEmployeesAsync(); // Ensure employees are loaded
+
+            if (Employees == null || Employees.Count == 0)
+            {
+                Debug.WriteLine("No employees available for assignment.");
+                return;
+            }
+
+            // Ensure drug tests are loaded
+            await EnsureDrugTestsLoadedAsync();
+
+            // Find the largest DrugTestId and IncidentReportId and increment by 1
+            int largestDrugTestId = _DrugTests.Any()
+                ? _DrugTests.Max(dt => dt.DrugAndAlcoholTestId)
+                : 1; // Default start if there are no existing drug tests
+
+            int? largestIncidentReportId = _DrugTests.Any()
+                ? _DrugTests.Max(dt => dt.IncidentReportId)
+                : 10000; // Default start if no existing incident report IDs
+
+            // Shuffle employees and select 5 random ones
+            Random rng = new Random();
+            var randomEmployees = Employees.OrderBy(x => rng.Next()).Take(5).ToList();
+
+            foreach (var employee in randomEmployees)
+            {
+                largestDrugTestId++; // Increment the DrugTestId
+                largestIncidentReportId++; // Increment the IncidentReportId
+
+                // Create a new drug test for the employee with incremented IDs
+                var newDrugTest = new DrugTest
+                {
+                    DrugAndAlcoholTestId = largestDrugTestId,
+                    EmployeeId = employee.EmployeeId,
+                    IncidentReportId = largestIncidentReportId,
+                    TestDate = DateTime.Now,
+                    //Result = "Pending" // Default status
+                };
+
+                _DrugTests.Add(newDrugTest); // Add the new drug test to the collection
+            }
+
+            // Refresh the filtered collection to update the UI
+            FilterDrugTests();
+        }
+
+        private async Task LoadEmployeesAsync()
+        {
+            try
+            {
+                var results = await _employeeUserService.GetEmployeesWithUserAccountsAsync();
+                if (results != null)
+                {
+                    _employees = new ObservableCollection<Employee>(results);
+                    var _filter = _employees.Where(emp => emp.UserRole == "Driver").ToList();
+                    Employees = new ObservableCollection<Employee>(_filter);
+ 
+                }
+                else
+                {
+                    Debug.WriteLine("Failed to load employees or no employees returned.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"An error occurred while loading products: {ex.Message}");
+            }
         }
 
         private void InitializeLazyLoader()
