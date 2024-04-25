@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Parts.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Assets\Images\assignment.png" />
     <None Remove="Assets\Images\BaseBackground.png" />
     <None Remove="Assets\Images\customer_page.png" />

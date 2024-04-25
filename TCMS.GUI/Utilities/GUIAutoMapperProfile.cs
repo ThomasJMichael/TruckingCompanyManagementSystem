@@ -3,6 +3,7 @@ using TCMS.Common.DTOs.Employee;
 using TCMS.Common.DTOs.Financial;
 using TCMS.Common.DTOs.Incident;
 using TCMS.Common.DTOs.Inventory;
+using TCMS.Common.DTOs.Equipment;
 using TCMS.Common.DTOs.Shipment;
 using TCMS.Common.DTOs.User;
 using TCMS.GUI.Models;
@@ -103,6 +104,23 @@ namespace TCMS.GUI.Utilities
 
             // Mapping for ShipmentDetailDto to Shipment
             CreateMap<ShipmentDetailDto, Shipment>();
+
+
+
+            // Vehicle Mapping
+            CreateMap<VehicleDto, Vehicle>().ReverseMap();
+            CreateMap<VehicleFormViewModel, VehicleDto>()
+                .ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand))
+                .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model))
+                .ForMember(dest => dest.Year, opt => opt.MapFrom(src => src.Year))
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type));
+
+            //CreateMap<InventoryProductDetailDto, Product>().ReverseMap();
+            //CreateMap<AddProductDto, ProductFormViewModel>().ReverseMap()
+            //    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+            //    .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+            //    .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
+            //    .ForMember(dest => dest.InitialQuantityOnHand, opt => opt.MapFrom(src => src.QuantityOnHand));
 
 
         }

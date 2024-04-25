@@ -3,17 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:TCMS.GUI.Views"
              xmlns:viewModels="clr-namespace:TCMS.GUI.ViewModels"
              xmlns:utilities="clr-namespace:TCMS.GUI.Utilities"
+             d:DataContext="{d:DesignInstance Type=viewmodels:EquipmentViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="600"
              d:DesignWidth="622"
              Style="{StaticResource Page_Style}">
 
-    <UserControl.DataContext>
-        <viewModels:EquipmentViewModel />
-    </UserControl.DataContext>
     <UserControl.Resources>
         <utilities:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
         <SolidColorBrush x:Key="DetailBackgroundBrush" Color="#FF272B2F"/>
@@ -76,6 +75,14 @@
                      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                      Width="{Binding ElementName=TopBarGrid, Path=ActualWidth}"/>
                     <!-- Interaction Triggers as before -->
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="GotFocus">
+                            <i:InvokeCommandAction Command="{Binding SearchBoxGotFocusCommand}" />
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="LostFocus">
+                            <i:InvokeCommandAction Command="{Binding SearchBoxLostFocusCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                 </Border>
             </Grid>
 
@@ -108,7 +115,7 @@
 
         <ListView Grid.Column="0"
                   x:Name="VehicleListView"
-                  ItemsSource="{Binding FilteredEmployees}"
+                  ItemsSource="{Binding FilteredVehicles}"
                   SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}"
                   BorderBrush="{x:Null}" Background="#FF272B2F"
                   ScrollViewer.VerticalScrollBarVisibility="Hidden" Margin="0,103,0,0">
@@ -155,7 +162,7 @@
                         <TextBlock Text="Vehicle Details" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold" FontSize="18" />
                         <Separator/>
                         <TextBlock Text="Vehicle ID:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding SelectedVehicle.VehicleId}" Style="{StaticResource DetailTextBlockStyle}"/>
+                        <TextBlock Text="{Binding SelectedVehicle.VehicleID}" Style="{StaticResource DetailTextBlockStyle}"/>
                         <TextBlock Text="Brand:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
                         <TextBlock Text="{Binding SelectedVehicle.Brand}" Style="{StaticResource DetailTextBlockStyle}"/>
                         <TextBlock Text="Model:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
