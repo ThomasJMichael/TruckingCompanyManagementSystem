@@ -389,12 +389,6 @@ namespace TCMS.Data.Migrations
 
                     b.HasKey("ManifestId");
 
-                    b.HasIndex("PurchaseOrderId")
-                        .IsUnique();
-
-                    b.HasIndex("ShipmentId")
-                        .IsUnique();
-
                     b.ToTable("Manifests");
                 });
 
@@ -574,6 +568,9 @@ namespace TCMS.Data.Migrations
                     b.Property<int>("ManifestId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("ManifestId1")
+                        .HasColumnType("INTEGER");
+
                     b.Property<decimal>("ShippingCost")
                         .HasColumnType("TEXT");
 
@@ -592,6 +589,8 @@ namespace TCMS.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("PurchaseOrderId");
+
+                    b.HasIndex("ManifestId1");
 
                     b.ToTable("PurchaseOrders");
                 });
@@ -673,6 +672,9 @@ namespace TCMS.Data.Migrations
                     b.Property<int>("ManifestId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("ManifestId1")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("PurchaseOrderId")
                         .HasColumnType("INTEGER");
 
@@ -694,7 +696,9 @@ namespace TCMS.Data.Migrations
 
                     b.HasIndex("DriverEmployeeId");
 
-                    b.HasIndex("ManifestId");
+                    b.HasIndex("ManifestId1");
+
+                    b.HasIndex("PurchaseOrderId");
 
                     b.HasIndex("VehicleId");
 
@@ -951,13 +955,11 @@ namespace TCMS.Data.Migrations
 
             modelBuilder.Entity("TCMS.Data.Models.Inventory", b =>
                 {
-                    b.HasOne("TCMS.Data.Models.Product", "Product")
+                    b.HasOne("TCMS.Data.Models.Product", null)
                         .WithOne("Inventory")
                         .HasForeignKey("TCMS.Data.Models.Inventory", "ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("TCMS.Data.Models.MaintenanceRecord", b =>
@@ -970,28 +972,12 @@ namespace TCMS.Data.Migrations
                     b.Navigation("Vehicle");
                 });
 
-            modelBuilder.Entity("TCMS.Data.Models.Manifest", b =>
-                {
-                    b.HasOne("TCMS.Data.Models.PurchaseOrder", "PurchaseOrder")
-                        .WithOne("Manifest")
-                        .HasForeignKey("TCMS.Data.Models.Manifest", "PurchaseOrderId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("TCMS.Data.Models.Shipment", "Shipment")
-                        .WithOne("Manifest")
-                        .HasForeignKey("TCMS.Data.Models.Manifest", "ShipmentId");
-
-                    b.Navigation("PurchaseOrder");
-
-                    b.Navigation("Shipment");
-                });
-
             modelBuilder.Entity("TCMS.Data.Models.ManifestItem", b =>
                 {
-                    b.HasOne("TCMS.Data.Models.Manifest", "Manifest")
+                    b.HasOne("TCMS.Data.Models.Manifest", null)
                         .WithMany("ManifestItems")
                         .HasForeignKey("ManifestId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TCMS.Data.Models.Product", "Product")
@@ -999,8 +985,6 @@ namespace TCMS.Data.Migrations
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Manifest");
 
                     b.Navigation("Product");
                 });
@@ -1040,6 +1024,17 @@ namespace TCMS.Data.Migrations
                     b.Navigation("Employee");
                 });
 
+            modelBuilder.Entity("TCMS.Data.Models.PurchaseOrder", b =>
+                {
+                    b.HasOne("TCMS.Data.Models.Manifest", "Manifest")
+                        .WithMany()
+                        .HasForeignKey("ManifestId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Manifest");
+                });
+
             modelBuilder.Entity("TCMS.Data.Models.RepairRecord", b =>
                 {
                     b.HasOne("TCMS.Data.Models.Vehicle", "Vehicle")
@@ -1056,10 +1051,16 @@ namespace TCMS.Data.Migrations
                         .WithMany("Shipments")
                         .HasForeignKey("DriverEmployeeId");
 
-                    b.HasOne("TCMS.Data.Models.PurchaseOrder", "PurchaseOrder")
+                    b.HasOne("TCMS.Data.Models.Manifest", "Manifest")
+                        .WithMany()
+                        .HasForeignKey("ManifestId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TCMS.Data.Models.PurchaseOrder", null)
                         .WithMany("Shipments")
-                        .HasForeignKey("ManifestId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasForeignKey("PurchaseOrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TCMS.Data.Models.Vehicle", "Vehicle")
@@ -1070,7 +1071,7 @@ namespace TCMS.Data.Migrations
 
                     b.Navigation("Driver");
 
-                    b.Navigation("PurchaseOrder");
+                    b.Navigation("Manifest");
 
                     b.Navigation("Vehicle");
                 });
@@ -1115,18 +1116,12 @@ namespace TCMS.Data.Migrations
 
             modelBuilder.Entity("TCMS.Data.Models.PurchaseOrder", b =>
                 {
-                    b.Navigation("Manifest")
-                        .IsRequired();
-
                     b.Navigation("Shipments");
                 });
 
             modelBuilder.Entity("TCMS.Data.Models.Shipment", b =>
                 {
                     b.Navigation("Assignments");
-
-                    b.Navigation("Manifest")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("TCMS.Data.Models.UserAccount", b =>

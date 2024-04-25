@@ -36,7 +36,7 @@
                 <Border Background="#272B2F"
                         CornerRadius="20,0,0,20" />
 
-                <StackPanel Height="Auto"
+                <StackPanel Height="550"
                             Width="228">
 
                     <!--// Home //-->
@@ -104,24 +104,6 @@
                                    Style="{StaticResource Image_Style}" />
 
                             <TextBlock Text="Inventory"
-                                       Style="{StaticResource Text_Style}" />
-
-                        </Grid>
-
-                    </utilities:Btn>
-
-                    <!--// Orders //-->
-
-                    <utilities:Btn Style="{StaticResource BtnStyle}"
-                              Command="{Binding OrdersCommand}"
-                              Visibility="{Binding OrdersVisibility}">
-
-                        <Grid>
-
-                            <Image Source="/Assets/Images/img_order.png"
-                                   Style="{StaticResource Image_Style}" />
-
-                            <TextBlock Text="Orders"
                                        Style="{StaticResource Text_Style}" />
 
                         </Grid>

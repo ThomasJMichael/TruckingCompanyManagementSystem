@@ -50,7 +50,7 @@ namespace TCMS.GUI
             // Initialize the AutoMapper for DI
             var mapperConfig = new MapperConfiguration(cfg =>
             {
-                cfg.AddProfile(new MappingConfigurations());
+                //cfg.AddProfile(new MappingConfigurations());
                 cfg.AddProfile<GUIAutoMapperProfile>();
             });
             IMapper mapper = mapperConfig.CreateMapper();

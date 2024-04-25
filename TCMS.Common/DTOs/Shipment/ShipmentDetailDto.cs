@@ -31,6 +31,7 @@ namespace TCMS.Common.DTOs.Shipment
         public bool IsFullyPaid { get; set; }
 
         public int VehicleId { get; set; }
+        public string EmployeeId { get; set; }
 
         public int ManifestId { get; set; }
         public int PurchaseOrderId { get; set; }

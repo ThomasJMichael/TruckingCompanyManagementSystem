@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TCMS.Common.enums;
 
 namespace TCMS.Common.DTOs.Shipment
 {
@@ -12,11 +13,10 @@ namespace TCMS.Common.DTOs.Shipment
         public int ManifestItemId { get; set; }
 
         public int ProductId { get; set; }
+        public ItemStatus ItemStatus { get; set; }
 
-        [Required]
         public int Quantity { get; set; }
 
-        [Required]
         [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0.")]
         public decimal Price { get; set; }
 

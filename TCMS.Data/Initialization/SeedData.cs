@@ -403,24 +403,27 @@ namespace TCMS.Data.Initialization
 
         private static async Task<List<Manifest>> SeedManifestsAsync(TcmsContext context)
         {
-            var manifests = ManifestGenerator.GenerateManifests(50);
-
-            await context.Manifests.AddRangeAsync(manifests);
+            // Ensure the database table is empty before adding new manifests.
+            context.Manifests.RemoveRange(context.Manifests);
             await context.SaveChangesAsync();
+
+            var manifestsGenerated = ManifestGenerator.GenerateManifests(50);
+
+            // EF Core will track and set the ManifestId automatically if it's an identity column.
+            await context.Manifests.AddRangeAsync(manifestsGenerated);
+            await context.SaveChangesAsync();
+
+            var manifests = context.Manifests.ToList();
 
             var products = context.Products.ToList();
             foreach (var manifest in manifests)
             {
-                var manifestItems = ManifestItemGenerator.GenerateManifestItemsForManifest(manifest.ManifestId, 10, products); // Generate 10 ManifestItems per Manifest
+                var manifestItems = ManifestItemGenerator.GenerateManifestItemsForManifest(manifest.ManifestId, 20, products);
                 manifest.ManifestItems = manifestItems;
+                // Save each manifest's items immediately after generation to maintain the relationship context.
+                await context.ManifestItems.AddRangeAsync(manifestItems);
+                await context.SaveChangesAsync();
             }
-
-            // Save ManifestItems to the database
-            foreach (var manifest in manifests)
-            {
-                await context.ManifestItems.AddRangeAsync(manifest.ManifestItems);
-            }
-            await context.SaveChangesAsync();
 
             return manifests;
         }
