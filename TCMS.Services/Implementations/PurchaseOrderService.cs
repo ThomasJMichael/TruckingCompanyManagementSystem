@@ -21,7 +21,23 @@ namespace TCMS.Services.Implementations
             try
             {
                 var purchaseOrders = await context.PurchaseOrders
+                    .Include(po => po.Manifest)
+                    .ThenInclude(m => m.ManifestItems)
+                    .ThenInclude(mi => mi.Product)
                     .ToListAsync();
+
+                // Step 2: Load Shipments separately
+                foreach (var po in purchaseOrders)
+                {
+                    var shipments = await context.Shipments
+                        .Where(s => s.PurchaseOrderId == po.PurchaseOrderId)
+                        .Include(s => s.Manifest)
+                        .ThenInclude(m => m.ManifestItems)
+                        .ThenInclude(mi => mi.Product)
+                        .ToListAsync();
+
+                    po.Shipments = shipments;  // Manually associating shipments with their respective purchase orders
+                }
 
                 var purchaseOrderDtos = mapper.Map<IEnumerable<PurchaseOrderDto>>(purchaseOrders);
 

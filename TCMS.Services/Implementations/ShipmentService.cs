@@ -188,7 +188,6 @@ namespace TCMS.Services.Implementations
             {
                 var shipments = await context.Shipments
                     .Include(s => s.Manifest)
-                    .Include(s => s.PurchaseOrder)
                     .Include(s => s.Vehicle)
                     .ToListAsync();
 
@@ -208,7 +207,6 @@ namespace TCMS.Services.Implementations
                 var shipments = await context.Shipments
                     .Where(s => s.Direction == ShipmentDirection.Inbound)
                     .Include(s => s.Manifest)
-                    .Include(s => s.PurchaseOrder)
                     .Include(s => s.Vehicle)
                     .ToListAsync();
 
@@ -228,7 +226,6 @@ namespace TCMS.Services.Implementations
                 var shipments = await context.Shipments
                     .Where(s => s.Direction == ShipmentDirection.Outbound)
                     .Include(s => s.Manifest)
-                    .Include(s => s.PurchaseOrder)
                     .Include(s => s.Vehicle)
                     .ToListAsync();
 
@@ -247,7 +244,6 @@ namespace TCMS.Services.Implementations
             {
                 var shipment = await context.Shipments
                     .Include(s => s.Manifest)
-                    .Include(s => s.PurchaseOrder)
                     .Include(s => s.Vehicle)
                     .FirstOrDefaultAsync(s => s.ShipmentId == id);
 

@@ -1,10 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
-using TCMS.Common.DTOs.Shipment;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using TCMS.Common.enums;
 
-namespace TCMS.Common.DTOs.Financial
+namespace TCMS.GUI.Models
 {
-    public class PurchaseOrderDto
+    public class PurchaseOrder
     {
         public int PurchaseOrderId { get; set; }
         public string Company { get; set; }
@@ -15,11 +19,18 @@ namespace TCMS.Common.DTOs.Financial
         public ShipmentDirection ShipmentDirection { get; set; }
         public DateTime DateCreated { get; set; }
         public int ManifestId { get; set; }
-        public ManifestDto Manifest { get; set; }
-        public List<ShipmentDetailDto> Shipments { get; set; }
+        public Manifest Manifest { get; set; }
+        public ObservableCollection<Shipment> Shipments { get; set; }
         public decimal ShippingCost { get; set; }
         public bool ShippingPaid { get; set; }
         public decimal TotalItemCost { get; set; }
         public decimal TotalCost { get; set; }
+
+        public void CalculateTotals()
+        {
+            TotalItemCost = Manifest.Items.Sum(item => item.Price * item.Quantity);
+            TotalCost = TotalItemCost + ShippingCost;
+        }
+
     }
 }

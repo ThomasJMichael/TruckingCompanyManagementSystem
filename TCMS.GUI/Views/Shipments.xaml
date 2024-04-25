@@ -63,6 +63,7 @@
 
         <!-- Main Tab Control -->
         <TabControl Grid.Row="1" Margin="10"
+                    SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay}"
                     ItemContainerStyle="{StaticResource ThemedTabItem}"
                     Background="#FF272B2F">
             <!-- Purchase Orders Tab -->
@@ -87,15 +88,15 @@
                         <!-- Search Results Tab -->
                         <TabItem Header="Search Results">
                             <ListView x:Name="PurchaseOrderSearchResults"
-                                      ItemsSource="{Binding PurchaseOrderResults}"
+                                      ItemsSource="{Binding FilteredPurchaseOrders}"
                                       SelectedItem="{Binding SelectedPurchaseOrder, Mode=TwoWay}"
                                       BorderBrush="{x:Null}" Background="#FF272B2F"
                                       ScrollViewer.VerticalScrollBarVisibility="Hidden">
                                 <ListView.View>
                                     <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
-                                        <GridViewColumn Header="Order ID" DisplayMemberBinding="{Binding OrderId}" Width="100"/>
-                                        <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date}" Width="100"/>
-                                        <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" Width="100"/>
+                                        <GridViewColumn Header="Order ID" DisplayMemberBinding="{Binding PurchaseOrderId}" Width="100"/>
+                                        <GridViewColumn Header="Date" DisplayMemberBinding="{Binding DateCreated}" Width="100"/>
+                                        <GridViewColumn Header="Company" DisplayMemberBinding="{Binding Company}" Width="100"/>
                                         <!-- Additional columns as needed -->
                                     </GridView>
                                 </ListView.View>
@@ -130,10 +131,10 @@
                                     <TextBlock Text="{Binding SelectedPurchaseOrder.TotalItemCost, StringFormat='{}{0:C}'}" Foreground="White" Margin="5" />
 
                                     <Label Content="Total Shipment Cost:" FontWeight="SemiBold" Foreground="White" Margin="5"/>
-                                    <TextBlock Text="{Binding SelectedPurchaseOrder.TotalShipmentCost, StringFormat='{}{0:C}'}" Foreground="White" Margin="5" />
+                                    <TextBlock Text="{Binding SelectedPurchaseOrder.TotalCost, StringFormat='{}{0:C}'}" Foreground="White" Margin="5" />
 
                                     <Label Content="Order Date:" FontWeight="SemiBold" Foreground="White" Margin="5"/>
-                                    <TextBlock Text="{Binding SelectedPurchaseOrder.OrderDate, StringFormat='{}{0:MM/dd/yyyy}'}" Foreground="White" Margin="5" />
+                                    <TextBlock Text="{Binding SelectedPurchaseOrder.DateCreated, StringFormat='{}{0:MM/dd/yyyy}'}" Foreground="White" Margin="5" />
 
                                     <!-- Additional details can be added here -->
                                 </StackPanel>
@@ -150,11 +151,11 @@
                                       ScrollViewer.VerticalScrollBarVisibility="Hidden">
                                 <ListView.View>
                                     <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
-                                        <GridViewColumn Header="Item ID" DisplayMemberBinding="{Binding ItemID}" Width="80"/>
+                                        <GridViewColumn Header="Item ID" DisplayMemberBinding="{Binding ItemId}" Width="80"/>
                                         <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" Width="150"/>
-                                        <GridViewColumn Header="Quantity" DisplayMemberBinding="{Binding QuantityOrdered}" Width="70"/>
-                                        <GridViewColumn Header="Unit Cost" DisplayMemberBinding="{Binding UnitCost, StringFormat='{}{0:C}'}" Width="100"/>
-                                        <GridViewColumn Header="Total Cost" DisplayMemberBinding="{Binding TotalCost, StringFormat='{}{0:C}'}" Width="100"/>
+                                        <GridViewColumn Header="Quantity" DisplayMemberBinding="{Binding Quantity}" Width="70"/>
+                                        <GridViewColumn Header="Unit Cost" DisplayMemberBinding="{Binding Price, StringFormat='{}{0:C}'}" Width="100"/>
+                                        <GridViewColumn Header="Total Cost" DisplayMemberBinding="{Binding TotalPrice, StringFormat='{}{0:C}'}" Width="100"/>
                                         <GridViewColumn Header="Status" DisplayMemberBinding="{Binding ItemStatus}" Width="100"/>
                                         <!-- Additional columns as needed -->
                                     </GridView>
@@ -195,17 +196,17 @@
                         <TabItem Header="Search Results"
                                  Background="#FF272B2F">
                             <ListView x:Name="ShipmentSearchResults"
-                                      ItemsSource="{Binding ShipmentResults}"
+                                      ItemsSource="{Binding FilteredShipments}"
                                       SelectedItem="{Binding SelectedShipment, Mode=TwoWay}"
                                       BorderBrush="{x:Null}" Background="#FF272B2F"
                                       ScrollViewer.VerticalScrollBarVisibility="Hidden">
                                 <ListView.View>
                                     <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
                                         <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ShipmentId}" Width="50"/>
-                                        <GridViewColumn Header="Shipping Direction" DisplayMemberBinding="{Binding Direction}" Width="Auto"/>
-                                        <GridViewColumn Header="Source/Destination" DisplayMemberBinding="{Binding Location}" Width="Auto"/>
-                                        <GridViewColumn Header="Departure Date" DisplayMemberBinding="{Binding DepartureDate}" Width="Auto"/>
-                                        <GridViewColumn Header="Estimated Arrival" DisplayMemberBinding="{Binding EstimatedArrival}" Width="Auto"/>
+                                        <GridViewColumn Header="Shipping Direction" DisplayMemberBinding="{Binding ShipmentDirection}" Width="Auto"/>
+                                        <GridViewColumn Header="Source/Destination" DisplayMemberBinding="{Binding Address}" Width="Auto"/>
+                                        <GridViewColumn Header="Departure Date" DisplayMemberBinding="{Binding DepartureDateTime}" Width="Auto"/>
+                                        <GridViewColumn Header="Estimated Arrival" DisplayMemberBinding="{Binding EstimatedArrivalDateTime}" Width="Auto"/>
                                         <!-- Additional columns as needed -->
                                     </GridView>
                                 </ListView.View>
@@ -223,7 +224,7 @@
                                     <TextBlock Text="{Binding SelectedShipment.PurchaseOrderId}" Margin="5" />
 
                                     <Label Content="Vehicle ID:" FontWeight="SemiBold" Foreground="White" Margin="5"/>
-                                    <TextBlock Text="{Binding SelectedShipment.VehicleID}" Margin="5" />
+                                    <TextBlock Text="{Binding SelectedShipment.VehicleId}" Margin="5" />
 
                                     <Label Content="Departure Date/Time:" FontWeight="SemiBold" Foreground="White" Margin="5"/>
                                     <TextBlock Text="{Binding SelectedShipment.DepartureDateTime, StringFormat='{}{0:MM/dd/yyyy HH:mm}'}" Margin="5" />
@@ -234,15 +235,16 @@
                                     <Label Content="Arrival Confirmation:" FontWeight="SemiBold" Foreground="White" Margin="5"/>
                                     <TextBlock Text="{Binding SelectedShipment.IsArrived, Converter={StaticResource BooleanToYesNoConverter}}" Margin="5" />
 
-                                    <Label Content="Driver(s):" FontWeight="SemiBold" Foreground="White" Margin="5"/>
-                                    <TextBlock Text="{Binding SelectedShipment.Drivers}" Margin="5" />
+                                    <Label Content="Driver:" FontWeight="SemiBold" Foreground="White" Margin="5"/>
+                                    <TextBlock Text="{Binding SelectedShipment.DriverId}" Margin="5" />
 
                                     <!-- Dynamic Details Based on Direction -->
                                     <StackPanel>
-                                        <Label Content="{Binding SelectedShipment.ShippingType, Converter={StaticResource ShippingTypeToLabelConverter}}" FontWeight="SemiBold" Margin="5" />
-                                        <TextBlock Text="{Binding SelectedShipment.CompanyName}" Margin="5" Foreground="White" />
+                                        <Label Content="{Binding SelectedShipment.ShipmentDirection, Converter={StaticResource ShippingTypeToLabelConverter}}" FontWeight="SemiBold" Margin="5" />
+                                        <TextBlock Text="{Binding SelectedShipment.Company}" Margin="5" Foreground="White" />
                                         <TextBlock Text="{Binding SelectedShipment.Address}" Margin="5" Foreground="White" />
                                         <TextBlock Text="{Binding SelectedShipment.City}" Margin="5" Foreground="White" />
+                                        <TextBlock Text="{Binding SelectedShipment.State}" Margin="5" Foreground="White" />
                                         <TextBlock Text="{Binding SelectedShipment.Zip}" Margin="5" Foreground="White" />
                                     </StackPanel>
                                 </StackPanel>
@@ -259,7 +261,7 @@
                                     <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
                                         <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ItemId}" Width="50"/>
                                         <GridViewColumn Header="Product Name" DisplayMemberBinding="{Binding ProductName}" Width="Auto"/>
-                                        <GridViewColumn Header="Quantity" DisplayMemberBinding="{Binding ProductQuantity}" Width="Auto"/>
+                                        <GridViewColumn Header="Quantity" DisplayMemberBinding="{Binding Quantity}" Width="Auto"/>
                                         <!-- Additional columns as needed -->
                                     </GridView>
                                 </ListView.View>

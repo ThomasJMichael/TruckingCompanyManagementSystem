@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using TCMS.Common.DTOs.Employee;
+using TCMS.Common.DTOs.Financial;
 using TCMS.Common.DTOs.Incident;
 using TCMS.Common.DTOs.Inventory;
+using TCMS.Common.DTOs.Shipment;
 using TCMS.Common.DTOs.User;
 using TCMS.GUI.Models;
 using TCMS.GUI.ViewModels;
@@ -73,7 +75,36 @@ namespace TCMS.GUI.Utilities
             CreateMap<EmployeeFormViewModel, UserRoleDto>()
                 .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.UserRole));
 
-        }
+            CreateMap<ManifestDto, Manifest>()
+                .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.ManifestItems))
+                .ReverseMap();
 
+            // Mapping for PurchaseOrderDto to PurchaseOrder
+            CreateMap<PurchaseOrderDto, PurchaseOrder>()
+                .ForMember(dest => dest.Manifest, opt => opt.MapFrom(src => src.Manifest))
+                .ForMember(dest => dest.Shipments, opt => opt.MapFrom(src => src.Shipments))
+                .ForMember(dest => dest.TotalItemCost,
+                    opt => opt.Ignore()) // Will be calculated in CalculateTotals method
+                .ForMember(dest => dest.TotalCost, opt => opt.Ignore()); // Will be calculated in CalculateTotals method
+
+            // Mapping for ManifestDto to Manifest
+            CreateMap<ManifestDto, Manifest>()
+                .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.ManifestItems));
+
+            // Mapping for ManifestItemDto to ManifestItem
+            CreateMap<ManifestItemDto, ManifestItem>()
+                .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
+                .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
+                .ForMember(dest => dest.ItemStatus, opt => opt.MapFrom(src => src.ItemStatus));
+
+            // Mapping for ProductDto to Product
+            CreateMap<ProductDto, Product>();
+
+            // Mapping for ShipmentDetailDto to Shipment
+            CreateMap<ShipmentDetailDto, Shipment>();
+
+
+        }
     };
 }

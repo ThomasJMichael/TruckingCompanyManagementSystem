@@ -11,6 +11,7 @@ namespace TCMS.Data.Generators
 {
     public static class PurchaseOrderGenerator
     {
+        private static int _manifestIndex = 0;
         public static List<PurchaseOrder> GeneratePurchaseOrders(int count, List<Manifest> manifests)
         {
             var purchaseOrderFaker = new Faker<PurchaseOrder>()
@@ -24,7 +25,18 @@ namespace TCMS.Data.Generators
                 .RuleFor(o => o.ShippingCost, f => f.Finance.Amount(10, 100))
                 .RuleFor(o => o.ShippingPaid, f => f.Random.Bool())
                 .RuleFor(o => o.Manifest, f => f.PickRandom(manifests))
-                .FinishWith((f, po) => po.ManifestId = po.Manifest.ManifestId);
+                .FinishWith((f, po) =>
+                {
+                    if (_manifestIndex >= manifests.Count)
+                    {
+                        _manifestIndex = 0;
+                    }
+
+                    po.Manifest = manifests[_manifestIndex];
+                    po.ManifestId = po.Manifest.ManifestId;
+
+                    _manifestIndex++;
+                });
 
             return purchaseOrderFaker.Generate(count);
         }

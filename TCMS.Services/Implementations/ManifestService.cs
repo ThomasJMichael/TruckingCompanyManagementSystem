@@ -120,6 +120,8 @@ namespace TCMS.Services.Implementations
                     .Where(item => item.ManifestId == manifestId)
                     .ToListAsync();
 
+                if (manifestItems == null) return OperationResult<IEnumerable<ManifestItemDto>>.Failure(["Manifest Item Not Found."]);
+
                 var manifestItemDtos = mapper.Map<IEnumerable<ManifestItemDto>>(manifestItems);
                 return OperationResult<IEnumerable<ManifestItemDto>>.Success(manifestItemDtos);
             }

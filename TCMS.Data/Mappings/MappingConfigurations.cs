@@ -93,6 +93,26 @@ namespace TCMS.Data.Mappings
 
             // User mappings
             CreateMap<UserAccount, UserAccountDto>().ReverseMap();
+
+            CreateMap<PurchaseOrder, PurchaseOrderDto>()
+                .ForMember(dest => dest.Manifest, opt => opt.MapFrom(src => src.Manifest))
+                .ForMember(dest => dest.Shipments, opt => opt.MapFrom(src => src.Shipments))
+                .ReverseMap();
+
+            CreateMap<Manifest, ManifestDto>()
+                .ForMember(dest => dest.ManifestItems, opt => opt.MapFrom(src => src.ManifestItems))
+                .ReverseMap();
+
+            CreateMap<ManifestItem, ManifestItemDto>()
+                .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId))
+                .ReverseMap();
+
+            CreateMap<Shipment, ShipmentDetailDto>()
+                .ForMember(dest => dest.ManifestId, opt => opt.MapFrom(src => src.ManifestId))
+                .ReverseMap();
+
+            CreateMap<Product, ProductDto>()
+                .ReverseMap();
         }
     }
 }
