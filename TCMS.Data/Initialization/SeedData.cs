@@ -415,7 +415,9 @@ namespace TCMS.Data.Initialization
 
             var manifests = context.Manifests.ToList();
 
-            var products = context.Products.ToList();
+            var products = context.Products
+                .Include(p => p.Inventory)
+                .ToList();
             foreach (var manifest in manifests)
             {
                 var manifestItems = ManifestItemGenerator.GenerateManifestItemsForManifest(manifest.ManifestId, 10, products);
@@ -425,6 +427,7 @@ namespace TCMS.Data.Initialization
                 await context.SaveChangesAsync();
             }
 
+            var finishedManifests = context.Manifests.ToList();
             return manifests;
         }
 

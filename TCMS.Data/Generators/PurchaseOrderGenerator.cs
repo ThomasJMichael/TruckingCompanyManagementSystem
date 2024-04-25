@@ -24,7 +24,6 @@ namespace TCMS.Data.Generators
                 .RuleFor(o => o.DateCreated, f => f.Date.Past(1))
                 .RuleFor(o => o.ShippingCost, f => f.Finance.Amount(10, 100))
                 .RuleFor(o => o.ShippingPaid, f => f.Random.Bool())
-                .RuleFor(o => o.Manifest, f => f.PickRandom(manifests))
                 .FinishWith((f, po) =>
                 {
                     if (_manifestIndex >= manifests.Count)

@@ -30,10 +30,18 @@ namespace TCMS.GUI.ViewModels
             _dialogService = dialogService;
 
             LoadPurchaseOrders();
-            LoadShipments();
         }
 
         private ObservableCollection<Shipment> _shipments;
+        public ObservableCollection<Shipment> Shipments
+        {
+            get => _shipments;
+            private set
+            {
+                _shipments = value;
+                OnPropertyChanged();
+            }
+        }
         private ObservableCollection<Shipment> _filteredShipments;
 
         public ObservableCollection<Shipment> FilteredShipments
@@ -58,6 +66,8 @@ namespace TCMS.GUI.ViewModels
             }
         }
 
+
+
         private ObservableCollection<PurchaseOrder> _filteredPurchaseOrders;
 
         public ObservableCollection<PurchaseOrder> FilteredPurchaseOrders
@@ -79,6 +89,7 @@ namespace TCMS.GUI.ViewModels
             {
                 _selectedPurchaseOrder = value;
                 OnPropertyChanged();
+                LoadPurchaseOrderItems();
             }
         }
 
@@ -91,6 +102,7 @@ namespace TCMS.GUI.ViewModels
             {
                 _selectedShipment = value;
                 OnPropertyChanged();
+                LoadShipmentItems();
             }
         }
 
@@ -105,6 +117,18 @@ namespace TCMS.GUI.ViewModels
                 OnPropertyChanged();
             }
         }
+        private ObservableCollection<ShipmentItem> _shipmentItemResults;
+
+        public ObservableCollection<ShipmentItem> ShipmentItemResults
+        {
+            get => _shipmentItemResults;
+            private set
+            {
+                _shipmentItemResults = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         private PurchaseOrderItem _selectedPurchaseOrderItem;
 
@@ -118,6 +142,17 @@ namespace TCMS.GUI.ViewModels
             }
         }
 
+        private ShipmentItem _selectedShipmentItem;
+
+        public ShipmentItem SelectedShipmentItem
+        {
+            get { return _selectedShipmentItem; }
+            set
+            {
+                _selectedShipmentItem = value;
+                OnPropertyChanged();
+            }
+        }
         private string _searchText = "Search Purchase Orders...";
 
         public string SearchText
@@ -205,10 +240,16 @@ namespace TCMS.GUI.ViewModels
 
         private void FilterShipments()
         {
-            if (_shipments == null)
+            if (Shipments == null || Shipments.Count == 0)
             {
-                LoadShipments();
-                return;
+                Shipments = new ObservableCollection<Shipment>();
+                foreach (PurchaseOrder po in PurchaseOrders)
+                {
+                    foreach (var shipment in po.Shipments)
+                    {
+                        Shipments.Add(shipment);
+                    }
+                }
             }
 
             if (string.IsNullOrEmpty(SearchText) || SearchText == "Search Shipments...")
@@ -240,7 +281,13 @@ namespace TCMS.GUI.ViewModels
                 if (purchaseOrdersResult.IsSuccessful)
                 {
                     var mappedPurchaseOrders = _mapper.Map<IEnumerable<PurchaseOrder>>(purchaseOrdersResult.Data);
-                    PurchaseOrders = new ObservableCollection<PurchaseOrder>(mappedPurchaseOrders);
+                    App.Current.Dispatcher.Invoke((Action)(() =>
+                    {
+                        PurchaseOrders = new ObservableCollection<PurchaseOrder>(mappedPurchaseOrders);
+                        FilterPurchaseOrders();
+                        FilterShipments();
+                    }));
+
 
                 }
             }
@@ -251,21 +298,41 @@ namespace TCMS.GUI.ViewModels
         }
 
 
-        private async void LoadShipments()
+        private void LoadPurchaseOrderItems()
         {
-            try
+            if (SelectedPurchaseOrder?.Manifest?.Items != null)
             {
-                var shipments = await _apiClient.GetAsync<OperationResult<IEnumerable<ShipmentDetailDto>>>("shipment/all");
-                if (shipments.IsSuccessful)
+                var items = SelectedPurchaseOrder.Manifest.Items.Select(mi => new PurchaseOrderItem
                 {
-                    _shipments =
-                        new ObservableCollection<Shipment>(shipments.Data.Select(s => _mapper.Map<Shipment>(s)));
-                    FilterShipments();
-                }
+                    ItemId = mi.ProductId, // Ensure you have a unique identifier here
+                    Quantity = mi.Quantity,
+                    Price = mi.Price,
+                    ItemStatus = (Common.enums.ItemStatus)mi.ItemStatus
+                });
+
+                PurchaseOrderItemsResult = new ObservableCollection<PurchaseOrderItem>(items);
             }
-            catch (Exception e)
+            else
             {
-                Console.WriteLine(e);
+                PurchaseOrderItemsResult = new ObservableCollection<PurchaseOrderItem>();
+            }
+        }
+
+        private void LoadShipmentItems()
+        {
+            if (SelectedShipment?.Manifest?.Items != null)
+            {
+                var items = SelectedShipment.Manifest.Items.Select(mi => new ShipmentItem
+                {
+                    ItemId = mi.ProductId, // Ensure you have a unique identifier here
+                    Quantity = mi.Quantity,
+                });
+
+                ShipmentItemResults = new ObservableCollection<ShipmentItem>(items);
+            }
+            else
+            {
+                ShipmentItemResults = new ObservableCollection<ShipmentItem>();
             }
         }
     }

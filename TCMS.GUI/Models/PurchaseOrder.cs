@@ -23,14 +23,8 @@ namespace TCMS.GUI.Models
         public ObservableCollection<Shipment> Shipments { get; set; }
         public decimal ShippingCost { get; set; }
         public bool ShippingPaid { get; set; }
-        public decimal TotalItemCost { get; set; }
-        public decimal TotalCost { get; set; }
-
-        public void CalculateTotals()
-        {
-            TotalItemCost = Manifest.Items.Sum(item => item.Price * item.Quantity);
-            TotalCost = TotalItemCost + ShippingCost;
-        }
+        public decimal TotalItemCost => Manifest.Items.Sum(item => item.Price * item.Quantity);
+        public decimal TotalCost => TotalItemCost + ShippingCost;
 
     }
 }

@@ -13,10 +13,10 @@ namespace TCMS.Data.Generators
     public class ShipmentGenerator
     {
         public static List<Shipment> GenerateShipments(
-    List<PurchaseOrder> purchaseOrders,
-    List<Driver> drivers,
-    List<Vehicle> vehicles,
-    TcmsContext context)        
+            List<PurchaseOrder> purchaseOrders,
+            List<Driver> drivers,
+            List<Vehicle> vehicles,
+            TcmsContext context)
         {
             var faker = new Faker();
             var shipments = new List<Shipment>();
@@ -24,9 +24,9 @@ namespace TCMS.Data.Generators
             foreach (var purchaseOrder in purchaseOrders)
             {
                 var numberOfShipmentsForOrder = faker.Random.Int(1, 5); // Assume 1-5 shipments per order
-
-                // Get the total quantity of items in the original manifest
-                var totalItemCount = purchaseOrder.Manifest.ManifestItems.Sum(item => item.Quantity);
+                var masterManifestItems = new Queue<ManifestItem>(purchaseOrder.Manifest.ManifestItems);
+                var itemsPerShipment = masterManifestItems.Count / numberOfShipmentsForOrder;
+                var leftoverItems = masterManifestItems.Count % numberOfShipmentsForOrder;
 
                 for (int i = 0; i < numberOfShipmentsForOrder; i++)
                 {
@@ -36,27 +36,19 @@ namespace TCMS.Data.Generators
                         ManifestItems = new List<ManifestItem>()
                     };
 
-                    // Determine how many items this shipment should have
-                    int itemsForThisShipmentCount = totalItemCount / numberOfShipmentsForOrder;
-
-                    // Distribute items evenly across shipments
-                    foreach (var item in purchaseOrder.Manifest.ManifestItems)
+                    var manifestItemsCopy = new Queue<ManifestItem>(masterManifestItems);
+                    for (int j = 0; j < itemsPerShipment && manifestItemsCopy.Count > 0; j++)
                     {
-                        // Calculate quantity for this shipment, avoid dividing by zero
-                        int quantityForThisShipment = Math.Min(item.Quantity, itemsForThisShipmentCount);
+                        manifestForShipment.ManifestItems.Add(manifestItemsCopy.Dequeue());
+                    }
 
-                        // Clone the ManifestItem for this shipment
-                        var clonedItem = new ManifestItem
+
+                    if (i == numberOfShipmentsForOrder - 1 && leftoverItems > 0)
+                    {
+                        for (int j = 0; j < leftoverItems; j++)
                         {
-                            ProductId = item.ProductId,
-                            Quantity = quantityForThisShipment,
-                            Status = item.Status
-                        };
-
-                        manifestForShipment.ManifestItems.Add(clonedItem);
-
-                        // Subtract the assigned quantity from the original item, ensuring it doesn't go below zero
-                        item.Quantity = Math.Max(item.Quantity - quantityForThisShipment, 0);
+                            manifestForShipment.ManifestItems.Add(masterManifestItems.Dequeue());
+                        }
                     }
 
                     // Ensure the manifest items are saved to generate IDs
@@ -64,10 +56,15 @@ namespace TCMS.Data.Generators
                     context.SaveChanges(); // Save changes to get ManifestId
 
                     var departureDate = faker.Date.Recent(90); // Shipments departed up to 90 days ago
-                    var estimatedArrivalDate = departureDate.AddDays(faker.Random.Int(1, 30)); // Estimated arrival within 30 days after departure
+                    var estimatedArrivalDate =
+                        departureDate.AddDays(faker.Random.Int(1,
+                            30)); // Estimated arrival within 30 days after departure
 
                     bool hasArrived = faker.Random.Bool(0.7f); // 70% chance the shipment has arrived
-                    DateTime? actualArrivalDate = hasArrived ? (DateTime?)estimatedArrivalDate.AddDays(faker.Random.Int(-2, 2)) : null; // Actual arrival within 2 days of the estimated date
+                    DateTime? actualArrivalDate =
+                        hasArrived
+                            ? (DateTime?)estimatedArrivalDate.AddDays(faker.Random.Int(-2, 2))
+                            : null; // Actual arrival within 2 days of the estimated date
                     // Create a Shipment
                     var shipment = new Shipment
                     {
@@ -95,14 +92,11 @@ namespace TCMS.Data.Generators
 
                     shipments.Add(shipment);
                     context.SaveChanges();
+
                 }
             }
-
 
             return shipments;
         }
     }
-
-
-
 }
