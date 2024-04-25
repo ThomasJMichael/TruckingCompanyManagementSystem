@@ -12,12 +12,6 @@ namespace TCMS.Data.Models
         public int ManifestId { get; set; }
         public virtual ICollection<ManifestItem>? ManifestItems { get; set; }
 
-        public int? ShipmentId { get; set; }
-        public virtual Shipment? Shipment { get; set; }
-
-        public int? PurchaseOrderId { get; set; }
-        public virtual PurchaseOrder? PurchaseOrder { get; set; }
-
         public decimal TotalPrice()
         {
             return ManifestItems.Sum(item => item.TotalPrice);

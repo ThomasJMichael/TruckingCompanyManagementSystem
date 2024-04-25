@@ -418,7 +418,7 @@ namespace TCMS.Data.Initialization
             var products = context.Products.ToList();
             foreach (var manifest in manifests)
             {
-                var manifestItems = ManifestItemGenerator.GenerateManifestItemsForManifest(manifest.ManifestId, 20, products);
+                var manifestItems = ManifestItemGenerator.GenerateManifestItemsForManifest(manifest.ManifestId, 10, products);
                 manifest.ManifestItems = manifestItems;
                 // Save each manifest's items immediately after generation to maintain the relationship context.
                 await context.ManifestItems.AddRangeAsync(manifestItems);
@@ -443,39 +443,12 @@ namespace TCMS.Data.Initialization
         {
             // Fetch all PurchaseOrders without manifests
             var purchaseOrders = await context.PurchaseOrders.ToListAsync();
-
-            // Fetch all Manifests and reassociate them manually
-            var manifestIds = purchaseOrders.Select(po => po.ManifestId).ToList();
-            var manifests = await context.Manifests
-                .Where(m => manifestIds.Contains(m.ManifestId))
-                .Include(m => m.ManifestItems)
-                .ToListAsync();
-
-            // Create a dictionary to quickly find manifests by ID
-            var manifestDictionary = manifests.ToDictionary(m => m.ManifestId);
-
-
-            // Associate manifests with purchase orders manually
-            foreach (var po in purchaseOrders)
-            {
-                if (manifestDictionary.TryGetValue(po.ManifestId, out var manifest))
-                {
-                    po.Manifest = manifest;
-                }
-            }
-
+  
             var drivers = context.Drivers.ToList();
             var vehicles = context.Vehicles.ToList();
 
             // Generate Shipments with references to PurchaseOrders
-            var shipments = ShipmentGenerator.GenerateShipments(purchaseOrders, drivers, vehicles);
-
-            // Save new manifests created for Shipments
-            foreach (var shipment in shipments)
-            {
-                context.Manifests.Add(shipment.Manifest);
-            }
-            await context.SaveChangesAsync();
+            var shipments = ShipmentGenerator.GenerateShipments(purchaseOrders, drivers, vehicles, context);
 
             // Now we can save the Shipments, as each Manifest has an ID
             await context.Shipments.AddRangeAsync(shipments);

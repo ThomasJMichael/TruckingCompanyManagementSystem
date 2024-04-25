@@ -17,7 +17,7 @@ namespace TCMS.Data.Models
         public string Zip { get; set; }
         public ShipmentDirection Direction { get; set; }
         public DateTime DateCreated { get; set; }
-        public int ManifestId { get; set; }
+        public int? ManifestId { get; set; }
         public virtual Manifest Manifest { get; set; }
         public decimal ShippingCost { get; set; }
         public bool ShippingPaid { get; set; }

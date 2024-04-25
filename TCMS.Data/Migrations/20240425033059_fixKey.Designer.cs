@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TCMS.Data.Data;
 
@@ -10,9 +11,11 @@ using TCMS.Data.Data;
 namespace TCMS.Data.Migrations
 {
     [DbContext(typeof(TcmsContext))]
-    partial class TcmsContextModelSnapshot : ModelSnapshot
+    [Migration("20240425033059_fixKey")]
+    partial class fixKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.2");

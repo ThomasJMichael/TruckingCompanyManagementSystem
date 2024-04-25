@@ -113,6 +113,14 @@ namespace TCMS.Data.Mappings
 
             CreateMap<Product, ProductDto>()
                 .ReverseMap();
+
+            CreateMap<Shipment, ShipmentDetailDto>()
+                .ForMember(dest => dest.Manifest, opt => opt.MapFrom(src => src.Manifest));
+
+            CreateMap<Manifest, ShipmentManifestDto>();
+            CreateMap<ManifestItem, ManifestItemDto>()
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Product.Price));  // Assuming you have a relationship with the Product entity
+
         }
     }
 }

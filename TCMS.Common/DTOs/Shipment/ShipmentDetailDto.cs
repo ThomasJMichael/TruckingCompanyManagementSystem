@@ -34,6 +34,7 @@ namespace TCMS.Common.DTOs.Shipment
         public string EmployeeId { get; set; }
 
         public int ManifestId { get; set; }
+        public ShipmentManifestDto Manifest { get; set; }
         public int PurchaseOrderId { get; set; }
 
         public DateTime? DepDateTime { get; set; }

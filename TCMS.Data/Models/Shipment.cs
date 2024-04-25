@@ -27,7 +27,7 @@ namespace TCMS.Data.Models
         public int VehicleId { get; set; }
         public virtual Vehicle Vehicle { get; set; }
 
-        public int ManifestId { get; set; }
+        public int? ManifestId { get; set; }
         public virtual Manifest Manifest { get; set; }
         public int PurchaseOrderId { get; set; }
         public virtual PurchaseOrder PurchaseOrder { get; set; }
