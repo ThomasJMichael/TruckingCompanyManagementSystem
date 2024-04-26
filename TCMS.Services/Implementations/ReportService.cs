@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TCMS.Common.DTOs.Report;
 using TCMS.Common.Operations;
+using TCMS.Data.Data;
 using TCMS.Services.Interfaces;
 using TCMS.Services.ReportSchemas;
 
@@ -14,92 +15,75 @@ namespace TCMS.Services.Implementations
         IPayrollService payrollService,
         IMaintenanceService maintenanceService,
         IVehicleService vehicleService,
+        TcmsContext context,
         IShipmentService shipmentService)
         : IReportService
     {
 
-        public async Task<OperationResult<CsvResultDto>> GeneratePayrollReport(ReportRequestDto requestDto)
+        public async Task<OperationResult<IEnumerable<PayrollReportDto>>> GeneratePayrollReport(ReportRequestDto requestDto)
         {
             try
             {
-                var payroll =
-                    await payrollService.GeneratePayrollForPeriodAsync(requestDto.StartDate, requestDto.EndDate);
-                if (!payroll.IsSuccessful)
+                var payrollResult = await payrollService.GeneratePayrollForPeriodAsync(requestDto.StartDate, requestDto.EndDate);
+                if (!payrollResult.IsSuccessful)
                 {
-                    return OperationResult<CsvResultDto>.Failure(payroll.Errors);
+                    return OperationResult<IEnumerable<PayrollReportDto>>.Failure(payrollResult.Errors);
                 }
 
-                var payrolls = payroll.Data.ToList();
-
-                var csv = new StringBuilder();
-                csv.AppendLine(string.Join(",", PayrollReportSchema.Schema.Fields));
-
-                foreach (var record in payrolls)
+                var payrolls = payrollResult.Data;
+                var payrollReportDtos = payrolls.Select(record => new PayrollReportDto
                 {
-                    csv.AppendLine(string.Join(",", new string[]
-                    {
-                        record.EmployeeId.ToString(),
-                        record.FirstName,
-                        record.MiddleName ?? string.Empty,
-                        record.LastName,
-                        record.PayPeriodStart.ToString("yyyy-MM-dd"),
-                        record.PayPeriodEnd.ToString("yyyy-MM-dd"),
-                        record.HoursWorked.ToString(),
-                        record.PayRate.ToString("F2"),
-                        record.GrossPay.ToString("F2"),
-                        record.TaxDeductions.ToString("F2"),
-                        record.OtherDeductions.ToString("F2"),
-                        record.NetPay.ToString("F2"),
-                    }));
-                }
+                    EmployeeId = record.EmployeeId,
+                    FirstName = record.FirstName,
+                    MiddleName = record.MiddleName,
+                    LastName = record.LastName,
+                    PayPeriodStart = record.PayPeriodStart,
+                    PayPeriodEnd = record.PayPeriodEnd,
+                    HoursWorked = record.HoursWorked,
+                    PayRate = record.PayRate,
+                    GrossPay = record.GrossPay,
+                    TaxDeductions = record.TaxDeductions,
+                    OtherDeductions = record.OtherDeductions,
+                    NetPay = record.NetPay
+                });
 
-                var resultDto = new CsvResultDto(csv.ToString(), PayrollReportSchema.Schema.Filename);
-                return OperationResult<CsvResultDto>.Success(resultDto);
-            }
-            catch (Exception)
-            {
-                return OperationResult<CsvResultDto>.Failure(new List<string>
-                    { "An unexpected error occurred while generating the payroll report." });
-            }
-
-        }
-
-        public async Task<OperationResult<CsvResultDto>> GenerateMaintenanceReport(ReportRequestDto requestDto)
-        {
-            try
-            {
-                var maintenanceRecords =
-                    await maintenanceService.GetMaintenanceRecordsForPeriod(requestDto.StartDate, requestDto.EndDate);
-                if (!maintenanceRecords.IsSuccessful)
-                {
-                    return OperationResult<CsvResultDto>.Failure(maintenanceRecords.Errors);
-                }
-
-                var records = maintenanceRecords.Data.ToList();
-
-                var csv = new StringBuilder();
-                csv.AppendLine(string.Join(",", MaintenanceReportSchema.Schema.Fields));
-
-                foreach (var record in records)
-                {
-                    csv.AppendLine(string.Join(",", new string[]
-                    {
-                        record.VehicleId.ToString(),
-                        record.Description,
-                        record.MaintenanceDate.ToString("yyyy-MM-dd"),
-                        record.Cost.ToString("F2"),
-                    }));
-                }
-
-                var resultDto = new CsvResultDto(csv.ToString(), MaintenanceReportSchema.Schema.Filename);
-                return OperationResult<CsvResultDto>.Success(resultDto);
+                return OperationResult<IEnumerable<PayrollReportDto>>.Success(payrollReportDtos.ToList());
             }
             catch (Exception ex)
             {
-                return OperationResult<CsvResultDto>.Failure(new List<string>
+                return OperationResult<IEnumerable<PayrollReportDto>>.Failure(new List<string>
+                    { "An unexpected error occurred while generating the payroll report.", ex.Message });
+            }
+        }
+
+
+        public async Task<OperationResult<IEnumerable<MaintenanceReportDto>>> GenerateMaintenanceReport(ReportRequestDto requestDto)
+        {
+            try
+            {
+                var maintenanceResult = await maintenanceService.GetMaintenanceRecordsForPeriod(requestDto.StartDate, requestDto.EndDate);
+                if (!maintenanceResult.IsSuccessful)
+                {
+                    return OperationResult<IEnumerable<MaintenanceReportDto>>.Failure(maintenanceResult.Errors);
+                }
+
+                var maintenanceReportDtos = maintenanceResult.Data.Select(record => new MaintenanceReportDto
+                {
+                    VehicleId = record.VehicleId,
+                    Description = record.Description,
+                    MaintenanceDate = record.MaintenanceDate,
+                    Cost = record.Cost
+                });
+
+                return OperationResult<IEnumerable<MaintenanceReportDto>>.Success(maintenanceReportDtos.ToList());
+            }
+            catch (Exception ex)
+            {
+                return OperationResult<IEnumerable<MaintenanceReportDto>>.Failure(new List<string>
                     { "An unexpected error occurred while generating the maintenance report.", ex.Message });
             }
         }
+
 
 
         public async Task<OperationResult<CsvResultDto>> GenerateVehicleMaintenanceReport(ReportRequestDto requestDto)
@@ -145,43 +129,46 @@ namespace TCMS.Services.Implementations
         }
 
 
-    public async Task<OperationResult<CsvResultDto>> GenerateIncomingShipmentsReport(ReportRequestDto requestDto)
+        public async Task<OperationResult<IEnumerable<IncomingShipmentReportDto>>> GenerateIncomingShipmentsReport()
         {
             try
             {
-                var incomingShipments =
-                    await shipmentService.GetAllIncomingShipmentsAsync();
-                if (!incomingShipments.IsSuccessful)
+                var incomingShipmentsResult = await shipmentService.GetAllIncomingShipmentsAsync();
+                if (!incomingShipmentsResult.IsSuccessful)
                 {
-                    return OperationResult<CsvResultDto>.Failure(incomingShipments.Errors);
+                    return OperationResult<IEnumerable<IncomingShipmentReportDto>>.Failure(incomingShipmentsResult.Errors);
                 }
 
-                var shipments = incomingShipments.Data.ToList();
-
-                var csv = new StringBuilder();
-                csv.AppendLine(string.Join(",", IncomingShipmentReportSchema.Schema.Fields));
-
-                foreach (var shipment in shipments)
+                var incomingShipmentsReportDtos = incomingShipmentsResult.Data.Select(shipment => new IncomingShipmentReportDto
                 {
-                    csv.AppendLine(string.Join(",", new string[]
+                    ShipmentId = shipment.ShipmentId,
+                    ActualArrivalTime = shipment.ActualArrivalTime,
+                    Company = shipment.Company,
+                });
+
+
+                foreach (var shipment in incomingShipmentsReportDtos)
+                {
+                    var shipmentModel = await context.Shipments.FindAsync(shipment.ShipmentId);
+                    var purchaseOrder = await context.PurchaseOrders.FindAsync(shipmentModel.PurchaseOrderId);
+                    if (purchaseOrder != null)
                     {
-                        shipment.ShipmentId.ToString(),
-                        shipment.ActualArrivalTime.ToString(),
-                        shipment.Company,
-                        shipment.TotalCost.ToString("F2"),
-                        shipment.IsFullyPaid ? "Yes" : "No",
-                    }));
+                        shipment.IsFullyPaid = purchaseOrder.ShippingPaid;
+                    }
                 }
 
-                var resultDto = new CsvResultDto(csv.ToString(), IncomingShipmentReportSchema.Schema.Filename);
-                return OperationResult<CsvResultDto>.Success(resultDto);
+                return OperationResult<IEnumerable<IncomingShipmentReportDto>>.Success(incomingShipmentsReportDtos.ToList());
             }
             catch (Exception ex)
             {
-                return OperationResult<CsvResultDto>.Failure(new List<string>
-                { "An unexpected error occurred while generating the incoming shipments report.", ex.Message });
+                return OperationResult<IEnumerable<IncomingShipmentReportDto>>.Failure(new List<string>
+                {
+                    "An unexpected error occurred while generating the incoming shipments report.",
+                    ex.Message
+                });
             }
         }
+
 
         public async Task<OperationResult<CsvResultDto>> GenerateOutgoingShipmentsReport(ReportRequestDto requestDto)
         {
