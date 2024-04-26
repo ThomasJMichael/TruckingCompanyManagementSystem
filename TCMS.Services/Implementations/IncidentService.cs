@@ -32,7 +32,14 @@ namespace TCMS.Services.Implementations
                 // If the incident requires a drug and alcohol test, create a new test record
                 if (incidentReport.RequiresDrugAndAlcoholTest)
                 {
-                    var drugAndAlcoholTest = _mapper.Map<DrugAndAlcoholTest>(incidentReportDto);
+                    var drugAndAlcoholTest = new DrugAndAlcoholTest();
+                    drugAndAlcoholTest.EmployeeId = incidentReport.EmployeeId;
+                    drugAndAlcoholTest.TestDate = DateTime.Now.AddDays(14);
+                    drugAndAlcoholTest.TestType = TestType.PostAccident;
+                    drugAndAlcoholTest.IncidentReportId = incidentReport.IncidentReportId;
+                    drugAndAlcoholTest.IsFollowUpComplete = false;
+                    drugAndAlcoholTest.TestResult = TestResult.AwaitingTest;
+                    drugAndAlcoholTest.TestDetails = "DOT Required test for post-accident incidents";
 
                     _context.DrugAndAlcoholTests.Add(drugAndAlcoholTest);
                     await _context.SaveChangesAsync();

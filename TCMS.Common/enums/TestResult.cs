@@ -13,6 +13,7 @@ namespace TCMS.Common.enums
         Refused,
         Adulterated,
         Invalid,
-        PendingIncident
+        PendingIncident,
+        AwaitingTest
     }
 }

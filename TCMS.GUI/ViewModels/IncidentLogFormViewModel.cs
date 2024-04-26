@@ -81,6 +81,10 @@ namespace TCMS.GUI.ViewModels
             {
                 _selectedEmployee = value;
                 OnPropertyChanged();
+                if (_selectedEmployee != null)
+                {
+                    EmployeeId = _selectedEmployee.EmployeeId;
+                }
             }
         }
 

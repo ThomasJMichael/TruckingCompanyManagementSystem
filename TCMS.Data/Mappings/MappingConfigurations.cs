@@ -151,6 +151,8 @@ namespace TCMS.Data.Mappings
                 .ForMember(dest => dest.TotalCost,
                     opt => opt.Ignore()) // Assuming TotalCost is a property of Manifest
                 .ForMember(dest => dest.IsFullyPaid, opt => opt.Ignore());
+
+            CreateMap<IncidentReportDto, DrugAndAlcoholTest>().ReverseMap();
         }
     }
 }
