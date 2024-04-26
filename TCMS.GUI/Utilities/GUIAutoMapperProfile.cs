@@ -36,7 +36,10 @@ namespace TCMS.GUI.Utilities
             CreateMap<IncidentLogFormViewModel, IncidentReportDto>()
                 .ForMember(dest => dest.IncidentReportId, opt => opt.MapFrom(src => src.IncidentReportId))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
-                .ForMember(dest => dest.IncidentDate, opt => opt.MapFrom(src => src.SelectedDate));
+                .ForMember(dest => dest.IncidentDate, opt => opt.MapFrom(src => src.SelectedDate))
+                .ForMember(dest => dest.EmployeeId, opt => opt.MapFrom(src => src.EmployeeId))
+                .ForMember(dest => dest.VehicleId, opt => opt.MapFrom(src => src.VehicleId))
+                .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Location));
             CreateMap<DrugTestFormViewModel, DrugTestCreateDto>()
                 .ForMember(dest => dest.EmployeeId, opt => opt.MapFrom(src => src.EmployeeId))
                 .ForMember(dest => dest.TestType, opt => opt.MapFrom(src => src.TestType))
