@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using TCMS.Common.DTOs.DrugTest;
 using TCMS.Common.DTOs.Employee;
+using TCMS.Common.DTOs.Equipment;
 using TCMS.Common.DTOs.Financial;
 using TCMS.Common.DTOs.Incident;
 using TCMS.Common.DTOs.Inventory;
@@ -50,6 +51,13 @@ namespace TCMS.GUI.Utilities
                 .ForMember(dest => dest.TestDetails, opt => opt.MapFrom(src => src.TestDetails))
                 .ForMember(dest => dest.IncidentReportId, opt => opt.MapFrom(src => src.IncidentReportId))
                 .ForMember(dest => dest.FollowUpTestDate, opt => opt.MapFrom(src => src.FollowUpTestDate));
+
+            CreateMap<EquipmentFormViewModel, VehicleDto>()
+                .ForMember(dest => dest.VehicleId, opt => opt.MapFrom(src => src.VehicleId))
+                .ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand))
+                .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model))
+                .ForMember(dest => dest.Year, opt => opt.MapFrom(src => src.Year))
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type));
 
 
 
