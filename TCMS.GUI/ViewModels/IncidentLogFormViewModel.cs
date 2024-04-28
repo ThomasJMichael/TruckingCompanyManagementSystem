@@ -266,7 +266,7 @@ namespace TCMS.GUI.ViewModels
                 OnPropertyChanged();
             }
         }
-        private int _vehicleId;
+        private int _vehicleId = 1;
         public int VehicleId
         {
             get => _vehicleId;
@@ -329,9 +329,9 @@ namespace TCMS.GUI.ViewModels
             }
         }
 
-        public Visibility NamePlaceholderVisible => string.IsNullOrEmpty(_employeeId) ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility DescriptionPlaceholderVisible => string.IsNullOrEmpty(_description) ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility PricePlaceholderVisible => string.IsNullOrEmpty(_location) ? Visibility.Visible : Visibility.Collapsed;
+        //public Visibility NamePlaceholderVisible => string.IsNullOrEmpty(_employeeId) ? Visibility.Visible : Visibility.Collapsed;
+        //public Visibility DescriptionPlaceholderVisible => string.IsNullOrEmpty(_description) ? Visibility.Visible : Visibility.Collapsed;
+        //public Visibility PricePlaceholderVisible => string.IsNullOrEmpty(_location) ? Visibility.Visible : Visibility.Collapsed;
 
         public ICommand ConfirmCommand { get; }
 
@@ -357,7 +357,7 @@ namespace TCMS.GUI.ViewModels
             if (IsEditMode)
             {
                 Location = CurrentIncident.Location;
-                VehicleId = CurrentIncident.VehicleId ?? 0;
+                VehicleId = CurrentIncident.VehicleId ?? 1;
                 IsFatal = CurrentIncident.IsFatal;
                 HasInjuries = CurrentIncident.HasInjuries;
                 HasTowedVehicle = CurrentIncident.HasTowedVehicle;

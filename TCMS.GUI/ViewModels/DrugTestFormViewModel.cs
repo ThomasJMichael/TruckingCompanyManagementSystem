@@ -300,11 +300,13 @@ namespace TCMS.GUI.ViewModels
             {
                 CurrentDrugTest = drugtest;
                 IsEditMode = true;
+                TestDate = CurrentDrugTest.TestDate;
             }
             else
             {
                 CurrentDrugTest = new DrugTest();
                 IsEditMode = false;
+                TestDate = DateTime.Now;
             }
 
             if (IsEditMode)
