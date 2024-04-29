@@ -42,7 +42,7 @@ namespace TCMS.GUI.ViewModels
 
         private Equipment _selectedEquipment;
 
-        private string _searchText = "Search Products...";
+        private string _searchText = "Search Equipment...";
 
         public Equipment SelectedEquipment
         {
@@ -99,7 +99,7 @@ namespace TCMS.GUI.ViewModels
             }
 
             Console.WriteLine($"Current SearchText: '{SearchText}'");
-            if (string.IsNullOrEmpty(SearchText) || SearchText == "Search Products...")
+            if (string.IsNullOrEmpty(SearchText) || SearchText == "Search Equipment...")
             {
                 Console.WriteLine("SearchText is empty or placeholder text, setting filteredProducts to all products.");
                 FilteredEquipment = new ObservableCollection<Equipment>(_equipment);
@@ -206,19 +206,19 @@ namespace TCMS.GUI.ViewModels
 
         private void AdjustSearchTextOnFocus()
         {
-            if (_isSearchBoxFocused && SearchText == "Search Products...")
+            if (_isSearchBoxFocused && SearchText == "Search Equipment...")
             {
                 SearchText = string.Empty;
             }
             else if (!_isSearchBoxFocused && string.IsNullOrWhiteSpace(SearchText))
             {
-                SearchText = "Search Products...";
+                SearchText = "Search Equipment...";
             }
         }
 
         private void SearchBoxGotFocus(object obj)
         {
-            if (SearchText == "Search Products...")
+            if (SearchText == "Search Equipment...")
             {
                 SearchText = string.Empty;
             }
@@ -228,7 +228,7 @@ namespace TCMS.GUI.ViewModels
         {
             if (string.IsNullOrWhiteSpace(SearchText))
             {
-                SearchText = "Search Products...";
+                SearchText = "Search Equipment...";
             }
         }
 

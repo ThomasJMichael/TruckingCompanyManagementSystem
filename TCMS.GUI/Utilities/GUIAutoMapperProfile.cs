@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Collections.ObjectModel;
+using AutoMapper;
 using TCMS.Common.DTOs.DrugTest;
 using TCMS.Common.DTOs.Employee;
 using TCMS.Common.DTOs.Equipment;
@@ -146,6 +147,15 @@ namespace TCMS.GUI.Utilities
                 .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model))
                 .ForMember(dest => dest.Year, opt => opt.MapFrom(src => src.Year))
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type));
+
+            CreateMap<VehicleDto, Equipment>()
+                .ForMember(dest => dest.VehicleId, opt => opt.MapFrom(src => src.VehicleId))
+                .ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand))
+                .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model))
+                .ForMember(dest => dest.Year, opt => opt.MapFrom(src => src.Year))
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type))
+                .ForMember(dest => dest.Parts, opt => opt.MapFrom(src => new ObservableCollection<Part>(src.Parts.Select(partDto => new Part { /* map properties */ }))))
+                .ForMember(dest => dest.MaintenanceRecords, opt => opt.MapFrom(src => new ObservableCollection<MaintenanceRecord>(src.MaintenanceRecords.Select(recordDto => new MaintenanceRecord { /* map properties */ }))));
         }
     };
 }
