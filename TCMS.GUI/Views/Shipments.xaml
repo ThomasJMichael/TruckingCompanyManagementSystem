@@ -94,13 +94,32 @@
                                       ScrollViewer.VerticalScrollBarVisibility="Hidden">
                                 <ListView.View>
                                     <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
-                                        <GridViewColumn Header="Order ID" DisplayMemberBinding="{Binding PurchaseOrderId}" Width="100"/>
-                                        <GridViewColumn Header="Date" DisplayMemberBinding="{Binding DateCreated}" Width="100"/>
-                                        <GridViewColumn Header="Company" DisplayMemberBinding="{Binding Company}" Width="100"/>
+                                        <GridViewColumn Header="Order ID" DisplayMemberBinding="{Binding PurchaseOrderId}" Width="Auto"/>
+                                        <GridViewColumn Header="Date" DisplayMemberBinding="{Binding DateCreated}" Width="160"/>
+                                        <GridViewColumn Header="Company" DisplayMemberBinding="{Binding Company}" Width="Auto"/>
                                         <!-- Additional columns as needed -->
                                     </GridView>
                                 </ListView.View>
-                                </ListView>
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="Foreground" Value="White"/>
+                                        <Setter Property="Margin" Value="2"/>
+                                        <Setter Property="Padding" Value="4"/>
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="BorderBrush" Value="Transparent"/>
+                                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Background" Value="#333"/>
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#555"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                            </ListView>
                         </TabItem>
                                                 <!-- General Info Tab -->
                         <TabItem Header="General Information">
@@ -109,31 +128,34 @@
                                 <StackPanel Margin="0" Background="#FF272B2F">
                                     <TextBlock Text="Purchase Order General Information" FontWeight="Bold" FontSize="18" Foreground="White" Margin="0,0,0,10" />
 
-                                    <Label Content="Shipment Direction:" FontWeight="SemiBold" Foreground="White" Margin="5"/>
+                                    <Label Content="Shipment Direction:" Foreground="DodgerBlue" FontWeight="Bold" FontSize="16"  Margin="5"/>
                                     <TextBlock Text="{Binding SelectedPurchaseOrder.ShipmentDirection}" Foreground="White" Margin="5" />
 
-                                    <Label Content="Company:" FontWeight="SemiBold" Foreground="White" Margin="5"/>
+                                    <Label Content="Company:"  Foreground="DodgerBlue" FontWeight="Bold" FontSize="16"  Margin="5"/>
                                     <TextBlock Text="{Binding SelectedPurchaseOrder.Company}" Foreground="White" Margin="5" />
 
-                                    <Label Content="Address:" FontWeight="SemiBold" Foreground="White" Margin="5"/>
+                                    <Label Content="Address:"  Foreground="DodgerBlue" FontWeight="Bold" FontSize="16"  Margin="5"/>
                                     <TextBlock Text="{Binding SelectedPurchaseOrder.Address}" Foreground="White" Margin="5" />
 
-                                    <Label Content="City:" FontWeight="SemiBold" Foreground="White" Margin="5"/>
+                                    <Label Content="City:"  Foreground="DodgerBlue" FontWeight="Bold" FontSize="16"  Margin="5"/>
                                     <TextBlock Text="{Binding SelectedPurchaseOrder.City}" Foreground="White" Margin="5" />
 
-                                    <Label Content="State:" FontWeight="SemiBold" Foreground="White" Margin="5"/>
+                                    <Label Content="State:"  Foreground="DodgerBlue" FontWeight="Bold" FontSize="16"  Margin="5"/>
                                     <TextBlock Text="{Binding SelectedPurchaseOrder.State}" Foreground="White" Margin="5" />
 
-                                    <Label Content="ZIP Code:" FontWeight="SemiBold" Foreground="White" Margin="5"/>
+                                    <Label Content="ZIP Code:"  Foreground="DodgerBlue" FontWeight="Bold" FontSize="16"  Margin="5"/>
                                     <TextBlock Text="{Binding SelectedPurchaseOrder.Zip}" Foreground="White" Margin="5" />
 
-                                    <Label Content="Total Cost of Items:" FontWeight="SemiBold" Foreground="White" Margin="5"/>
+                                    <Label Content="Total Cost of Items:"  Foreground="DodgerBlue" FontWeight="Bold" FontSize="16"  Margin="5"/>
                                     <TextBlock Text="{Binding SelectedPurchaseOrder.TotalItemCost, StringFormat='{}{0:C}'}" Foreground="White" Margin="5" />
 
-                                    <Label Content="Total Shipment Cost:" FontWeight="SemiBold" Foreground="White" Margin="5"/>
+                                    <Label Content="Total Shipment Cost:"  Foreground="DodgerBlue" FontWeight="Bold" FontSize="16"  Margin="5"/>
                                     <TextBlock Text="{Binding SelectedPurchaseOrder.TotalCost, StringFormat='{}{0:C}'}" Foreground="White" Margin="5" />
 
-                                    <Label Content="Order Date:" FontWeight="SemiBold" Foreground="White" Margin="5"/>
+                                    <Label Content="Purchase Order Paid For:"  Foreground="DodgerBlue" FontWeight="Bold" FontSize="16"  Margin="5"/>
+                                    <TextBlock Text="{Binding SelectedPurchaseOrder.ShippingPaid, StringFormat='{}{0:C}'}" Foreground="White" Margin="5" />
+
+                                    <Label Content="Order Date:"  Foreground="DodgerBlue" FontWeight="Bold" FontSize="16"  Margin="5"/>
                                     <TextBlock Text="{Binding SelectedPurchaseOrder.DateCreated, StringFormat='{}{0:MM/dd/yyyy}'}" Foreground="White" Margin="5" />
 
                                     <!-- Additional details can be added here -->
@@ -152,7 +174,7 @@
                                 <ListView.View>
                                     <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
                                         <GridViewColumn Header="Item ID" DisplayMemberBinding="{Binding ItemId}" Width="80"/>
-                                        <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" Width="150"/>
+                                        <!-- <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" Width="150"/> -->
                                         <GridViewColumn Header="Quantity" DisplayMemberBinding="{Binding Quantity}" Width="70"/>
                                         <GridViewColumn Header="Unit Cost" DisplayMemberBinding="{Binding Price, StringFormat='{}{0:C}'}" Width="100"/>
                                         <GridViewColumn Header="Total Cost" DisplayMemberBinding="{Binding TotalPrice, StringFormat='{}{0:C}'}" Width="100"/>
@@ -160,6 +182,25 @@
                                         <!-- Additional columns as needed -->
                                     </GridView>
                                 </ListView.View>
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="Foreground" Value="White"/>
+                                        <Setter Property="Margin" Value="2"/>
+                                        <Setter Property="Padding" Value="4"/>
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="BorderBrush" Value="Transparent"/>
+                                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Background" Value="#333"/>
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#555"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ListView.ItemContainerStyle>
                             </ListView>
                         </TabItem>
                     </TabControl>
@@ -210,6 +251,25 @@
                                         <!-- Additional columns as needed -->
                                     </GridView>
                                 </ListView.View>
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="Foreground" Value="White"/>
+                                        <Setter Property="Margin" Value="2"/>
+                                        <Setter Property="Padding" Value="4"/>
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="BorderBrush" Value="Transparent"/>
+                                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Background" Value="#333"/>
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#555"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ListView.ItemContainerStyle>
                             </ListView>
                         </TabItem>
                         <!-- Additional Detail Tabs -->
@@ -220,32 +280,32 @@
                                     <TextBlock Text="Shipping Information" FontWeight="Bold" FontSize="16" Foreground="White" />
 
                                     <!-- Common Details -->
-                                    <Label Content="Purchase Order ID:" FontWeight="SemiBold" Foreground="White" Margin="5"/>
+                                    <Label Content="Purchase Order ID:" FontWeight="Bold" FontSize="16" Foreground="DeepSkyBlue" Margin="5"/>
                                     <TextBlock Text="{Binding SelectedShipment.PurchaseOrderId}" Margin="5" />
 
-                                    <Label Content="Vehicle ID:" FontWeight="SemiBold" Foreground="White" Margin="5"/>
+                                    <Label Content="Vehicle ID:" FontWeight="Bold" FontSize="16" Foreground="DeepSkyBlue" Margin="5"/>
                                     <TextBlock Text="{Binding SelectedShipment.VehicleId}" Margin="5" />
 
-                                    <Label Content="Departure Date/Time:" FontWeight="SemiBold" Foreground="White" Margin="5"/>
+                                    <Label Content="Departure Date/Time:" FontWeight="Bold" FontSize="16" Foreground="DeepSkyBlue" Margin="5"/>
                                     <TextBlock Text="{Binding SelectedShipment.DepartureDateTime, StringFormat='{}{0:MM/dd/yyyy HH:mm}'}" Margin="5" />
 
-                                    <Label Content="Estimated Arrival Date/Time:" FontWeight="SemiBold" Foreground="White" Margin="5"/>
+                                    <Label Content="Estimated Arrival Date/Time:" FontWeight="Bold" FontSize="16" Foreground="DeepSkyBlue" Margin="5"/>
                                     <TextBlock Text="{Binding SelectedShipment.EstimatedArrivalDateTime, StringFormat='{}{0:MM/dd/yyyy HH:mm}'}" Margin="5" />
 
-                                    <Label Content="Arrival Confirmation:" FontWeight="SemiBold" Foreground="White" Margin="5"/>
+                                    <Label Content="Arrival Confirmation:" FontWeight="Bold" FontSize="16" Foreground="DeepSkyBlue" Margin="5"/>
                                     <TextBlock Text="{Binding SelectedShipment.IsArrived, Converter={StaticResource BooleanToYesNoConverter}}" Margin="5" />
 
-                                    <Label Content="Driver:" FontWeight="SemiBold" Foreground="White" Margin="5"/>
-                                    <TextBlock Text="{Binding SelectedShipment.DriverId}" Margin="5" />
+                                    <Label Content="Driver:" FontWeight="Bold" FontSize="16" Foreground="DeepSkyBlue" Margin="5"/>
+                                    <TextBlock Text="{Binding SelectedShipment.EmployeeId}" Margin="5" />
 
                                     <!-- Dynamic Details Based on Direction -->
                                     <StackPanel>
-                                        <Label Content="{Binding SelectedShipment.ShipmentDirection, Converter={StaticResource ShippingTypeToLabelConverter}}" FontWeight="SemiBold" Margin="5" />
-                                        <TextBlock Text="{Binding SelectedShipment.Company}" Margin="5" Foreground="White" />
-                                        <TextBlock Text="{Binding SelectedShipment.Address}" Margin="5" Foreground="White" />
-                                        <TextBlock Text="{Binding SelectedShipment.City}" Margin="5" Foreground="White" />
-                                        <TextBlock Text="{Binding SelectedShipment.State}" Margin="5" Foreground="White" />
-                                        <TextBlock Text="{Binding SelectedShipment.Zip}" Margin="5" Foreground="White" />
+                                        <Label Content="{Binding SelectedShipment.ShipmentDirection, Converter={StaticResource ShippingTypeToLabelConverter}}" Foreground="White" FontWeight="Bold" FontSize="16" Margin="5" />
+                                        <TextBlock Text="{Binding SelectedShipment.Company}" Margin="5" Foreground="DeepSkyBlue" />
+                                        <TextBlock Text="{Binding SelectedShipment.Address}" Margin="5" Foreground="DeepSkyBlue" />
+                                        <TextBlock Text="{Binding SelectedShipment.City}" Margin="5" Foreground="DeepSkyBlue" />
+                                        <TextBlock Text="{Binding SelectedShipment.State}" Margin="5" Foreground="DeepSkyBlue" />
+                                        <TextBlock Text="{Binding SelectedShipment.Zip}" Margin="5" Foreground="DeepSkyBlue" />
                                     </StackPanel>
                                 </StackPanel>
                             </ScrollViewer>
@@ -253,18 +313,37 @@
 
                         <TabItem Header="Manifest Information">
                             <ListView x:Name="ManifestInformationResults"
-                                      ItemsSource="{Binding ShipmentManifestItems}"
+                                      ItemsSource="{Binding ShipmentItemResults}"
                                       SelectedItem="{Binding SelectedShipmentItem, Mode=TwoWay}"
                                       BorderBrush="{x:Null}" Background="#FF272B2F"
                                       ScrollViewer.VerticalScrollBarVisibility="Hidden">
                                 <ListView.View>
                                     <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
-                                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ItemId}" Width="50"/>
-                                        <GridViewColumn Header="Product Name" DisplayMemberBinding="{Binding ProductName}" Width="Auto"/>
+                                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ItemId}" Width="Auto"/>
+                                        <!-- <GridViewColumn Header="Product Name" DisplayMemberBinding="{Binding ProductName}" Width="Auto"/> -->
                                         <GridViewColumn Header="Quantity" DisplayMemberBinding="{Binding Quantity}" Width="Auto"/>
                                         <!-- Additional columns as needed -->
                                     </GridView>
                                 </ListView.View>
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="Foreground" Value="White"/>
+                                        <Setter Property="Margin" Value="2"/>
+                                        <Setter Property="Padding" Value="4"/>
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="BorderBrush" Value="Transparent"/>
+                                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Background" Value="#333"/>
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#555"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ListView.ItemContainerStyle>
                             </ListView>
                         </TabItem>
                     </TabControl>

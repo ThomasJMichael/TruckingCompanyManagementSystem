@@ -17,10 +17,10 @@ namespace TCMS.API.Controllers
         }
 
         // Payroll
-        [HttpGet("payroll")]
+        [HttpPost("payroll")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<OperationResult>> GeneratePayrollReport([FromBody] ReportRequestDto dto)
+        public async Task<ActionResult<OperationResult<IEnumerable<PayrollReportDto>>>> GeneratePayrollReport([FromBody] ReportRequestDto dto)
         {
             if (!ModelState.IsValid)
             {
@@ -32,10 +32,10 @@ namespace TCMS.API.Controllers
         }
 
         // Maintenance
-        [HttpGet("maintenance")]
+        [HttpPost("maintenance")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<OperationResult>> GenerateMaintenanceReport([FromBody] ReportRequestDto dto)
+        public async Task<ActionResult<OperationResult<IEnumerable<MaintenanceReportDto>>>> GenerateMaintenanceReport([FromBody] ReportRequestDto dto)
         {
             if (!ModelState.IsValid)
             {
@@ -66,15 +66,14 @@ namespace TCMS.API.Controllers
         [HttpGet("incoming-shipments")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<OperationResult>> GenerateIncomingShipmentsReport(
-            [FromBody] ReportRequestDto dto)
+        public async Task<ActionResult<OperationResult>> GenerateIncomingShipmentsReport()
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = await _reportService.GenerateIncomingShipmentsReport(dto);
+            var result = await _reportService.GenerateIncomingShipmentsReport();
             return result.IsSuccessful ? Ok(result) : BadRequest(result);
         }
 

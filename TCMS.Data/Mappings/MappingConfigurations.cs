@@ -113,6 +113,53 @@ namespace TCMS.Data.Mappings
 
             CreateMap<Product, ProductDto>()
                 .ReverseMap();
+
+            CreateMap<Shipment, ShipmentDetailDto>()
+                .ForMember(dest => dest.Manifest, opt => opt.MapFrom(src => src.Manifest));
+
+            CreateMap<Manifest, ShipmentManifestDto>();
+            CreateMap<ManifestItem, ManifestItemDto>()
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Product.Price));  // Assuming you have a relationship with the Product entity
+
+            CreateMap<MaintenanceRecord, MaintenanceRecordDto>()
+                .ForMember(dest => dest.MaintenanceRecordId, opt => opt.MapFrom(src => src.MaintenanceRecordId))
+                .ForMember(dest => dest.VehicleId, opt => opt.MapFrom(src => src.VehicleId.HasValue ? src.VehicleId.Value : default(int)))
+                .ForMember(dest => dest.MaintenanceDate, opt => opt.MapFrom(src => src.MaintenanceDate))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+                .ForMember(dest => dest.Cost, opt => opt.MapFrom(src => src.Cost))
+                .ForMember(dest => dest.PartIds, opt => opt.Ignore()); // Ignoring the PartIds as they are not needed
+
+            CreateMap<Shipment, ShipmentDetailDto>()
+                .ForMember(dest => dest.ShipmentId, opt => opt.MapFrom(src => src.ShipmentId))
+                .ForMember(dest => dest.Direction, opt => opt.MapFrom(src => src.Direction))
+                .ForMember(dest => dest.hasArrived, opt => opt.MapFrom(src => src.hasArrived))
+                .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.Company))
+                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
+                .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.City))
+                .ForMember(dest => dest.State, opt => opt.MapFrom(src => src.State))
+                .ForMember(dest => dest.Zip, opt => opt.MapFrom(src => src.Zip))
+                .ForMember(dest => dest.VehicleId, opt => opt.MapFrom(src => src.VehicleId))
+                .ForMember(dest => dest.EmployeeId, opt => opt.MapFrom(src => src.EmployeeId))
+                .ForMember(dest => dest.ManifestId, opt => opt.MapFrom(src => src.ManifestId))
+                .ForMember(dest => dest.Manifest,
+                    opt => opt.MapFrom(src =>
+                        src.Manifest)) // Assuming you have a mapping for Manifest to ShipmentManifestDto
+                .ForMember(dest => dest.PurchaseOrderId, opt => opt.MapFrom(src => src.PurchaseOrderId))
+                .ForMember(dest => dest.DepDateTime, opt => opt.MapFrom(src => src.DepDateTime))
+                .ForMember(dest => dest.EstimatedArrivalTime, opt => opt.MapFrom(src => src.EstimatedArrivalTime))
+                .ForMember(dest => dest.ActualArrivalTime, opt => opt.MapFrom(src => src.ActualArrivalTime))
+                .ForMember(dest => dest.TotalCost,
+                    opt => opt.Ignore()) // Assuming TotalCost is a property of Manifest
+                .ForMember(dest => dest.IsFullyPaid, opt => opt.Ignore());
+
+            CreateMap<IncidentReportDto, DrugAndAlcoholTest>().ReverseMap();
+
+            CreateMap<VehicleCreateDto, Vehicle>()
+                .ForMember(dest => dest.VehicleId, opt => opt.Ignore())
+                .ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand))
+                .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model))
+                .ForMember(dest => dest.Year, opt => opt.MapFrom(src => src.Year))
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type));
         }
     }
 }

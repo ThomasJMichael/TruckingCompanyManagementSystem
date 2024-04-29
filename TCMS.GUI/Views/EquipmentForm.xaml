@@ -1,0 +1,62 @@
+﻿<Window x:Class="TCMS.GUI.Views.EquipmentForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TCMS.GUI.Views" xmlns:viewmodels="clr-namespace:TCMS.GUI.ViewModels" 
+        d:DataContext="{d:DesignInstance Type=viewmodels:EquipmentFormViewModel}"
+        mc:Ignorable="d"
+        Title="Create Equipment Listing" Height="300" Width="340">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="22"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="280"/>
+
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Row="0" >
+
+        </Grid>
+
+        <!-- Description TextBox -->
+        <Label Grid.Row="2" Content="Brand" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,-26,0,0"/>
+        <TextBox Grid.Column="0"
+                     Grid.Row="2"
+                     Text="{Binding Brand, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource PlaceholderTextBoxStyle}"/>
+
+        <Label Grid.Row="3" Content="Model" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.RowSpan="3"/>
+        <TextBox Grid.Column="0"
+                     Grid.Row="4"
+                     Text="{Binding Model, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource PlaceholderTextBoxStyle}"/>
+        <Label Grid.Row="5" Content="Year" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.RowSpan="3"/>
+        <TextBox Grid.Column="0"
+                     Grid.Row="6"
+                     Text="{Binding Year, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource PlaceholderTextBoxStyle}"/>
+        <Label Grid.Row="7" Content="Type" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.RowSpan="3"/>
+        <TextBox Grid.Column="0"
+                     Grid.Row="9"
+                     Text="{Binding Type, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource PlaceholderTextBoxStyle}"/>
+        <!-- Confirm Button -->
+        <Button Grid.Row="11" Content="Confirm" Command="{Binding ConfirmCommand}" HorizontalAlignment="Center"/>
+
+
+    </Grid>
+
+</Window>

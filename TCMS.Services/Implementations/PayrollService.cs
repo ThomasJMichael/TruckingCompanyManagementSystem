@@ -12,6 +12,12 @@ namespace TCMS.Services.Implementations
     {
         private readonly TcmsContext _context;
         private readonly IMapper _mapper;
+
+        public PayrollService(TcmsContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
         public async Task<OperationResult<IEnumerable<PayrollDto>>> GetAllPayrollsAsync()
         {
             try

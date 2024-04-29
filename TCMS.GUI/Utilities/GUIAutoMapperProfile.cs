@@ -1,13 +1,16 @@
 ﻿using AutoMapper;
+using TCMS.Common.DTOs.DrugTest;
 using TCMS.Common.DTOs.Employee;
+using TCMS.Common.DTOs.Equipment;
 using TCMS.Common.DTOs.Financial;
 using TCMS.Common.DTOs.Incident;
 using TCMS.Common.DTOs.Inventory;
-using TCMS.Common.DTOs.Equipment;
+using TCMS.Common.DTOs.Report;
 using TCMS.Common.DTOs.Shipment;
 using TCMS.Common.DTOs.User;
 using TCMS.GUI.Models;
 using TCMS.GUI.ViewModels;
+using MaintenanceReportDto = TCMS.Common.DTOs.Report.MaintenanceReportDto;
 
 namespace TCMS.GUI.Utilities
 {
@@ -36,7 +39,27 @@ namespace TCMS.GUI.Utilities
             CreateMap<IncidentLogFormViewModel, IncidentReportDto>()
                 .ForMember(dest => dest.IncidentReportId, opt => opt.MapFrom(src => src.IncidentReportId))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
-                .ForMember(dest => dest.IncidentDate, opt => opt.MapFrom(src => src.SelectedDate));
+                .ForMember(dest => dest.IncidentDate, opt => opt.MapFrom(src => src.SelectedDate))
+                .ForMember(dest => dest.EmployeeId, opt => opt.MapFrom(src => src.EmployeeId))
+                .ForMember(dest => dest.VehicleId, opt => opt.MapFrom(src => src.VehicleId))
+                .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Location));
+            CreateMap<DrugTestFormViewModel, DrugTestCreateDto>()
+                .ForMember(dest => dest.EmployeeId, opt => opt.MapFrom(src => src.EmployeeId))
+                .ForMember(dest => dest.TestType, opt => opt.MapFrom(src => src.TestType))
+                .ForMember(dest => dest.TestResult, opt => opt.MapFrom(src => src.TestResult))
+                .ForMember(dest => dest.TestDate, opt => opt.MapFrom(src => src.TestDate))
+                .ForMember(dest => dest.TestDetails, opt => opt.MapFrom(src => src.TestDetails))
+                .ForMember(dest => dest.IncidentReportId, opt => opt.MapFrom(src => src.IncidentReportId))
+                .ForMember(dest => dest.FollowUpTestDate, opt => opt.MapFrom(src => src.FollowUpTestDate));
+
+            CreateMap<EquipmentFormViewModel, VehicleDto>()
+                .ForMember(dest => dest.VehicleId, opt => opt.MapFrom(src => src.VehicleId))
+                .ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand))
+                .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model))
+                .ForMember(dest => dest.Year, opt => opt.MapFrom(src => src.Year))
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type));
+
+
 
             // Employee Mapping
             CreateMap<EmployeeDto, Employee>()
@@ -105,24 +128,24 @@ namespace TCMS.GUI.Utilities
             // Mapping for ShipmentDetailDto to Shipment
             CreateMap<ShipmentDetailDto, Shipment>();
 
+            CreateMap<ShipmentDetailDto, Shipment>()
+                .ForMember(dest => dest.IsArrived, opt => opt.MapFrom(src => src.hasArrived))
+                .ForMember(dest => dest.ManifestId, opt => opt.MapFrom(src => src.Manifest.ManifestId));
 
+            CreateMap<ShipmentManifestDto, Manifest>()
+                .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.ManifestItems));
 
-            // Vehicle Mapping
-            CreateMap<VehicleDto, Vehicle>().ReverseMap();
-            CreateMap<VehicleFormViewModel, VehicleDto>()
+            CreateMap<ManifestItemDto, ManifestItem>()
+                .ForMember(dest => dest.ItemStatus, opt => opt.MapFrom(src => src.ItemStatus));
+
+            CreateMap<PayrollReportDto, PayrollReport>().ReverseMap();
+            CreateMap<MaintenanceReportDto, MaintenanceReport>().ReverseMap();
+
+            CreateMap<EquipmentFormViewModel, VehicleCreateDto>()
                 .ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand))
                 .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model))
                 .ForMember(dest => dest.Year, opt => opt.MapFrom(src => src.Year))
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type));
-
-            //CreateMap<InventoryProductDetailDto, Product>().ReverseMap();
-            //CreateMap<AddProductDto, ProductFormViewModel>().ReverseMap()
-            //    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-            //    .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
-            //    .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
-            //    .ForMember(dest => dest.InitialQuantityOnHand, opt => opt.MapFrom(src => src.QuantityOnHand));
-
-
         }
     };
 }

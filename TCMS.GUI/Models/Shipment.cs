@@ -17,7 +17,7 @@ namespace TCMS.GUI.Models
         public DateTime EstimatedArrivalDateTime { get; set; }
         public DateTime? ArrivalDateTime { get; set; }
         public bool IsArrived { get; set; }
-        public string DriverId { get; set; }
+        public string EmployeeId { get; set; }
 
         public ShipmentDirection ShipmentDirection { get; set; }
         public string Company { get; set; }
@@ -25,5 +25,7 @@ namespace TCMS.GUI.Models
         public string City { get; set; }
         public string State { get; set; }
         public string Zip { get; set; }
+        public int ManifestId { get; set; }
+        public Manifest Manifest { get; set; }
     }
 }

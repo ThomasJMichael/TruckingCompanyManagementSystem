@@ -56,6 +56,18 @@ namespace TCMS.GUI.ViewModels
             }
         }
 
+        private string _employeeId;
+        public string EmployeeId
+        {
+            get => string.IsNullOrEmpty(_employeeId) ? "Name" : _employeeId;
+            set
+            {
+                _employeeId = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(EmployeeId));
+            }
+        }
+
         public Employee SelectedEmployee
         {
             get => _selectedEmployee;
@@ -63,6 +75,10 @@ namespace TCMS.GUI.ViewModels
             {
                 _selectedEmployee = value;
                 OnPropertyChanged();
+                if (_selectedEmployee != null)
+                {
+                    EmployeeId = _selectedEmployee.EmployeeId;
+                }
             }
         }
 
@@ -284,11 +300,13 @@ namespace TCMS.GUI.ViewModels
             {
                 CurrentDrugTest = drugtest;
                 IsEditMode = true;
+                TestDate = CurrentDrugTest.TestDate;
             }
             else
             {
                 CurrentDrugTest = new DrugTest();
                 IsEditMode = false;
+                TestDate = DateTime.Now;
             }
 
             if (IsEditMode)

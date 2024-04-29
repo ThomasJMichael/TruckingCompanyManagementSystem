@@ -206,6 +206,7 @@ namespace TCMS.Services.Implementations
             {
                 var shipments = await context.Shipments
                     .Where(s => s.Direction == ShipmentDirection.Inbound)
+                    .Include(s => s.PurchaseOrder)
                     .Include(s => s.Manifest)
                     .Include(s => s.Vehicle)
                     .ToListAsync();

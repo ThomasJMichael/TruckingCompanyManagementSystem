@@ -81,6 +81,10 @@ namespace TCMS.GUI.ViewModels
             {
                 _selectedEmployee = value;
                 OnPropertyChanged();
+                if (_selectedEmployee != null)
+                {
+                    EmployeeId = _selectedEmployee.EmployeeId;
+                }
             }
         }
 
@@ -249,7 +253,7 @@ namespace TCMS.GUI.ViewModels
             {
                 _incidentReportId = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(NamePlaceholderVisible));
+                OnPropertyChanged(nameof(IncidentReportId));
             }
         }
         private DateTime? _selectedDate;
@@ -262,7 +266,7 @@ namespace TCMS.GUI.ViewModels
                 OnPropertyChanged();
             }
         }
-        private int _vehicleId;
+        private int _vehicleId = 1;
         public int VehicleId
         {
             get => _vehicleId;
@@ -270,7 +274,7 @@ namespace TCMS.GUI.ViewModels
             {
                 _vehicleId = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(NamePlaceholderVisible));
+                OnPropertyChanged(nameof(VehicleId));
             }
         }
 
@@ -282,7 +286,7 @@ namespace TCMS.GUI.ViewModels
             {
                 _employeeId = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(NamePlaceholderVisible));
+                OnPropertyChanged(nameof(EmployeeId));
             }
         }
 
@@ -294,7 +298,7 @@ namespace TCMS.GUI.ViewModels
             {
                 _location = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(NamePlaceholderVisible));
+                OnPropertyChanged(nameof(Location));
             }
         }
 
@@ -307,7 +311,7 @@ namespace TCMS.GUI.ViewModels
             {
                 _description = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(DescriptionPlaceholderVisible));
+                OnPropertyChanged(nameof(Description));
             }
         }
 
@@ -325,9 +329,9 @@ namespace TCMS.GUI.ViewModels
             }
         }
 
-        public Visibility NamePlaceholderVisible => string.IsNullOrEmpty(_employeeId) ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility DescriptionPlaceholderVisible => string.IsNullOrEmpty(_description) ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility PricePlaceholderVisible => string.IsNullOrEmpty(_location) ? Visibility.Visible : Visibility.Collapsed;
+        //public Visibility NamePlaceholderVisible => string.IsNullOrEmpty(_employeeId) ? Visibility.Visible : Visibility.Collapsed;
+        //public Visibility DescriptionPlaceholderVisible => string.IsNullOrEmpty(_description) ? Visibility.Visible : Visibility.Collapsed;
+        //public Visibility PricePlaceholderVisible => string.IsNullOrEmpty(_location) ? Visibility.Visible : Visibility.Collapsed;
 
         public ICommand ConfirmCommand { get; }
 
@@ -353,7 +357,7 @@ namespace TCMS.GUI.ViewModels
             if (IsEditMode)
             {
                 Location = CurrentIncident.Location;
-                VehicleId = CurrentIncident.VehicleId ?? 0;
+                VehicleId = CurrentIncident.VehicleId ?? 1;
                 IsFatal = CurrentIncident.IsFatal;
                 HasInjuries = CurrentIncident.HasInjuries;
                 HasTowedVehicle = CurrentIncident.HasTowedVehicle;

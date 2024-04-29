@@ -6,49 +6,50 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using TCMS.Common.DTOs.Equipment;
+using TCMS.Common.DTOs.Incident;
+using TCMS.Common.Operations;
 using TCMS.GUI.Models;
 using TCMS.GUI.Services.Interfaces;
 using TCMS.GUI.Utilities;
-using TCMS.Common.DTOs.Equipment;
-using TCMS.Common.Operations;
-using Xceed.Wpf.Toolkit;
-using System.Windows.Input;
-using TCMS.Common.DTOs.Inventory;
+using TCMS.GUI.Views;
+using Equipment = TCMS.GUI.Models.Equipment;
 
 namespace TCMS.GUI.ViewModels
 {
-    public class EquipmentViewModel : ViewModelBase
+    public class EquipmentViewModel : Utilities.ViewModelBase
     {
-        // Represent list of vehicles
+        // Example property representing a list of products
         private readonly IApiClient _apiClient;
         private readonly IMapper _mapper;
         private readonly IDialogService _dialogService;
 
-        private Lazy<Task> _LazyVehiclesLoader;
+        private Lazy<Task> _LazyIncidentLoader;
 
-        private ObservableCollection<Vehicle> _vehicles;
-        private ObservableCollection<Vehicle> _filteredVehicles;
+        private ObservableCollection<Equipment> _equipment;
+        private ObservableCollection<Equipment> _filteredEquipment;
 
-        // Similar to Inventory segment
-        public ObservableCollection<Vehicle> FilteredVehicles
+        public ObservableCollection<Equipment> FilteredEquipment
         {
-            get => _filteredVehicles;
+            get => _filteredEquipment;
             private set
             {
-                _filteredVehicles = value;
+                _filteredEquipment = value;
                 OnPropertyChanged();
             }
         }
 
-        private Vehicle _selectedVehicle;
+        private Equipment _selectedEquipment;
 
-        public Vehicle SelectedVehicle
+        private string _searchText = "Search Products...";
+
+        public Equipment SelectedEquipment
         {
-            get { return _selectedVehicle; }
-            set { _selectedVehicle = value; OnPropertyChanged(); }
+            get { return _selectedEquipment; }
+            set { _selectedEquipment = value; OnPropertyChanged(); }
         }
 
-        private string _searchText = "Search Vehicles...";
         public string SearchText
         {
             get => _searchText;
@@ -56,13 +57,13 @@ namespace TCMS.GUI.ViewModels
             {
                 _searchText = value;
                 OnPropertyChanged();
-                // Try to ensure the vehicles are loaded before filtering.
-                _ = EnsureVehiclesLoadedAsync().ContinueWith(t =>
+                // Try to ensure the products are loaded before filtering.
+                _ = EnsureIncidentsLoadedAsync().ContinueWith(t =>
                 {
                     if (t.IsCompletedSuccessfully)
                     {
-                        // Vehicles are loaded, perform the filter.
-                        FilterVehicles();
+                        // Products are loaded, perform the filter.
+                        FilterEquipments();
                     }
                     // If the task is not completed, it's either still running or failed.
                     // If it's still running, the search will be triggered once it completes.
@@ -84,22 +85,24 @@ namespace TCMS.GUI.ViewModels
             }
         }
 
-        private void FilterVehicles()
-        {   
-            Console.WriteLine("FilterVehicles called");
 
-            if (_vehicles == null)
+
+        private void FilterEquipments()
+        {
+            Console.WriteLine("FilterProducts called");
+
+            if (_equipment == null)
             {
-                Console.WriteLine("Vehicles collection is null, loading vehicles.");
-                EnsureVehiclesLoadedAsync();
+                Console.WriteLine("Products collection is null, loading products.");
+                EnsureIncidentsLoadedAsync();
                 return;
             }
 
             Console.WriteLine($"Current SearchText: '{SearchText}'");
-            if (string.IsNullOrEmpty(SearchText) || SearchText == "Search Vehicles...")
+            if (string.IsNullOrEmpty(SearchText) || SearchText == "Search Products...")
             {
-                Console.WriteLine("SearchText is empty or placeholder text, setting filteredVehicles to all vehicles.");
-                FilteredVehicles = new ObservableCollection<Vehicle>(_vehicles);
+                Console.WriteLine("SearchText is empty or placeholder text, setting filteredProducts to all products.");
+                FilteredEquipment = new ObservableCollection<Equipment>(_equipment);
             }
             else
             {
@@ -108,35 +111,33 @@ namespace TCMS.GUI.ViewModels
                 bool isNumericSearch = int.TryParse(SearchText, out int searchId);
                 Console.WriteLine($"isNumericSearch: {isNumericSearch}, searchId: {searchId}");
 
-                var filtered = _vehicles.Where(vehicle =>
-                        (isNumericSearch && vehicle.VehicleID.ToString().Contains(SearchText)) ||
-                        (!isNumericSearch && vehicle.Brand.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0))
-                    .ToList();
+                var filtered = _equipment.Where(equipment =>
+                    (isNumericSearch && equipment.VehicleId.ToString().Contains(SearchText)) ||
+                    (isNumericSearch && equipment.Brand.ToString().Contains(SearchText)) ||
+                    (!isNumericSearch && equipment.Model.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0))
+                  .ToList();
 
-                Console.WriteLine($"Found {filtered.Count} vehicles after filtering.");
-                FilteredVehicles = new ObservableCollection<Vehicle>(filtered);
+                Console.WriteLine($"Found {filtered.Count} products after filtering.");
+                FilteredEquipment = new ObservableCollection<Equipment>(filtered);
             }
 
-            Console.WriteLine($"FilteredProducts count after filtering: {FilteredVehicles.Count}");
+            Console.WriteLine($"FilteredProducts count after filtering: {FilteredEquipment.Count}");
         }
+
+
         private void PerformSearch()
         {
-            FilterVehicles();
+            FilterEquipments();
         }
 
         // Commands
-        public ICommand AddVehicleCommand { get; private set; }
-        public ICommand EditVehicleCommand { get; private set; }
-        public ICommand DeleteVehicleCommand { get; private set; }
+        public ICommand AddEquipmentCommand { get; private set; }
+        public ICommand EditEquipmentCommand { get; private set; }
+        public ICommand DeleteEquipmentCommand { get; private set; }
+        public ICommand RefreshEquipmentsCommand { get; private set; }
         public ICommand SearchCommand { get; }
         public ICommand SearchBoxGotFocusCommand { get; }
         public ICommand SearchBoxLostFocusCommand { get; }
-
-        //public EquipmentViewModel()
-        //{
-            //maybe delete this? not sure if code is working; I feel like it isn't
-        //}
-
 
         public EquipmentViewModel(IApiClient apiClient, IMapper mapper, IDialogService dialogService)
         {
@@ -144,128 +145,140 @@ namespace TCMS.GUI.ViewModels
             _mapper = mapper;
             _dialogService = dialogService;
             // Initialize commands
-            AddVehicleCommand = new RelayCommand(AddVehicle);
-            EditVehicleCommand = new RelayCommand(EditVehicle, CanExecuteEditOrDelete);
-            DeleteVehicleCommand = new RelayCommand(DeleteVehicle, CanExecuteEditOrDelete);
-            SearchCommand = new RelayCommand((obj) => FilterVehicles());
+            AddEquipmentCommand = new RelayCommand(AddEquipment);
+            EditEquipmentCommand = new RelayCommand(EditEquipment, CanExecuteEditOrDelete);
+            DeleteEquipmentCommand = new RelayCommand(DeleteEquipment, CanExecuteEditOrDelete);
+            RefreshEquipmentsCommand = new RelayCommand(RefreshEquipments);
+            SearchCommand = new RelayCommand((obj) => FilterEquipments());
             SearchBoxGotFocusCommand = new RelayCommand(SearchBoxGotFocus);
             SearchBoxLostFocusCommand = new RelayCommand(SearchBoxLostFocus);
 
-            _vehicles = new ObservableCollection<Vehicle>();
-            _filteredVehicles = new ObservableCollection<Vehicle>();
+            _equipment = new ObservableCollection<Equipment>();
+            _filteredEquipment = new ObservableCollection<Equipment>();
 
             InitializeLazyLoader();
 
         }
+
         private void InitializeLazyLoader()
         {
-            _LazyVehiclesLoader = new Lazy<Task>(() => LoadVehiclesAsync(), isThreadSafe: true);
+            _LazyIncidentLoader = new Lazy<Task>(() => LoadEquipmentAsync(), isThreadSafe: true);
         }
 
-        private async Task LoadVehiclesAsync()
+        private async Task LoadEquipmentAsync()
         {
             try
             {
-
-                // Replace PartDetailDto with Vehicle Details (create vehicle details?)
-                var result = await _apiClient.GetAsync<OperationResult<IEnumerable<VehicleDto>>>("vehicle/all");
+                var result = await _apiClient.GetAsync<OperationResult<IEnumerable<Equipment>>>("vehicle/all");
                 if (result.IsSuccessful && result.Data != null)
                 {
-                    var vehicles = _mapper.Map<IEnumerable<Vehicle>>(result.Data);
+                    var mappedEquipment = _mapper.Map<IEnumerable<Equipment>>(result.Data);
+
                     App.Current.Dispatcher.Invoke(() =>
                     {
-                        _vehicles.Clear();
-                        foreach (var vehicle in vehicles)
+                        _equipment.Clear();
+                        foreach (var equipment in mappedEquipment)
                         {
-                            _vehicles.Add(vehicle);
+                            _equipment.Add(equipment);
                         }
-                        FilterVehicles();
+                        FilterEquipments();
                     });
                 }
                 else
                 {
-                    // Log failure or handle accordingly
-                    Debug.WriteLine("Failed to load vehicles or no vehicles returned.");
+                    Debug.WriteLine("Failed to load equipment or no data returned.");
                 }
             }
             catch (Exception ex)
             {
-                // Log or handle exceptions
-                Debug.WriteLine($"An error occurred while loading vehicles: {ex.Message}");
+                Debug.WriteLine($"An error occurred while loading equipment: {ex.Message}");
             }
         }
-        public async Task EnsureVehiclesLoadedAsync()
+
+
+        public async Task EnsureIncidentsLoadedAsync()
         {
-            if (!_LazyVehiclesLoader.IsValueCreated)
+            if (!_LazyIncidentLoader.IsValueCreated)
             {
-                await _LazyVehiclesLoader.Value;
+                await _LazyIncidentLoader.Value;
             }
         }
+
         private void AdjustSearchTextOnFocus()
         {
-            if (_isSearchBoxFocused && SearchText == "Search Vehicles...")
+            if (_isSearchBoxFocused && SearchText == "Search Products...")
             {
                 SearchText = string.Empty;
             }
             else if (!_isSearchBoxFocused && string.IsNullOrWhiteSpace(SearchText))
             {
-                SearchText = "Search Vehicles...";
+                SearchText = "Search Products...";
             }
         }
+
         private void SearchBoxGotFocus(object obj)
         {
-            if (SearchText == "Search Vehicles...")
+            if (SearchText == "Search Products...")
             {
                 SearchText = string.Empty;
             }
         }
+
         private void SearchBoxLostFocus(object obj)
         {
             if (string.IsNullOrWhiteSpace(SearchText))
             {
-                SearchText = "Search Vehicles...";
+                SearchText = "Search Products...";
             }
-        }
-        private void AddVehicle(object obj)
-        {
-            var newVehicleForm = new VehicleFormViewModel(_apiClient, _mapper);
-            newVehicleForm.VehicleUpdated += OnVehicleUpdated;
-            _dialogService.ShowDialog(newVehicleForm);
-            newVehicleForm.VehicleUpdated -= OnVehicleUpdated;
-        }
-        private void OnVehicleUpdated(object sender, EventArgs e)
-        {
-            RefreshVehicles(null);
         }
 
-        private void EditVehicle(object obj)
+
+        private void AddEquipment(object obj)
         {
-            if (SelectedVehicle != null)
+            var newEquipmentForm = new EquipmentFormViewModel(_apiClient, _mapper);
+            newEquipmentForm.EquipmentUpdated += OnEquipmentUpdated;
+            _dialogService.ShowDialog(newEquipmentForm);
+            newEquipmentForm.EquipmentUpdated -= OnEquipmentUpdated;
+        }
+
+        private void OnEquipmentUpdated(object sender, EventArgs e)
+        {
+            RefreshEquipments(null);
+        }
+
+
+        private void Refresh()
+        {
+            _ = LoadEquipmentAsync();
+        }
+
+        private void EditEquipment(object obj)
+        {
+            if (SelectedEquipment != null)
             {
-                var editVehicleFormViewModel = new VehicleFormViewModel(_apiClient, _mapper, SelectedVehicle);
-                editVehicleFormViewModel.VehicleUpdated += OnVehicleUpdated;
-                _dialogService.ShowDialog(editVehicleFormViewModel);
-                editVehicleFormViewModel.Cleanup();
-                editVehicleFormViewModel.VehicleUpdated -= OnVehicleUpdated;
+                var editEquipmentForm = new EquipmentFormViewModel(_apiClient, _mapper, SelectedEquipment);
+                editEquipmentForm.EquipmentUpdated += OnEquipmentUpdated;
+                _dialogService.ShowDialog(editEquipmentForm);
+                editEquipmentForm.Cleanup();
+                editEquipmentForm.EquipmentUpdated -= OnEquipmentUpdated;
             }
         }
+
         private bool CanExecuteEditOrDelete(object obj)
         {
             // Determine if the edit/delete command can execute, e.g., based on if a product is selected
             return true; // Example logic
         }
-        private void DeleteVehicle(object obj)
+
+        private void DeleteEquipment(object obj)
         {
-            // Implementation for deleting a selected vehicle
+            // Implementation for deleting a selected product
         }
-        private void RefreshVehicles(object obj)
+
+        private void RefreshEquipments(object obj)
         {
             Refresh();
         }
-        private void Refresh()
-        {
-            _ = LoadVehiclesAsync();
-        }
-
     }
 }
+

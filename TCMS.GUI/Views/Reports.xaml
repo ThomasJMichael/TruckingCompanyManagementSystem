@@ -4,9 +4,305 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TCMS.GUI.Views"
+             xmlns:utilities="clr-namespace:TCMS.GUI.Utilities" 
+             xmlns:viewmodels="clr-namespace:TCMS.GUI.ViewModels"
+             xmlns:global="clr-namespace:"
+             d:DataContext="{d:DesignInstance Type=viewmodels:ReportViewModel}"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="600" d:DesignWidth="622"
+             Style="{StaticResource Page_Style}">
+
+    <UserControl.Resources>
+        <utilities:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+        <SolidColorBrush x:Key="DetailBackgroundBrush" Color="#FF272B2F"/>
+        <!-- Define the TextBlock style for details -->
+        <Style x:Key="DetailTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontFamily" Value="pack://application:,,,/;component/Assets/Fonts/#Rubik Regular"/>
+            <!-- Add the path to your font file here, adjust the path if necessary -->
+            <Setter Property="FontSize" Value="14"/>
+            <!-- Set any other common properties you need for your TextBlocks -->
+        </Style>
+        <!-- Style for the GridView Column Header -->
+        <Style x:Key="GridViewColumnHeaderStyle" TargetType="GridViewColumnHeader">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <!-- Add additional Setters for other properties if needed -->
+        </Style>
+    </UserControl.Resources>
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <!-- Buttons for Shipments -->
+        <!-- Main Tab Control -->
+        <TabControl Grid.Row="1" Margin="10"
+            SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay}"
+            ItemContainerStyle="{StaticResource ThemedTabItem}"
+            Background="#FF272B2F">
+            <!-- Purchase Orders Tab -->
+            <TabItem Header="Payroll">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <!-- Buttons for Purchase Orders -->
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="5"
+                        Background="#FF272B2F">
+                        <Button Content="Generate Report" Style="{StaticResource ThemedButtonStyle}" Command="{Binding AddPurchaseOrderCommand}"/>
+                    </StackPanel>
+                    <!-- Purchase Order Details -->
+                    <ListView Grid.Row="1" x:Name="PurchaseOrderSearchResults"
+                              ItemsSource="{Binding PayrollReports}"
+                              BorderBrush="{x:Null}" Background="#FF272B2F"
+                              ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                              ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                        <ListView.View>
+                            <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
+                                <GridViewColumn Header="Employee Name" DisplayMemberBinding="{Binding FullName}" Width="Auto"/>
+                                <GridViewColumn Header="Pay Start" DisplayMemberBinding="{Binding PayPeriodStart}" Width="Auto"/>
+                                <GridViewColumn Header="Pay End" DisplayMemberBinding="{Binding PayPeriodEnd}" Width="Auto"/>
+                                <GridViewColumn Header="Hours Worked" DisplayMemberBinding="{Binding HoursWorked}" Width="Auto"/>
+                                <GridViewColumn Header="Pay Rate" DisplayMemberBinding="{Binding PayRate}" Width="Auto"/>
+                                <GridViewColumn Header="Gross Pay" DisplayMemberBinding="{Binding GrossPay}" Width="Auto"/>
+                                <GridViewColumn Header="Tax Deductions" DisplayMemberBinding="{Binding TaxDeductions}" Width="Auto"/>
+                                <GridViewColumn Header="Other Deductions" DisplayMemberBinding="{Binding OtherDeductions}" Width="Auto"/>
+                                <GridViewColumn Header="Net Pay" DisplayMemberBinding="{Binding NetPay}" Width="Auto"/>
+                            </GridView>
+                        </ListView.View>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Margin" Value="2"/>
+                                <Setter Property="Padding" Value="4"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#333"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#555"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                </Grid>
+            </TabItem>
+
+<!-- Shipments Tab -->
+            <!-- Shipments Tab -->
+            <TabItem Header="Full Maint">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <!-- Buttons for Shipments -->
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="5">
+                        <Button Content="Generate Report"
+                    Style="{StaticResource ThemedButtonStyle}"
+                    Command="{Binding GenerateFullMaintenance}"/>
+                        <!-- Edit Button -->
+                    </StackPanel>
+                    <!-- Purchase Order Details -->
+                    <ListView Grid.Row="1" x:Name="fullMaint"
+                              ItemsSource="{Binding MaintenanceReports}"
+                              BorderBrush="{x:Null}" Background="#FF272B2F"
+                              ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                              ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                        <ListView.View>
+                            <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
+                                <GridViewColumn Header="Vehicle Id" DisplayMemberBinding="{Binding VehicleId}" Width="Auto"/>
+                                <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" Width="Auto"/>
+                                <GridViewColumn Header="Date" DisplayMemberBinding="{Binding MaintenanceDate}" Width="Auto"/>
+                                <GridViewColumn Header="Cost" DisplayMemberBinding="{Binding Cost}" Width="Auto"/>
+                                <!-- Additional columns as needed -->
+                            </GridView>
+                        </ListView.View>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Margin" Value="2"/>
+                                <Setter Property="Padding" Value="4"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#333"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#555"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Vehicle Maint">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <!-- Buttons for Shipments -->
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="5">
+                        <Button Content="Generate Report"
+         Style="{StaticResource ThemedButtonStyle}"
+         Command="{Binding DispatchReceiveCommand}"/>
+                        <!-- Edit Button -->
+                    </StackPanel>
+                    <!-- Purchase Order Details -->
+                    <ListView Grid.Row="1" x:Name="alkjalksdjf"
+                   ItemsSource="{Binding FilteredPurchaseOrders}"
+                   SelectedItem="{Binding SelectedPurchaseOrder, Mode=TwoWay}"
+                   BorderBrush="{x:Null}" Background="#FF272B2F"
+                   ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                        <ListView.View>
+                            <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
+                                <GridViewColumn Header="Order ID" DisplayMemberBinding="{Binding PurchaseOrderId}" Width="Auto"/>
+                                <GridViewColumn Header="Date" DisplayMemberBinding="{Binding DateCreated}" Width="160"/>
+                                <GridViewColumn Header="Company" DisplayMemberBinding="{Binding Company}" Width="Auto"/>
+                                <!-- Additional columns as needed -->
+                            </GridView>
+                        </ListView.View>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Margin" Value="2"/>
+                                <Setter Property="Padding" Value="4"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#333"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#555"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Incoming Ship">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <!-- Buttons for Shipments -->
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="5">
+                        <Button Content="Generate Report"
+Style="{StaticResource ThemedButtonStyle}"
+Command="{Binding DispatchReceiveCommand}"/>
+                        <!-- Edit Button -->
+                    </StackPanel>
+                    <!-- Purchase Order Details -->
+                    <ListView Grid.Row="1" x:Name="qwerqewr"
+          ItemsSource="{Binding FilteredPurchaseOrders}"
+          SelectedItem="{Binding SelectedPurchaseOrder, Mode=TwoWay}"
+          BorderBrush="{x:Null}" Background="#FF272B2F"
+          ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                        <ListView.View>
+                            <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
+                                <GridViewColumn Header="Order ID" DisplayMemberBinding="{Binding PurchaseOrderId}" Width="Auto"/>
+                                <GridViewColumn Header="Date" DisplayMemberBinding="{Binding DateCreated}" Width="160"/>
+                                <GridViewColumn Header="Company" DisplayMemberBinding="{Binding Company}" Width="Auto"/>
+                                <!-- Additional columns as needed -->
+                            </GridView>
+                        </ListView.View>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Margin" Value="2"/>
+                                <Setter Property="Padding" Value="4"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#333"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#555"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Outgoing Ship">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <!-- Buttons for Shipments -->
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="5">
+                        <Button Content="Generate Report"
+Style="{StaticResource ThemedButtonStyle}"
+Command="{Binding DispatchReceiveCommand}"/>
+                        <!-- Edit Button -->
+                    </StackPanel>
+                    <!-- Purchase Order Details -->
+                    <ListView Grid.Row="1" x:Name="nbvasdf"
+          ItemsSource="{Binding FilteredPurchaseOrders}"
+          SelectedItem="{Binding SelectedPurchaseOrder, Mode=TwoWay}"
+          BorderBrush="{x:Null}" Background="#FF272B2F"
+          ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                        <ListView.View>
+                            <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
+                                <GridViewColumn Header="Order ID" DisplayMemberBinding="{Binding PurchaseOrderId}" Width="Auto"/>
+                                <GridViewColumn Header="Date" DisplayMemberBinding="{Binding DateCreated}" Width="160"/>
+                                <GridViewColumn Header="Company" DisplayMemberBinding="{Binding Company}" Width="Auto"/>
+                                <!-- Additional columns as needed -->
+                            </GridView>
+                        </ListView.View>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Margin" Value="2"/>
+                                <Setter Property="Padding" Value="4"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#333"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#555"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>

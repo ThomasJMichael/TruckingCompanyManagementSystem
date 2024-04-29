@@ -11,7 +11,7 @@ namespace TCMS.GUI.Models
     public class PurchaseOrderItem
     {
         public int ItemId { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public int Quantity { get; set; }
         public ItemStatus ItemStatus { get; set; }
 

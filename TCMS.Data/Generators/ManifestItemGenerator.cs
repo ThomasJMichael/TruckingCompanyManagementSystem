@@ -19,11 +19,14 @@ namespace TCMS.Data.Generators
 
             for (int i = 0; i < itemCount; i++)
             {
+                var number = faker.Random.Int(1, products.Count - 1);
+                var productMaxQuantity = products.Find(id => id.ProductId == number).Inventory.QuantityOnHand;
                 var manifestItem = new ManifestItem
                 {
                     ManifestId = manifestId,
-                    ProductId = products[faker.Random.Int(0, products.Count - 1)].ProductId,
+                    ProductId = products[number].ProductId,
                     Status = faker.PickRandom<ItemStatus>(),
+                    Quantity = faker.Random.Int(1, productMaxQuantity)
 
                 };
                 manifestItems.Add(manifestItem);
