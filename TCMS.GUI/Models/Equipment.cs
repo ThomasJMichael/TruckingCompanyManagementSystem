@@ -16,6 +16,5 @@ namespace TCMS.GUI.Models
         public string Type { get; set; }
         public ObservableCollection<Part>? Parts { get; set; }
         public ObservableCollection<MaintenanceRecord>? MaintenanceRecords { get; set; }
-
     }
 }

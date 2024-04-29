@@ -46,8 +46,12 @@ namespace TCMS.GUI.ViewModels
 
         public Equipment SelectedEquipment
         {
-            get { return _selectedEquipment; }
-            set { _selectedEquipment = value; OnPropertyChanged(); }
+            get => _selectedEquipment;
+            set
+            {
+                _selectedEquipment = value;
+                OnPropertyChanged();
+            }
         }
 
         public string SearchText

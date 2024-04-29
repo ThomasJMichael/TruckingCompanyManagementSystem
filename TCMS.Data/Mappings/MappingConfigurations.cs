@@ -123,6 +123,7 @@ namespace TCMS.Data.Mappings
 
             CreateMap<MaintenanceRecord, MaintenanceRecordDto>()
                 .ForMember(dest => dest.MaintenanceRecordId, opt => opt.MapFrom(src => src.MaintenanceRecordId))
+                .ForMember(dest => dest.RecordType, opt => opt.MapFrom(src => src.RecordType))
                 .ForMember(dest => dest.VehicleId, opt => opt.MapFrom(src => src.VehicleId.HasValue ? src.VehicleId.Value : default(int)))
                 .ForMember(dest => dest.MaintenanceDate, opt => opt.MapFrom(src => src.MaintenanceDate))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))

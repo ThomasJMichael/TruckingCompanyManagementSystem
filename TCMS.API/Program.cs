@@ -41,6 +41,7 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<TcmsContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
+        .EnableSensitiveDataLogging(true)
         .LogTo(Console.WriteLine, LogLevel.Information));
 
 builder.Services.AddDefaultIdentity<UserAccount>(options => options.SignIn.RequireConfirmedAccount = false)

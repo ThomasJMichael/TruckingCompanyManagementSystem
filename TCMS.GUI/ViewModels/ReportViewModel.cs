@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using AutoMapper;
+using TCMS.Common.DTOs.Equipment;
 using TCMS.Common.DTOs.Report;
 using TCMS.Common.Operations;
 using TCMS.GUI.Models;
@@ -33,9 +34,9 @@ namespace TCMS.GUI.ViewModels
             }
         }
 
-        private ObservableCollection<MaintenanceReport> _maintenanceReports;
+        private ObservableCollection<MaintenanceRecord> _maintenanceReports;
 
-        public ObservableCollection<MaintenanceReport> MaintenanceReports
+        public ObservableCollection<MaintenanceRecord> MaintenanceRecords
         {
             get => _maintenanceReports;
             set
@@ -52,7 +53,7 @@ namespace TCMS.GUI.ViewModels
             _mapper = mapper;
 
             LoadPayrollReports();
-            LoadMaintenanceReports();
+            LoadMaintenanceRecords();
         }
 
         private async void LoadPayrollReports()
@@ -79,7 +80,7 @@ namespace TCMS.GUI.ViewModels
             }
 
         }
-        private async void LoadMaintenanceReports()
+        private async void LoadMaintenanceRecords()
         {
             var reportReqDto = new ReportRequestDto
             {
@@ -89,11 +90,11 @@ namespace TCMS.GUI.ViewModels
             try
             {
                 var result =
-                    await _apiClient.PostAsync<OperationResult<IEnumerable<MaintenanceReportDto>>>("reports/maintenance", reportReqDto);
+                    await _apiClient.PostAsync<OperationResult<IEnumerable<MaintenanceRecordDto>>>("reports/maintenance", reportReqDto);
                 if (result.IsSuccessful)
                 {
-                    MaintenanceReports =
-                        new ObservableCollection<MaintenanceReport>(_mapper.Map<IEnumerable<MaintenanceReport>>(result.Data));
+                    MaintenanceRecords =
+                        new ObservableCollection<MaintenanceRecord>(_mapper.Map<IEnumerable<MaintenanceRecord>>(result.Data));
                 }
             }
             catch (Exception e)

@@ -167,34 +167,54 @@
             <!-- Vehicle Details Tab -->
             <TabItem Header="Vehicle Details">
                 <Border Grid.Column="1" Background="{StaticResource DetailBackgroundBrush}">
-                    <StackPanel Visibility="{Binding SelectedVehicle, Converter={StaticResource NullToVisibilityConverter}}">
+                    <StackPanel Visibility="{Binding SelectedEquipment, Converter={StaticResource NullToVisibilityConverter}}">
                         <TextBlock Text="Vehicle Details" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold" FontSize="18" />
                         <Separator/>
-                        <TextBlock Text="Vehicle ID:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                        <TextBlock Text="Vehicle ID:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold" Foreground="DodgerBlue"/>
                         <TextBlock Text="{Binding SelectedEquipment.VehicleId}" Style="{StaticResource DetailTextBlockStyle}"/>
-                        <TextBlock Text="Brand:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                        <TextBlock Text="Brand:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold" Foreground="DodgerBlue"/>
                         <TextBlock Text="{Binding SelectedEquipment.Brand}" Style="{StaticResource DetailTextBlockStyle}"/>
-                        <TextBlock Text="Model:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                        <TextBlock Text="Model:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold" Foreground="DodgerBlue"/>
                         <TextBlock Text="{Binding SelectedEquipment.Model}" Style="{StaticResource DetailTextBlockStyle}"/>
-                        <TextBlock Text="Year:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                        <TextBlock Text="Year:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold" Foreground="DodgerBlue"/>
                         <TextBlock Text="{Binding SelectedEquipment.Year}" Style="{StaticResource DetailTextBlockStyle}"/>
-                        <TextBlock Text="Type:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold"/>
+                        <TextBlock Text="Type:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold" Foreground="DodgerBlue"/>
                         <TextBlock Text="{Binding SelectedEquipment.Type}" Style="{StaticResource DetailTextBlockStyle}"/>
                         <!-- Include other details such as Year, Type, etc. -->
 
                         <!-- Parts associated with the selected vehicle -->
-                        <TextBlock Text="Parts List:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold" Margin="0,10,0,0"/>
-                        <ListView ItemsSource="{Binding SelectedVehicle.Parts}" Margin="5" Background="{StaticResource DetailBackgroundBrush}">
+                        <TextBlock Text="Parts List:" Style="{StaticResource DetailTextBlockStyle}" FontWeight="Bold" Foreground="DodgerBlue" Margin="0,10,0,0"/>
+                        <ListView Height="300" ItemsSource="{Binding SelectedEquipment.Parts}" Margin="5" Background="{StaticResource DetailBackgroundBrush}"
+                                  ScrollViewer.VerticalScrollBarVisibility="Hidden">
                             <ListView.View>
                                 <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
                                     <GridViewColumn Header="Name" DisplayMemberBinding="{Binding PartName}" Width="120"/>
                                     <GridViewColumn Header="Id" DisplayMemberBinding="{Binding PartNumber}" Width="Auto"/>
-                                    <GridViewColumn Header="Quantity" DisplayMemberBinding="{Binding Quantity}" Width="Auto"/>
-                                    <GridViewColumn Header="Price" DisplayMemberBinding="{Binding Price, StringFormat=C}" Width="60"/>
+                                    <GridViewColumn Header="Quantity" DisplayMemberBinding="{Binding QuantityOnHand}" Width="Auto"/>
+                                    <GridViewColumn Header="Price" DisplayMemberBinding="{Binding Cost, StringFormat=C}" Width="60"/>
                                     <GridViewColumn Header="Supplier" DisplayMemberBinding="{Binding Supplier}" Width="120"/>
                                     <!-- Add more columns as needed -->
                                 </GridView>
                             </ListView.View>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="Margin" Value="2"/>
+                                    <Setter Property="Padding" Value="4"/>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="BorderBrush" Value="Transparent"/>
+                                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="#333"/>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#555"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListView.ItemContainerStyle>
                         </ListView>
                     </StackPanel>
                 </Border>
@@ -216,15 +236,17 @@
                         </StackPanel>
 
                         <!-- Maintenance Records List View -->
-                    <ListView Grid.Column="0"
+                        <ListView Grid.Column="0"
                               x:Name="ProductsListView"
-                              ItemsSource="{Binding FilteredEmployees}"
-                              SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}"
+                              ItemsSource="{Binding SelectedEquipment.MaintenanceRecords}"
+                              SelectedItem="{Binding SelectedRecord, Mode=TwoWay}"
                               BorderBrush="{x:Null}" Background="#FF272B2F"
-                              ScrollViewer.VerticalScrollBarVisibility="Hidden">
-                        <ListView.View>
+                              Height="480"
+                              ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                              ScrollViewer.HorizontalScrollBarVisibility="Visible">
+                            <ListView.View>
                             <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
-                                <GridViewColumn Header="ID" DisplayMemberBinding="{Binding MaintenanceRecordId}" Width="Auto"/>
+                                <GridViewColumn Header="ID" DisplayMemberBinding="{Binding  MaintenanceRecordID}" Width="Auto"/>
                                 <GridViewColumn Header="Type" DisplayMemberBinding="{Binding RecordType}" Width="Auto"/>
                                 <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" Width="240"/>
                                 <GridViewColumn Header="Date" DisplayMemberBinding="{Binding MaintenanceDate, StringFormat=\{0:d\}}" Width="Auto"/>

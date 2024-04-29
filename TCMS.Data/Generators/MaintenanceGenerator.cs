@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using TCMS.Common.enums;
+using TCMS.Data.Data;
 using TCMS.Data.Models;
 using Vehicle = TCMS.Data.Models.Vehicle;
 
@@ -13,36 +15,64 @@ namespace TCMS.Data.Generators
 {
     public class MaintenanceGenerator
     {
-        public static List<MaintenanceRecord> GenerateMaintenanceRecordsForVehicle(Vehicle vehicle, int count)
+        public static async Task GenerateMaintenanceRecordsForVehicles(IEnumerable<Vehicle> vehicles,
+            int recordsPerVehicle, TcmsContext context)
         {
-            var maintenanceRecords = new Faker<MaintenanceRecord>()
-                .RuleFor(mr => mr.RecordType, f => f.PickRandom<RecordType>())
-                .RuleFor(mr => mr.Description, f => f.Commerce.ProductName())
-                .RuleFor(mr => mr.MaintenanceDate, f => f.Date.Past(2))
-                .RuleFor(mr => mr.Cost, f => f.Finance.Amount(100, 10000))
-                .RuleFor(mr => mr.VehicleId, vehicle.VehicleId)
-                .Generate(count);
+            var allMaintenanceRecords = new List<MaintenanceRecord>();
 
-            foreach (var record in maintenanceRecords)
+            foreach (var vehicle in vehicles)
             {
-                var faker = new Faker();
-                // Assume each maintenance record may involve between 1 and 5 parts.
-                var partDetails = GeneratePartDetails(faker.Random.Int(1, 5));
+                var maintenanceRecordsForThisVehicle = new List<MaintenanceRecord>();
 
-                // Associate the generated PartDetails with the MaintenanceRecord
-                record.PartDetails = partDetails;
+                for (int i = 0; i < recordsPerVehicle; i++)
+                {
+                    var maintenanceRecord = new MaintenanceRecord
+                    {
+                        RecordType = new Faker().PickRandom<RecordType>(),
+                        Description = new Faker().Commerce.ProductName(),
+                        MaintenanceDate = new Faker().Date.Past(2),
+                        Cost = new Faker().Finance.Amount(100, 10000),
+                        Vehicle = vehicle
+                    };
+                    maintenanceRecord.VehicleId = vehicle.VehicleId;
+                    maintenanceRecordsForThisVehicle.Add(maintenanceRecord);
+                    context.MaintenanceRecords.Add(maintenanceRecord);
+                }
+                allMaintenanceRecords.AddRange(maintenanceRecordsForThisVehicle);
+            }
+            foreach (var entry in context.ChangeTracker.Entries<MaintenanceRecord>())
+            {
+                Console.WriteLine($"VehicleId before save: {entry.Entity.VehicleId}, state: {entry.State}");
+            }
+            foreach (var vehicle in context.ChangeTracker.Entries<Vehicle>())
+            {
+                Console.WriteLine($"Vehicle ID: {vehicle.Entity.VehicleId}, State: {vehicle.State}");
+            }
+            await context.SaveChangesAsync();
+            foreach (var entry in context.ChangeTracker.Entries<MaintenanceRecord>())
+            {
+                Console.WriteLine($"VehicleId after save: {entry.Entity.VehicleId}, state: {entry.State}");
+            }
 
-                // Also associate the generated PartDetails with the Vehicle
+
+
+            var updatedMaintenanceRecords = await context.MaintenanceRecords.ToListAsync();
+
+            foreach (var record in updatedMaintenanceRecords)
+            {
+                var partDetails = GeneratePartDetails(new Faker().Random.Int(1, 5));
                 foreach (var part in partDetails)
                 {
-                    part.VehicleId = vehicle.VehicleId;
-                    vehicle.Parts.Add(part); // Assuming the Vehicle.Parts collection is initialized.
+                    part.MaintenanceRecordId = record.MaintenanceRecordId;
+                    part.VehicleId = record.VehicleId.Value; // Make sure to handle nullable VehicleId if necessary
+                    context.PartDetails.Add(part);
                 }
             }
 
-            return maintenanceRecords;
-
+            await context.SaveChangesAsync();
         }
+
+
 
         public static List<PartDetails> GeneratePartDetails(int count)
         {

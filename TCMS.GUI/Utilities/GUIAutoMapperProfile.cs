@@ -140,7 +140,7 @@ namespace TCMS.GUI.Utilities
                 .ForMember(dest => dest.ItemStatus, opt => opt.MapFrom(src => src.ItemStatus));
 
             CreateMap<PayrollReportDto, PayrollReport>().ReverseMap();
-            CreateMap<MaintenanceReportDto, MaintenanceReport>().ReverseMap();
+            CreateMap<MaintenanceReportDto, MaintenanceRecord>().ReverseMap();
 
             CreateMap<EquipmentFormViewModel, VehicleCreateDto>()
                 .ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand))
@@ -154,8 +154,29 @@ namespace TCMS.GUI.Utilities
                 .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model))
                 .ForMember(dest => dest.Year, opt => opt.MapFrom(src => src.Year))
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type))
-                .ForMember(dest => dest.Parts, opt => opt.MapFrom(src => new ObservableCollection<Part>(src.Parts.Select(partDto => new Part { /* map properties */ }))))
-                .ForMember(dest => dest.MaintenanceRecords, opt => opt.MapFrom(src => new ObservableCollection<MaintenanceRecord>(src.MaintenanceRecords.Select(recordDto => new MaintenanceRecord { /* map properties */ }))));
+                .ForMember(dest => dest.Parts, opt => opt.MapFrom(src => src.Parts))
+                .ForMember(dest => dest.MaintenanceRecords, opt => opt.MapFrom(src => src.MaintenanceRecords));
+
+            CreateMap<PartDetailDto, Part>()
+                .ForMember(dest => dest.PartDetailId, opt => opt.MapFrom(src => src.PartDetailId))
+                .ForMember(dest => dest.PartName, opt => opt.MapFrom(src => src.PartName))
+                .ForMember(dest => dest.PartNumber, opt => opt.MapFrom(src => src.PartNumber))
+                .ForMember(dest => dest.QuantityOnHand, opt => opt.MapFrom(src => src.QuantityOnHand.GetValueOrDefault()))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+                .ForMember(dest => dest.Cost, opt => opt.MapFrom(src => src.Cost))
+                .ForMember(dest => dest.Supplier, opt => opt.MapFrom(src => src.Supplier))
+                .ForMember(dest => dest.IsFromStock, opt => opt.MapFrom(src => src.IsFromStock))
+                .ForMember(dest => dest.VehicleId, opt => opt.MapFrom(src => src.VehicleId))
+                .ForMember(dest => dest.MaintenanceRecordId, opt => opt.MapFrom(src => src.MaintenanceRecordID))
+                .ForMember(dest => dest.RepairRecordId, opt => opt.MapFrom(src => src.RepairRecordID.GetValueOrDefault()));
+
+            CreateMap<MaintenanceRecordDto, MaintenanceRecord>()
+                .ForMember(dest => dest.MaintenanceRecordID, opt => opt.MapFrom(src => src.MaintenanceRecordId))
+                .ForMember(dest => dest.RecordType, opt => opt.MapFrom(src => src.RecordType))
+                .ForMember(dest => dest.VehicleId, opt => opt.MapFrom(src => src.VehicleId))
+                .ForMember(dest => dest.MaintenanceDate, opt => opt.MapFrom(src => src.MaintenanceDate))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+                .ForMember(dest => dest.Cost, opt => opt.MapFrom(src => src.Cost));
         }
     };
 }

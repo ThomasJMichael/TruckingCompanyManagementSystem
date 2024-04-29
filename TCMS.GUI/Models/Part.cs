@@ -17,8 +17,8 @@ namespace TCMS.GUI.Models
         public string Supplier { get; set; }
         public bool IsFromStock {  get; set; }
         public int VehicleId {  get; set; }
-        public int MaintenanceRecordID {  get; set; }
-        public int RepairRecordID {  get; set; }
+        public int MaintenanceRecordId {  get; set; }
+        public int RepairRecordId {  get; set; }
 
     }
 }

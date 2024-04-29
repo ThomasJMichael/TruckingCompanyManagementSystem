@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TCMS.GUI.Models
 {
-    public class MaintenanceReport
+    public class MaintenanceReportRemove
     {
         public int VehicleId { get; set; }
         public string? Description { get; set; }

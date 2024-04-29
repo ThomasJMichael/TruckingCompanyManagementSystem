@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TCMS.Common.enums;
 
 namespace TCMS.Common.DTOs.Equipment
 {
@@ -6,6 +7,7 @@ namespace TCMS.Common.DTOs.Equipment
     {
         public int MaintenanceRecordId { get; set; }
 
+        public RecordType RecordType { get; set; }
         public int VehicleId { get; set; }
 
         public DateTime MaintenanceDate { get; set; }
