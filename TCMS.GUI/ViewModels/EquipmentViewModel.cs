@@ -169,7 +169,7 @@ namespace TCMS.GUI.ViewModels
         {
             try
             {
-                var result = await _apiClient.GetAsync<OperationResult<IEnumerable<Equipment>>>("vehicle/all");
+                var result = await _apiClient.GetAsync<OperationResult<IEnumerable<VehicleDto>>>("vehicle/all");
                 if (result.IsSuccessful && result.Data != null)
                 {
                     var mappedEquipment = _mapper.Map<IEnumerable<Equipment>>(result.Data);

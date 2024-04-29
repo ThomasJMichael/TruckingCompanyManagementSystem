@@ -21,7 +21,11 @@ namespace TCMS.Services.Implementations
         {
             try
             {
-                var vehicles = await context.Vehicles.ToListAsync();
+                var vehicles = await context.Vehicles
+                    .Include(v => v.Parts)
+                    .Include(v => v.MaintenanceRecords)
+                    .ToListAsync();
+
                 var vehicleDtos = mapper.Map<IEnumerable<VehicleDto>>(vehicles);
 
                 return OperationResult<IEnumerable<VehicleDto>>.Success(vehicleDtos);
