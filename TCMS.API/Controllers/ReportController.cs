@@ -81,15 +81,14 @@ namespace TCMS.API.Controllers
         [HttpGet("outgoing-shipments")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<OperationResult>> GenerateOutgoingShipmentsReport(
-            [FromBody] ReportRequestDto dto)
+        public async Task<ActionResult<OperationResult>> GenerateOutgoingShipmentsReport()
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = await _reportService.GenerateOutgoingShipmentsReport(dto);
+            var result = await _reportService.GenerateOutgoingShipmentsReport();
             return result.IsSuccessful ? Ok(result) : BadRequest(result);
         }
 

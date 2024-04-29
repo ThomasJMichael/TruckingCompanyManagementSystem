@@ -17,5 +17,5 @@ public interface IReportService
     Task<OperationResult<IEnumerable<IncomingShipmentReportDto>>> GenerateIncomingShipmentsReport();
 
     // Summary of all outgoing shipments with costs, and whether payment has been submitted
-    Task<OperationResult<CsvResultDto>> GenerateOutgoingShipmentsReport(ReportRequestDto requestDto);
+    Task<OperationResult<IEnumerable<OutgoingShipmentReportDto>>> GenerateOutgoingShipmentsReport();
 }

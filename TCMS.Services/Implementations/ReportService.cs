@@ -193,42 +193,60 @@ namespace TCMS.Services.Implementations
         }
 
 
-        public async Task<OperationResult<CsvResultDto>> GenerateOutgoingShipmentsReport(ReportRequestDto requestDto)
+        public async Task<OperationResult<IEnumerable<OutgoingShipmentReportDto>>> GenerateOutgoingShipmentsReport()
         {
             try
             {
-                var outgoingShipments =
-                    await shipmentService.GetAllOutgoingShipmentsAsync();
-                if (!outgoingShipments.IsSuccessful)
+                // Assuming there's a similar service for fetching outgoing shipments
+                var outgoingShipmentsResult = await shipmentService.GetAllOutgoingShipmentsAsync();
+                if (!outgoingShipmentsResult.IsSuccessful)
                 {
-                    return OperationResult<CsvResultDto>.Failure(outgoingShipments.Errors);
+                    return OperationResult<IEnumerable<OutgoingShipmentReportDto>>.Failure(outgoingShipmentsResult.Errors);
                 }
 
-                var shipments = outgoingShipments.Data.ToList();
-
-                var csv = new StringBuilder();
-                csv.AppendLine(string.Join(",", OutgoingShipmentReportSchema.Schema.Fields));
-
-                foreach (var shipment in shipments)
+                var outgoingShipmentsReportDtos = outgoingShipmentsResult.Data.Select(shipment => new OutgoingShipmentReportDto
                 {
-                    csv.AppendLine(string.Join(",", new string[]
+                    ShipmentId = shipment.ShipmentId,
+                    Company = shipment.Company,
+                }).ToList();
+
+                foreach (var shipment in outgoingShipmentsReportDtos)
+                {
+                    var shipmentModel = await context.Shipments.FindAsync(shipment.ShipmentId);
+                    var purchaseOrder = await context.PurchaseOrders.FindAsync(shipmentModel?.PurchaseOrderId);
+                    var manifest = await context.Manifests
+                        .Include(m => m.ManifestItems)
+                        .ThenInclude(mi => mi.Product)
+                        .SingleOrDefaultAsync(m => m.ManifestId == shipmentModel.ManifestId);
+
+                    decimal totalCost = 0;
+                    if (purchaseOrder != null)
                     {
-                        shipment.ShipmentId.ToString(),
-                        shipment.DepDateTime.ToString(),
-                        shipment.Address + " " + shipment.City + " " + shipment.State + " " + shipment.Zip,
-                        shipment.TotalCost.ToString("F2"),
-                        shipment.IsFullyPaid ? "Yes" : "No",
-                    }));
+                        shipment.IsFullyPaid = purchaseOrder.ShippingPaid;
+                        totalCost += purchaseOrder.ShippingCost;
+                    }
+
+                    if (manifest?.ManifestItems != null)
+                    {
+                        var manifestTotalCost = manifest.ManifestItems.Sum(item => item.Product.Price);
+                        totalCost += manifestTotalCost;
+                    }
+
+                    shipment.TotalCost = totalCost;
+                    Console.WriteLine($"DTO for Shipment {shipment.ShipmentId} has Total Cost: {shipment.TotalCost}");
                 }
 
-                var resultDto = new CsvResultDto(csv.ToString(), OutgoingShipmentReportSchema.Schema.Filename);
-                return OperationResult<CsvResultDto>.Success(resultDto);
+                return OperationResult<IEnumerable<OutgoingShipmentReportDto>>.Success(outgoingShipmentsReportDtos);
             }
             catch (Exception ex)
             {
-                return OperationResult<CsvResultDto>.Failure(new List<string>
-                { "An unexpected error occurred while generating the outgoing shipments report.", ex.Message });
+                return OperationResult<IEnumerable<OutgoingShipmentReportDto>>.Failure(new List<string>
+        {
+            "An unexpected error occurred while generating the outgoing shipments report.",
+            ex.Message
+        });
             }
         }
+
     }
 }

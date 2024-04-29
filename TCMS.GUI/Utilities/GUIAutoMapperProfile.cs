@@ -180,6 +180,9 @@ namespace TCMS.GUI.Utilities
 
             CreateMap<IncomingShipmentReportDto, Shipment>()
                 .ForMember(dest => dest.IsPaid, opt => opt.MapFrom(src => src.IsFullyPaid));
+
+            CreateMap<OutgoingShipmentReportDto, Shipment>()
+                .ForMember(dest => dest.IsPaid, opt => opt.MapFrom(src => src.IsFullyPaid));
         }
     };
 }
