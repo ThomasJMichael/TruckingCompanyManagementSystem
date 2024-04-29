@@ -153,6 +153,13 @@ namespace TCMS.Data.Mappings
                 .ForMember(dest => dest.IsFullyPaid, opt => opt.Ignore());
 
             CreateMap<IncidentReportDto, DrugAndAlcoholTest>().ReverseMap();
+
+            CreateMap<VehicleCreateDto, Vehicle>()
+                .ForMember(dest => dest.VehicleId, opt => opt.Ignore())
+                .ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand))
+                .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model))
+                .ForMember(dest => dest.Year, opt => opt.MapFrom(src => src.Year))
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type));
         }
     }
 }
