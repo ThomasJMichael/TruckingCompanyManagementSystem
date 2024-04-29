@@ -77,6 +77,14 @@
                      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                      Width="{Binding ElementName=TopBarGrid, Path=ActualWidth}"/>
                     <!-- Interaction Triggers as before -->
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="GotFocus">
+                            <i:InvokeCommandAction Command="{Binding SearchBoxGotFocusCommand}" />
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="LostFocus">
+                            <i:InvokeCommandAction Command="{Binding SearchBoxLostFocusCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                 </Border>
             </Grid>
 
