@@ -46,6 +46,17 @@ namespace TCMS.GUI.ViewModels
             }
         }
 
+        private ObservableCollection<Shipment> _incomingShipments;
+
+        public ObservableCollection<Shipment> IncomingShipments
+        {
+            get => _incomingShipments;
+            set
+            {
+                _incomingShipments = value;
+                OnPropertyChanged();
+            }
+        }
         public ReportViewModel(IDialogService dialogService, IMapper mapper, IApiClient apiClient)
         {
             _dialogService = dialogService;
@@ -54,6 +65,7 @@ namespace TCMS.GUI.ViewModels
 
             LoadPayrollReports();
             LoadMaintenanceRecords();
+            LoadIncomingShipments();
         }
 
         private async void LoadPayrollReports()
@@ -95,6 +107,24 @@ namespace TCMS.GUI.ViewModels
                 {
                     MaintenanceRecords =
                         new ObservableCollection<MaintenanceRecord>(_mapper.Map<IEnumerable<MaintenanceRecord>>(result.Data));
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.Print(e.Message);
+            }
+
+        }
+        private async void LoadIncomingShipments()
+        {
+            try
+            {
+                var result =
+                    await _apiClient.GetAsync<OperationResult<IEnumerable<IncomingShipmentReportDto>>>("reports/incoming-shipments");
+                if (result.IsSuccessful)
+                {
+                    IncomingShipments =
+                        new ObservableCollection<Shipment>(_mapper.Map<IEnumerable<Shipment>>(result.Data));
                 }
             }
             catch (Exception e)

@@ -177,6 +177,9 @@ namespace TCMS.GUI.Utilities
                 .ForMember(dest => dest.MaintenanceDate, opt => opt.MapFrom(src => src.MaintenanceDate))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
                 .ForMember(dest => dest.Cost, opt => opt.MapFrom(src => src.Cost));
+
+            CreateMap<IncomingShipmentReportDto, Shipment>()
+                .ForMember(dest => dest.IsPaid, opt => opt.MapFrom(src => src.IsFullyPaid));
         }
     };
 }

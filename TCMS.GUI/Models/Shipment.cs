@@ -27,5 +27,7 @@ namespace TCMS.GUI.Models
         public string Zip { get; set; }
         public int ManifestId { get; set; }
         public Manifest Manifest { get; set; }
+        public decimal? TotalCost { get; set; }
+        public bool? IsPaid { get; set; }
     }
 }

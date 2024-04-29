@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using TCMS.Common.DTOs.Report;
 using TCMS.Common.Operations;
 using TCMS.Data.Data;
@@ -144,20 +145,42 @@ namespace TCMS.Services.Implementations
                     ShipmentId = shipment.ShipmentId,
                     ActualArrivalTime = shipment.ActualArrivalTime,
                     Company = shipment.Company,
-                });
+                }).ToList();
 
 
                 foreach (var shipment in incomingShipmentsReportDtos)
                 {
                     var shipmentModel = await context.Shipments.FindAsync(shipment.ShipmentId);
-                    var purchaseOrder = await context.PurchaseOrders.FindAsync(shipmentModel.PurchaseOrderId);
+                    var purchaseOrder = await context.PurchaseOrders.FindAsync(shipmentModel?.PurchaseOrderId);
+                    var manifest = await context.Manifests
+                        .Include(m => m.ManifestItems)  // Include ManifestItems in the query
+                        .ThenInclude(mi => mi.Product)  // Include Product for each ManifestItem
+                        .SingleOrDefaultAsync(m => m.ManifestId == shipmentModel.ManifestId);
+
+
+                    // Initialize TotalCost to 0
+                    decimal totalCost = 0;
+
+                    // Check if purchaseOrder is not null
                     if (purchaseOrder != null)
                     {
                         shipment.IsFullyPaid = purchaseOrder.ShippingPaid;
+                        totalCost += purchaseOrder.ShippingCost; // Add ShippingCost to totalCost
                     }
+
+                    // Check if manifest and its items are not null before summing
+                    if (manifest?.ManifestItems != null)
+                    {
+                        var manifestTotalCost = manifest.ManifestItems.Sum(item => item.Price);
+                        totalCost += manifestTotalCost; // Add ManifestTotalCost to totalCost
+                    }
+
+                    shipment.TotalCost = totalCost;
+                    Console.WriteLine($"DTO for Shipment {shipment.ShipmentId} has Total Cost: {shipment.TotalCost}");
                 }
 
-                return OperationResult<IEnumerable<IncomingShipmentReportDto>>.Success(incomingShipmentsReportDtos.ToList());
+
+                return OperationResult<IEnumerable<IncomingShipmentReportDto>>.Success(incomingShipmentsReportDtos);
             }
             catch (Exception ex)
             {

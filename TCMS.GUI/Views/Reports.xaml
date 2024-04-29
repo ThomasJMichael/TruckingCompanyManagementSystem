@@ -219,15 +219,15 @@ Command="{Binding DispatchReceiveCommand}"/>
                     </StackPanel>
                     <!-- Purchase Order Details -->
                     <ListView Grid.Row="1" x:Name="qwerqewr"
-          ItemsSource="{Binding FilteredPurchaseOrders}"
+          ItemsSource="{Binding IncomingShipments}"
           SelectedItem="{Binding SelectedPurchaseOrder, Mode=TwoWay}"
           BorderBrush="{x:Null}" Background="#FF272B2F"
           ScrollViewer.VerticalScrollBarVisibility="Hidden">
                         <ListView.View>
                             <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
-                                <GridViewColumn Header="Order ID" DisplayMemberBinding="{Binding PurchaseOrderId}" Width="Auto"/>
-                                <GridViewColumn Header="Date" DisplayMemberBinding="{Binding DateCreated}" Width="160"/>
-                                <GridViewColumn Header="Company" DisplayMemberBinding="{Binding Company}" Width="Auto"/>
+                                <GridViewColumn Header="Shipment ID" DisplayMemberBinding="{Binding ShipmentId}" Width="Auto"/>
+                                <GridViewColumn Header="Total Cost" DisplayMemberBinding="{Binding TotalCost, StringFormat=C }" Width="Auto"/>
+                                <GridViewColumn Header="Payment Received" DisplayMemberBinding="{Binding IsPaid }" Width="Auto"/>
                                 <!-- Additional columns as needed -->
                             </GridView>
                         </ListView.View>
@@ -269,15 +269,15 @@ Command="{Binding DispatchReceiveCommand}"/>
                     </StackPanel>
                     <!-- Purchase Order Details -->
                     <ListView Grid.Row="1" x:Name="nbvasdf"
-          ItemsSource="{Binding FilteredPurchaseOrders}"
+          ItemsSource="{Binding OutgoingShipments}"
           SelectedItem="{Binding SelectedPurchaseOrder, Mode=TwoWay}"
           BorderBrush="{x:Null}" Background="#FF272B2F"
           ScrollViewer.VerticalScrollBarVisibility="Hidden">
                         <ListView.View>
                             <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
-                                <GridViewColumn Header="Order ID" DisplayMemberBinding="{Binding PurchaseOrderId}" Width="Auto"/>
-                                <GridViewColumn Header="Date" DisplayMemberBinding="{Binding DateCreated}" Width="160"/>
-                                <GridViewColumn Header="Company" DisplayMemberBinding="{Binding Company}" Width="Auto"/>
+                                <GridViewColumn Header="Shipment ID" DisplayMemberBinding="{Binding ShipmentId}" Width="Auto"/>
+                                <GridViewColumn Header="Total Cost" DisplayMemberBinding="{Binding TotalCost, StringFormat=C }" Width="Auto"/>
+                                <GridViewColumn Header="Payment Received" DisplayMemberBinding="{Binding IsPaid }" Width="Auto"/>
                                 <!-- Additional columns as needed -->
                             </GridView>
                         </ListView.View>
