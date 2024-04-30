@@ -13,6 +13,7 @@
              Style="{StaticResource Page_Style}">
 
     <UserControl.Resources>
+        <utilities:StringToIntConverter x:Key="StringToIntConverter"/>
         <utilities:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
         <SolidColorBrush x:Key="DetailBackgroundBrush" Color="#FF272B2F"/>
         <!-- Define the TextBlock style for details -->
@@ -162,22 +163,29 @@
                     </Grid.RowDefinitions>
                     <!-- Buttons for Shipments -->
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="5">
+                        <Label Content="Enter Vehicle ID:" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="White"/>
+                        <TextBox Width="120" VerticalAlignment="Center"
+                                 Text="{Binding SelectedVehicleId, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringToIntConverter}}"/>
                         <Button Content="Generate Report"
-         Style="{StaticResource ThemedButtonStyle}"
-         Command="{Binding DispatchReceiveCommand}"/>
-                        <!-- Edit Button -->
+                                Style="{StaticResource ThemedButtonStyle}"
+                                Command="{Binding GenerateVehicleReportCommand}"
+                                Margin="5,0,0,0"/>
                     </StackPanel>
                     <!-- Purchase Order Details -->
-                    <ListView Grid.Row="1" x:Name="alkjalksdjf"
-                   ItemsSource="{Binding FilteredPurchaseOrders}"
+                    <ListView Grid.Row="1" x:Name="VehicleMaintReport"
+                   ItemsSource="{Binding SelectedVehicleMaintenanceReports}"
                    SelectedItem="{Binding SelectedPurchaseOrder, Mode=TwoWay}"
                    BorderBrush="{x:Null}" Background="#FF272B2F"
-                   ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                   ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                   ScrollViewer.HorizontalScrollBarVisibility="Visible">
                         <ListView.View>
                             <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
-                                <GridViewColumn Header="Order ID" DisplayMemberBinding="{Binding PurchaseOrderId}" Width="Auto"/>
-                                <GridViewColumn Header="Date" DisplayMemberBinding="{Binding DateCreated}" Width="160"/>
-                                <GridViewColumn Header="Company" DisplayMemberBinding="{Binding Company}" Width="Auto"/>
+                                <GridViewColumn Header="Record ID" DisplayMemberBinding="{Binding MaintenanceRecordID}" Width="Auto"/>
+                                <GridViewColumn Header="Vehicle ID" DisplayMemberBinding="{Binding VehicleId}" Width="Auto"/>
+                                <GridViewColumn Header="Date" DisplayMemberBinding="{Binding MaintenanceDate}" Width="Auto"/>
+                                <GridViewColumn Header="Type" DisplayMemberBinding="{Binding RecordType}" Width="Auto"/>
+                                <GridViewColumn Header="Cost" DisplayMemberBinding="{Binding Cost}" Width="Auto"/>
+                                <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" Width="Auto"/>
                                 <!-- Additional columns as needed -->
                             </GridView>
                         </ListView.View>

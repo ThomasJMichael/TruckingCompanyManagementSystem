@@ -6,13 +6,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Input;
 using AutoMapper;
 using TCMS.Common.DTOs.Equipment;
 using TCMS.Common.DTOs.Report;
+using TCMS.Common.enums;
 using TCMS.Common.Operations;
 using TCMS.GUI.Models;
 using TCMS.GUI.Services.Interfaces;
 using TCMS.GUI.Utilities;
+using TCMS.GUI.Views;
+using Equipment = TCMS.GUI.Models.Equipment;
 
 namespace TCMS.GUI.ViewModels
 {
@@ -68,6 +72,32 @@ namespace TCMS.GUI.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        private ObservableCollection<Equipment> _equipment;
+        private ObservableCollection<Equipment> _filteredEquipment;
+
+        public ObservableCollection<Equipment> FilteredEquipment
+        {
+            get => _filteredEquipment;
+            private set
+            {
+                _filteredEquipment = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int? _selectedVehicleId;
+        public int? SelectedVehicleId
+        {
+            get => _selectedVehicleId;
+            set
+            {
+                _selectedVehicleId = value;
+                OnPropertyChanged(nameof(SelectedVehicleId));
+            }
+        }
+        public ObservableCollection<MaintenanceRecord> SelectedVehicleMaintenanceReports { get; } = new ObservableCollection<MaintenanceRecord>();
+        public ICommand GenerateVehicleReportCommand { get; }
         public ReportViewModel(IDialogService dialogService, IMapper mapper, IApiClient apiClient)
         {
             _dialogService = dialogService;
@@ -78,6 +108,29 @@ namespace TCMS.GUI.ViewModels
             LoadMaintenanceRecords();
             LoadIncomingShipments();
             LoadOutgoingShipments();
+            _ = LoadEquipmentAsync();
+
+            GenerateVehicleReportCommand = new RelayCommand(GenerateVehicleReport);
+        }
+
+        private void GenerateVehicleReport(object obj)
+        {
+            if (SelectedVehicleId.HasValue)
+            {
+                var selectedVehicle = _filteredEquipment.FirstOrDefault(v => v.VehicleId == SelectedVehicleId.Value);
+                if (selectedVehicle != null)
+                {
+                    SelectedVehicleMaintenanceReports.Clear();
+                    foreach (var record in selectedVehicle.MaintenanceRecords)
+                    {
+                        if (record.RecordType is not (RecordType.Maintenance and RecordType.Inspection))
+                        {
+                            record.RecordType = RecordType.Maintenance;
+                        }
+                        SelectedVehicleMaintenanceReports.Add(record);
+                    }
+                }
+            }
         }
 
         private async void LoadPayrollReports()
@@ -162,6 +215,30 @@ namespace TCMS.GUI.ViewModels
                 Debug.Print(e.Message);
             }
 
+        }
+        private async Task LoadEquipmentAsync()
+        {
+            try
+            {
+                var result = await _apiClient.GetAsync<OperationResult<IEnumerable<VehicleDto>>>("vehicle/all");
+                if (result.IsSuccessful && result.Data != null)
+                {
+                    var mappedEquipment = _mapper.Map<IEnumerable<Equipment>>(result.Data);
+
+                    App.Current.Dispatcher.Invoke(() =>
+                    {
+                        FilteredEquipment = new ObservableCollection<Equipment>(mappedEquipment);
+                    });
+                }
+                else
+                {
+                    Debug.WriteLine("Failed to load equipment or no data returned.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"An error occurred while loading equipment: {ex.Message}");
+            }
         }
     }
 
