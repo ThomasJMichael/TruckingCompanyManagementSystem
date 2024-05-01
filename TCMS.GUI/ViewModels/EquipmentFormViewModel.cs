@@ -236,10 +236,10 @@ namespace TCMS.GUI.ViewModels
         {
             try
             {
-                var updatedEquipmentDto = _mapper.Map<Equipment>(this);
+                var updatedEquipmentDto = _mapper.Map<VehicleUpdateDto>(this);
                 updatedEquipmentDto.VehicleId = CurrentEquipment.VehicleId;
 
-                var result = await _apiClient.PutAsync<OperationResult>("vehicle/all", updatedEquipmentDto);
+                var result = await _apiClient.PutAsync<OperationResult>("vehicle/update", updatedEquipmentDto);
                 if (!result.IsSuccessful)
                 {
                     Debug.WriteLine(result.Messages);

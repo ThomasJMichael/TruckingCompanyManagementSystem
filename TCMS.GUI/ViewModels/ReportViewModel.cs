@@ -113,10 +113,11 @@ namespace TCMS.GUI.ViewModels
             GenerateVehicleReportCommand = new RelayCommand(GenerateVehicleReport);
         }
 
-        private void GenerateVehicleReport(object obj)
+        private async void GenerateVehicleReport(object obj)
         {
             if (SelectedVehicleId.HasValue)
             {
+                await _loadEquipmentComplete.Task;
                 var selectedVehicle = _filteredEquipment.FirstOrDefault(v => v.VehicleId == SelectedVehicleId.Value);
                 if (selectedVehicle != null)
                 {
@@ -216,6 +217,7 @@ namespace TCMS.GUI.ViewModels
             }
 
         }
+        private TaskCompletionSource<bool> _loadEquipmentComplete = new TaskCompletionSource<bool>();
         private async Task LoadEquipmentAsync()
         {
             try
@@ -228,6 +230,7 @@ namespace TCMS.GUI.ViewModels
                     App.Current.Dispatcher.Invoke(() =>
                     {
                         FilteredEquipment = new ObservableCollection<Equipment>(mappedEquipment);
+                        _loadEquipmentComplete.SetResult(true);
                     });
                 }
                 else

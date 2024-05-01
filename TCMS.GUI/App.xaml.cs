@@ -9,6 +9,7 @@ using TCMS.GUI.Services.Interfaces;
 using TCMS.GUI.Utilities;
 using TCMS.GUI.ViewModels;
 using TCMS.GUI.Views;
+using System.Globalization;
 
 namespace TCMS.GUI
 {
@@ -105,6 +106,9 @@ namespace TCMS.GUI
             base.OnStartup(e);
 
             this.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+            CultureInfo culture = new CultureInfo("en-US");
+            CultureInfo.DefaultThreadCurrentCulture = culture;
+            CultureInfo.DefaultThreadCurrentUICulture = culture;
 
             // Resolve the LoginWindow from the service provider.
             var loginWindow = ServiceProvider.GetRequiredService<LoginWindow>();

@@ -183,6 +183,8 @@ namespace TCMS.GUI.Utilities
 
             CreateMap<OutgoingShipmentReportDto, Shipment>()
                 .ForMember(dest => dest.IsPaid, opt => opt.MapFrom(src => src.IsFullyPaid));
+
+            CreateMap<VehicleUpdateDto, EquipmentFormViewModel>().ReverseMap();
         }
     };
 }

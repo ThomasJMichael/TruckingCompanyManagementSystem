@@ -82,13 +82,24 @@ namespace TCMS.Services.Implementations
 
         public async Task<OperationResult> UpdateMaintenanceRecordAsync(MaintenanceRecordDto maintenanceRecordDto)
         {
-            var record = await _context.MaintenanceRecords.FindAsync(maintenanceRecordDto.MaintenanceRecordId);
-            if(record == null) return OperationResult.Failure(new[] { "Maintenance record not found" });
+            // Attempt to retrieve the existing record.
+            var record = await _context.MaintenanceRecords
+                .AsNoTracking()  
+                .FirstOrDefaultAsync(r => r.MaintenanceRecordId == maintenanceRecordDto.MaintenanceRecordId);
 
+            if (record == null)
+            {
+                return OperationResult.Failure(new[] { "Maintenance record not found" });
+            }
+
+            // Ensure the ID is not modified by reassigning the original ID.
+            var originalId = record.MaintenanceRecordId;
             _mapper.Map(maintenanceRecordDto, record);
+            record.MaintenanceRecordId = originalId; // Reset the ID in case it was changed.
 
             try
             {
+                _context.MaintenanceRecords.Update(record); // Explicitly mark the entity as updated.
                 await _context.SaveChangesAsync();
                 return OperationResult.Success();
             }
@@ -97,6 +108,7 @@ namespace TCMS.Services.Implementations
                 return OperationResult.Failure(new[] { ex.Message });
             }
         }
+
 
         public async Task<OperationResult> DeleteMaintenanceRecordAsync(int maintenanceRecordId)
         {

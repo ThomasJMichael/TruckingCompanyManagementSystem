@@ -38,7 +38,10 @@ namespace TCMS.Data.Mappings
 
             // Equipment mappings
             CreateMap<Vehicle, VehicleDto>().ReverseMap();
-            CreateMap<PartDetails, PartDetailDto>().ReverseMap();
+            CreateMap<PartDetails, PartDetailDto>()
+                .ForMember(dest => dest.QuantityOnHand, opt => opt.MapFrom(src => src.Quantity))
+                .ForMember(dest => dest.Cost, opt => opt.MapFrom(src => src.Price));
+
 
             // Financial mappings
             CreateMap<Payroll, PayrollDto>().ReverseMap();
@@ -124,11 +127,14 @@ namespace TCMS.Data.Mappings
             CreateMap<MaintenanceRecord, MaintenanceRecordDto>()
                 .ForMember(dest => dest.MaintenanceRecordId, opt => opt.MapFrom(src => src.MaintenanceRecordId))
                 .ForMember(dest => dest.RecordType, opt => opt.MapFrom(src => src.MaintenanceRecordId))
-                .ForMember(dest => dest.VehicleId, opt => opt.MapFrom(src => src.VehicleId.HasValue ? src.VehicleId.Value : default(int)))
+                .ForMember(dest => dest.VehicleId,
+                    opt => opt.MapFrom(src => src.VehicleId.HasValue ? src.VehicleId.Value : default(int)))
                 .ForMember(dest => dest.MaintenanceDate, opt => opt.MapFrom(src => src.MaintenanceDate))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
                 .ForMember(dest => dest.Cost, opt => opt.MapFrom(src => src.Cost))
-                .ForMember(dest => dest.PartIds, opt => opt.Ignore()); // Ignoring the PartIds as they are not needed
+                .ForMember(dest => dest.PartIds, opt => opt.Ignore())
+                .ReverseMap();
+
 
             CreateMap<Shipment, ShipmentDetailDto>()
                 .ForMember(dest => dest.ShipmentId, opt => opt.MapFrom(src => src.ShipmentId))
@@ -161,6 +167,8 @@ namespace TCMS.Data.Mappings
                 .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model))
                 .ForMember(dest => dest.Year, opt => opt.MapFrom(src => src.Year))
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type));
+
+            CreateMap<VehicleUpdateDto, Vehicle>();
 
 
         }

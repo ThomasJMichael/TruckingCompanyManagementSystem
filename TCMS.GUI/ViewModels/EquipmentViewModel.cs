@@ -53,6 +53,17 @@ namespace TCMS.GUI.ViewModels
                 OnPropertyChanged();
             }
         }
+        private MaintenanceRecord _selectedRecord;
+
+        public MaintenanceRecord SelectedRecord
+        {
+            get => _selectedRecord;
+            set
+            {
+                _selectedRecord = value;
+                OnPropertyChanged();
+            }
+        }
 
         public string SearchText
         {
@@ -138,6 +149,9 @@ namespace TCMS.GUI.ViewModels
         public ICommand AddEquipmentCommand { get; private set; }
         public ICommand EditEquipmentCommand { get; private set; }
         public ICommand DeleteEquipmentCommand { get; private set; }
+        public ICommand AddRecordCommand { get; private set; }
+        public ICommand EditRecordCommand { get; private set; }
+        public ICommand DeleteRecordCommand { get; private set; }
         public ICommand RefreshEquipmentsCommand { get; private set; }
         public ICommand SearchCommand { get; }
         public ICommand SearchBoxGotFocusCommand { get; }
@@ -151,6 +165,8 @@ namespace TCMS.GUI.ViewModels
             // Initialize commands
             AddEquipmentCommand = new RelayCommand(AddEquipment);
             EditEquipmentCommand = new RelayCommand(EditEquipment, CanExecuteEditOrDelete);
+            AddRecordCommand = new RelayCommand(AddRecord);
+            EditRecordCommand = new RelayCommand(UpdateRecord);
             DeleteEquipmentCommand = new RelayCommand(DeleteEquipment, CanExecuteEditOrDelete);
             RefreshEquipmentsCommand = new RelayCommand(RefreshEquipments);
             SearchCommand = new RelayCommand((obj) => FilterEquipments());
@@ -247,7 +263,7 @@ namespace TCMS.GUI.ViewModels
 
         private void OnEquipmentUpdated(object sender, EventArgs e)
         {
-            RefreshEquipments(null);
+            Refresh();
         }
 
 
@@ -282,6 +298,30 @@ namespace TCMS.GUI.ViewModels
         private void RefreshEquipments(object obj)
         {
             Refresh();
+        }
+
+        private void AddRecord(object obj)
+        {
+            var newRecordForm = new MaintenanceFormViewModel(_apiClient, _dialogService, _mapper);
+            newRecordForm.RecordsUpdated += OnRecordsUpdated;
+            _dialogService.ShowDialog(newRecordForm);
+            newRecordForm.RecordsUpdated -= OnRecordsUpdated;
+        }
+
+        private void UpdateRecord(object obj)
+        {
+            if (SelectedEquipment != null)
+            {
+                var editRecordForm = new MaintenanceFormViewModel(_apiClient, _dialogService, _mapper, SelectedRecord);
+                editRecordForm.RecordsUpdated += OnRecordsUpdated;
+                _dialogService.ShowDialog(editRecordForm);
+                editRecordForm.RecordsUpdated -= OnRecordsUpdated;
+            }
+        }
+
+        private void OnRecordsUpdated(object sender, EventArgs e)
+        {
+            RefreshEquipments(null);
         }
     }
 }

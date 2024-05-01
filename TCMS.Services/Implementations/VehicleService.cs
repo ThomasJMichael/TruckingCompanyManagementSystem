@@ -25,6 +25,7 @@ namespace TCMS.Services.Implementations
                     .Include(v => v.Parts)
                     .Include(v => v.MaintenanceRecords)
                     .ThenInclude(mr => mr.PartDetails)
+                    .AsSplitQuery()
                     .ToListAsync();
 
                 var vehicleDtos = mapper.Map<IEnumerable<VehicleDto>>(vehicles);

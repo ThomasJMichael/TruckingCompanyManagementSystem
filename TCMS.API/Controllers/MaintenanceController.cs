@@ -40,7 +40,7 @@ namespace TCMS.API.Controllers
         [HttpPost("create")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<OperationResult>> CreateMaintenance([FromBody] MaintenanceRecordDto dto)
+        public async Task<ActionResult<OperationResult<MaintenanceRecordDto>>> CreateMaintenance([FromBody] MaintenanceRecordDto dto)
         {
             if (!ModelState.IsValid)
             {
