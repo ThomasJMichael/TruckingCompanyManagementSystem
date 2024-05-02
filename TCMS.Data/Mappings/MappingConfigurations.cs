@@ -39,6 +39,7 @@ namespace TCMS.Data.Mappings
             // Equipment mappings
             CreateMap<Vehicle, VehicleDto>().ReverseMap();
             CreateMap<PartDetails, PartDetailDto>()
+                .ForMember(dest => dest.PartDetailId, opt => opt.MapFrom(src => src.PartDetailsId))
                 .ForMember(dest => dest.QuantityOnHand, opt => opt.MapFrom(src => src.Quantity))
                 .ForMember(dest => dest.Cost, opt => opt.MapFrom(src => src.Price));
 
@@ -126,7 +127,7 @@ namespace TCMS.Data.Mappings
 
             CreateMap<MaintenanceRecord, MaintenanceRecordDto>()
                 .ForMember(dest => dest.MaintenanceRecordId, opt => opt.MapFrom(src => src.MaintenanceRecordId))
-                .ForMember(dest => dest.RecordType, opt => opt.MapFrom(src => src.MaintenanceRecordId))
+                .ForMember(dest => dest.RecordType, opt => opt.MapFrom(src => src.RecordType))
                 .ForMember(dest => dest.VehicleId,
                     opt => opt.MapFrom(src => src.VehicleId.HasValue ? src.VehicleId.Value : default(int)))
                 .ForMember(dest => dest.MaintenanceDate, opt => opt.MapFrom(src => src.MaintenanceDate))

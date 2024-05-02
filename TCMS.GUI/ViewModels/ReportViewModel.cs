@@ -50,6 +50,18 @@ namespace TCMS.GUI.ViewModels
             }
         }
 
+        private ObservableCollection<MaintenanceRecord> _fullMaintenanceRecords;
+
+        public ObservableCollection<MaintenanceRecord> FullMaintenanceRecords
+        {
+            get => _fullMaintenanceRecords;
+            set
+            {
+                _fullMaintenanceRecords = value;
+                OnPropertyChanged();
+            }
+        }
+
         private ObservableCollection<Shipment> _incomingShipments;
 
         public ObservableCollection<Shipment> IncomingShipments
@@ -171,7 +183,7 @@ namespace TCMS.GUI.ViewModels
                     await _apiClient.PostAsync<OperationResult<IEnumerable<MaintenanceRecordDto>>>("reports/maintenance", reportReqDto);
                 if (result.IsSuccessful)
                 {
-                    MaintenanceRecords =
+                    FullMaintenanceRecords =
                         new ObservableCollection<MaintenanceRecord>(_mapper.Map<IEnumerable<MaintenanceRecord>>(result.Data));
                 }
             }

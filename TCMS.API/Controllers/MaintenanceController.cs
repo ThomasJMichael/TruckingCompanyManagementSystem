@@ -76,6 +76,24 @@ namespace TCMS.API.Controllers
             return result.IsSuccessful ? Ok(result) : BadRequest(result);
         }
 
+        // Get all parts for a given maintenance record
+        [HttpGet("all-parts/{maintenanceRecordId}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult<IEnumerable<PartDetailDto>>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<OperationResult<IEnumerable<PartDetailDto>>>> GetPartsByMaintenanceRecord(int maintenanceRecordId)
+        {
+            var result = await _maintenanceService.GetPartsByMaintenanceRecordIdAsync(maintenanceRecordId);
+            return result.IsSuccessful ? Ok(result) : BadRequest(result);
+        }
+
+        [HttpPost("update-parts/{maintenanceRecordId}")]
+        public async Task<ActionResult<OperationResult>> UpdateParts(int maintenanceRecordId, [FromBody] PartsDto partsDto)
+        {
+            var result = await _maintenanceService.UpdateParts(maintenanceRecordId, partsDto);
+            return result.IsSuccessful ? Ok(result) : BadRequest(result);
+        }
+
+
         // Get all maintenance records for a given period
         [HttpGet("period")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult<IEnumerable<MaintenanceRecordDto>>))]

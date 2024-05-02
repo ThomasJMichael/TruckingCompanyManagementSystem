@@ -302,7 +302,7 @@ namespace TCMS.GUI.ViewModels
 
         private void AddRecord(object obj)
         {
-            var newRecordForm = new MaintenanceFormViewModel(_apiClient, _dialogService, _mapper);
+            var newRecordForm = new MaintenanceFormViewModel(_apiClient, _dialogService, _mapper, null, SelectedEquipment.VehicleId);
             newRecordForm.RecordsUpdated += OnRecordsUpdated;
             _dialogService.ShowDialog(newRecordForm);
             newRecordForm.RecordsUpdated -= OnRecordsUpdated;

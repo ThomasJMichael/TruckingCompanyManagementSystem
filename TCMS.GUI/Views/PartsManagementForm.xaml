@@ -16,14 +16,15 @@
         </Grid.RowDefinitions>
 
         <!-- Parts List View -->
-        <ListView Grid.Row="0" Name="lstParts" ItemsSource="{Binding Parts}" 
+        <ListView Grid.Row="0" Name="LstParts" ItemsSource="{Binding DisplayedParts}" 
                   SelectedItem="{Binding SelectedPart}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Part Name" DisplayMemberBinding="{Binding Name}"/>
+                    <GridViewColumn Header="Part Name" DisplayMemberBinding="{Binding PartName}"/>
                     <GridViewColumn Header="Part Number" DisplayMemberBinding="{Binding PartNumber}"/>
                     <GridViewColumn Header="Cost" DisplayMemberBinding="{Binding Cost}"/>
                     <GridViewColumn Header="Supplier" DisplayMemberBinding="{Binding Supplier}"/>
+                    <GridViewColumn Header="Quantity" DisplayMemberBinding="{Binding QuantityOnHand}"/>
                     <GridViewColumn Header="From Stock" DisplayMemberBinding="{Binding IsFromStock}"/>
                 </GridView>
             </ListView.View>
@@ -46,19 +47,22 @@
                 </Grid.RowDefinitions>
 
                 <Label Content="Part Name:" Grid.Row="0" Grid.Column="0" Margin="5"/>
-                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SelectedPart.Name, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding PartName, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 
                 <Label Content="Part Number:" Grid.Row="1" Grid.Column="0" Margin="5"/>
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SelectedPart.PartNumber, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding PartNumber, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 
                 <Label Content="Cost:" Grid.Row="2" Grid.Column="0" Margin="5"/>
-                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding SelectedPart.Cost, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Cost, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 
                 <Label Content="Supplier:" Grid.Row="3" Grid.Column="0" Margin="5"/>
-                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding SelectedPart.Supplier, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Supplier, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 
-                <Label Content="Is from Stock:" Grid.Row="4" Grid.Column="0" Margin="5"/>
-                <CheckBox Grid.Row="4" Grid.Column="1" IsChecked="{Binding SelectedPart.IsFromStock}" Margin="5"/>
+                <Label Content="Quantity:" Grid.Row="4" Grid.Column="0" Margin="5"/>
+                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+
+                <Label Content="Is from Stock:" Grid.Row="5" Grid.Column="0" Margin="5"/>
+                <CheckBox Grid.Row="5" Grid.Column="1" IsChecked="{Binding IsFromStock}" Margin="5"/>
 
             </Grid>
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -118,12 +119,13 @@ namespace TCMS.GUI.ViewModels
         public event EventHandler<DialogCloseRequestedEventArgs> CloseRequested;
         public ICommand AddPartsCommand { get; private set; }
         public ICommand ConfirmCommand { get; private set; }
-        public MaintenanceFormViewModel(IApiClient apiClient, IDialogService dialogService, IMapper mapper, MaintenanceRecord? maintenanceRecord = null)
+        public MaintenanceFormViewModel(IApiClient apiClient, IDialogService dialogService, IMapper mapper, MaintenanceRecord? maintenanceRecord = null, int? vehicleId = null)
         {
             _apiClient = apiClient;
             _dialogService = dialogService;
             _mapper = mapper;
             _isEditMode = false;
+            MaintenanceDate = DateTime.Now;
 
             if (maintenanceRecord != null)
             {
@@ -137,6 +139,7 @@ namespace TCMS.GUI.ViewModels
             }
             else
             {
+                VehicleId = vehicleId ?? 1;
                 CreateInitialRecord();
             }
 
@@ -147,19 +150,21 @@ namespace TCMS.GUI.ViewModels
 
         private void AddParts(object obj)
         {
-            throw new NotImplementedException();
+            var newEquipmentForm = new PartsManagementFormViewModel(_apiClient, _mapper, Id);
+            newEquipmentForm.PartsUpdated += OnPartsUpdated;
+            _dialogService.ShowDialog(newEquipmentForm);
+            newEquipmentForm.PartsUpdated -= OnPartsUpdated;
+        }
+
+        private void OnPartsUpdated(object? sender, EventArgs e)
+        {
+            return;
         }
 
         private void Confirm(object obj)
         {
-            if (!IsEditMode)
-            {
-                CreateNewRecord();
-            }
-            else
-            {
-                UpdateRecord();
-            }
+            UpdateRecord();
+            RecordsUpdated?.Invoke(this, EventArgs.Empty);
             CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
         }
 
@@ -171,12 +176,17 @@ namespace TCMS.GUI.ViewModels
                 RecordType = RecordType.Maintenance,
                 MaintenanceDate = DateTime.Now,
                 Cost = 0,
-                VehicleId = 1
+                VehicleId = VehicleId,
             };
             var result = await _apiClient.PostAsync<OperationResult<MaintenanceRecordDto>>("maintenance/create", initialRecordDto);
             if (result.IsSuccessful)
             {
                 Id = result.Data.MaintenanceRecordId;
+                Description = initialRecordDto.Description;
+                SelectedRecordType = initialRecordDto.RecordType;
+                MaintenanceDate = initialRecordDto.MaintenanceDate;
+                TotalCost = initialRecordDto.Cost;
+                VehicleId = initialRecordDto.VehicleId;
             }
             else
             {

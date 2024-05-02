@@ -25,11 +25,13 @@ public interface IMaintenanceService
     Task<OperationResult<IEnumerable<RepairRecordDto>>> GetRepairRecordsByVehicleIdAsync(int vehicleId);
 
     // Parts
+    Task<OperationResult<IEnumerable<PartDetailDto>>> GetPartsByMaintenanceRecordIdAsync(int maintenanceRecordId);
     Task<OperationResult<IEnumerable<PartDetailDto>>> GetAllPartsAsync();
     Task<OperationResult<PartDetailDto>> GetPartByIdAsync(int partId);
     Task<OperationResult<PartDetailDto>> AddPartAsync(PartDetailDto partDto);
     Task<OperationResult> UpdatePartAsync(PartDetailDto partDto);
     Task<OperationResult> DeletePartAsync(int partId);
+    Task<OperationResult> UpdateParts(int maintenanceRecordId, PartsDto partsDto);
 
     // Assign Part to MaintenanceRecord
     Task<OperationResult> AssignPartToMaintenanceRecordAsync(int maintenanceRecordId, int partId);

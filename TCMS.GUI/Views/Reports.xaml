@@ -120,7 +120,7 @@
                     </StackPanel>
                     <!-- Purchase Order Details -->
                     <ListView Grid.Row="1" x:Name="fullMaint"
-                              ItemsSource="{Binding MaintenanceReports}"
+                              ItemsSource="{Binding FullMaintenanceRecords}"
                               BorderBrush="{x:Null}" Background="#FF272B2F"
                               ScrollViewer.VerticalScrollBarVisibility="Hidden"
                               ScrollViewer.HorizontalScrollBarVisibility="Auto">

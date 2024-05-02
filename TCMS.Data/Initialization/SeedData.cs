@@ -19,7 +19,7 @@ namespace TCMS.Data.Initialization
         public static async Task Initialize(IServiceProvider serviceProvider, UserManager<UserAccount> userManager)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            //await ResetDatabase(serviceProvider);
+            await ResetDatabase(serviceProvider);
             Console.WriteLine("Seeding roles...");
             await SeedRolesAsync(roleManager);
 
@@ -48,7 +48,7 @@ namespace TCMS.Data.Initialization
             await SeedEmployeesWithAccountsAsync(serviceProvider);
 
             Console.WriteLine("Seeding vehicle related data...");
-            await SeedVehicleRelatedData(serviceProvider);
+            //await SeedVehicleRelatedData(serviceProvider);
 
             Console.WriteLine("Seeding shipping data...");
             await SeedShippingData(serviceProvider);

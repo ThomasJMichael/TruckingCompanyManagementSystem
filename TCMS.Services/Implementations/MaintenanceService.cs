@@ -68,10 +68,26 @@ namespace TCMS.Services.Implementations
         {
             try
             {
-                var maintenanceRecord = _mapper.Map<MaintenanceRecord>(maintenanceRecordDto);
+                var maintenanceRecord = new MaintenanceRecord()
+                {
+                    MaintenanceDate = maintenanceRecordDto.MaintenanceDate,
+                    RecordType = maintenanceRecordDto.RecordType,
+                    Cost = maintenanceRecordDto.Cost,
+                    Description = maintenanceRecordDto.Description,
+                    VehicleId = maintenanceRecordDto.VehicleId
+                };
+
                 _context.MaintenanceRecords.Add(maintenanceRecord);
                 await _context.SaveChangesAsync();
-                var newMaintenanceRecordDto = _mapper.Map<MaintenanceRecordDto>(maintenanceRecord);
+                var newMaintenanceRecordDto = new MaintenanceRecordDto()
+                {
+                    MaintenanceRecordId = maintenanceRecord.MaintenanceRecordId,
+                    Cost = maintenanceRecord.Cost,
+                    Description = maintenanceRecord.Description,
+                    MaintenanceDate = maintenanceRecord.MaintenanceDate,
+                    RecordType = maintenanceRecord.RecordType,
+                    VehicleId = (int)maintenanceRecord.VehicleId
+                };
                 return OperationResult<MaintenanceRecordDto>.Success(newMaintenanceRecordDto);
             }
             catch (Exception ex)
@@ -126,6 +142,7 @@ namespace TCMS.Services.Implementations
                 return OperationResult.Failure(new[] { ex.Message });
             }
         }
+
 
         public async Task<OperationResult<IEnumerable<MaintenanceRecordDto>>> GetMaintenanceRecordsForPeriod(DateTime startDate, DateTime endDate)
         {
@@ -237,6 +254,87 @@ namespace TCMS.Services.Implementations
                 return OperationResult<IEnumerable<RepairRecordDto>>.Failure([ ex.Message ]);
             }
         }
+
+        public async Task<OperationResult<IEnumerable<PartDetailDto>>> GetPartsByMaintenanceRecordIdAsync(int maintenanceRecordId)
+        {
+            try
+            {
+                var parts = await _context.PartDetails
+                    .Where(p => p.MaintenanceRecord.MaintenanceRecordId == maintenanceRecordId)
+                    .ToListAsync();
+
+
+                var partsDto = _mapper.Map<IEnumerable<PartDetailDto>>(parts);
+                return OperationResult<IEnumerable<PartDetailDto>>.Success(partsDto);
+            }
+            catch (Exception ex)
+            {
+                return OperationResult<IEnumerable<PartDetailDto>>.Failure([ex.Message]);
+            }
+        }
+
+        public async Task<OperationResult> UpdateParts(int maintenanceRecordId, PartsDto partsDto)
+        {
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var vehicleId = _context.Vehicles.Where(v => v.MaintenanceRecords.Any(mr => mr.MaintenanceRecordId == maintenanceRecordId))
+                    .Select(v => v.VehicleId)
+                    .FirstOrDefault();
+
+                // Handle added parts
+                foreach (var partDto in partsDto.AddedParts)
+                {
+                    var part = new PartDetails
+                    {
+                        PartName = partDto.PartName,
+                        PartNumber = partDto.PartNumber,
+                        Price = partDto.Cost,
+                        Supplier = partDto.Supplier,
+                        isFromStock = (bool)partDto.IsFromStock,
+                        Quantity = (int)partDto.QuantityOnHand,
+                        MaintenanceRecordId = maintenanceRecordId,
+                        VehicleId = vehicleId
+                    };
+                    _context.PartDetails.Add(part);
+                }
+
+                // Handle updated parts
+                foreach (var partDto in partsDto.UpdatedParts)
+                {
+                    var part = await _context.PartDetails.FindAsync(partDto.PartDetailId);
+                    if (part != null)
+                    {
+                        part.PartName = partDto.PartName;
+                        part.PartNumber = partDto.PartNumber;
+                        part.Price = partDto.Cost;
+                        part.Supplier = partDto.Supplier;
+                        part.isFromStock = (bool)partDto.IsFromStock;
+                    }
+                }
+
+                // Handle removed parts
+                foreach (var partDto in partsDto.RemovedParts)
+                {
+                    var part = await _context.PartDetails.FindAsync(partDto.PartDetailId);
+                    if (part != null)
+                    {
+                        _context.PartDetails.Remove(part);
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return OperationResult.Success();
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return OperationResult.Failure(new[] { ex.Message });
+            }
+        }
+
 
         public async Task<OperationResult<IEnumerable<PartDetailDto>>> GetAllPartsAsync()
         {

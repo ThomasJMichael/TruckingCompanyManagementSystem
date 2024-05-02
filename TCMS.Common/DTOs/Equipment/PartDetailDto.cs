@@ -9,7 +9,7 @@ namespace TCMS.Common.DTOs.Equipment
         public string? PartNumber { get; set; }
         public int? QuantityOnHand { get; set; }
         public string? Description { get; set; }
-        public decimal? Cost { get; set; }
+        public decimal Cost { get; set; }
         public string? Supplier { get; set; }
         public bool? IsFromStock { get; set; }
         public int? VehicleId { get; set; }

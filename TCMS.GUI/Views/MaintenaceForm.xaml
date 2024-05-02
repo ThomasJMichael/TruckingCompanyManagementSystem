@@ -40,7 +40,7 @@
 
         <!-- Record Type Combo Box -->
         <Label Content="Record Type:" Grid.Row="2"/>
-        <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding RecordTypes}" SelectedItem="{Binding SelectedRecordType}"/>
+        <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding RecordTypes}" SelectedItem="{Binding SelectedRecordType, UpdateSourceTrigger=PropertyChanged}"/>
 
         <!-- Maintenance Date Picker -->
         <Label Content="Maintenance Date:" Grid.Row="3"/>
